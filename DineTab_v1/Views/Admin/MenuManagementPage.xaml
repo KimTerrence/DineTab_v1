@@ -1,0 +1,94 @@
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DineTab_v1.Views.Admin.MenuManagementPage"
+             x:Name="RootContentView" >
+    <ScrollView Grid.Column="1">
+        <!-- Menu Management Content -->
+        <StackLayout IsVisible="{Binding MenuManagementVisible}" BackgroundColor="White" Padding="15" Spacing="10">
+            <Grid ColumnSpacing="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Stroke="#000000"  StrokeThickness="1" BackgroundColor="White" Padding="5" WidthRequest="300" HorizontalOptions="Start">
+                    <Entry Placeholder="Search Menu Items..." PlaceholderColor="#000000"/>
+                </Border>
+                <Button Grid.Column="1" TextColor="#000000" Text="Add New Item" BackgroundColor="#FFFFFF" BorderColor="#000000" BorderWidth="2" CornerRadius="0"   Command="{Binding OpenAddItemPageCommand}" />
+                <Button Grid.Column="2" TextColor="#000000" Text="Modify Categories" BackgroundColor="#FFFFFF" BorderColor="#000000"  BorderWidth="2" CornerRadius="0"  Command="{Binding ModifyCategoriesCommand}" />
+            </Grid>
+
+            <Label Text="Categories" Padding="0, 20, 0, 0"/>
+
+            <ScrollView Orientation="Horizontal">
+                <HorizontalStackLayout Spacing="5">
+                    <CollectionView ItemsSource="{Binding Categories}" ItemsLayout="HorizontalList">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Button Text="{Binding .}" 
+                                BackgroundColor="#BCBCBC" 
+                                HeightRequest="25" FontSize="12" 
+                                TextColor="#000000" CornerRadius="0" Margin="2, 0"/>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </HorizontalStackLayout>
+            </ScrollView>
+
+            <!-- Menu Items -->
+
+            <CollectionView ItemsSource="{Binding MenuItems}" ItemsLayout="VerticalGrid, 4" Margin="0,10,0,0">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Stroke="Black" StrokeThickness="1" BackgroundColor="White" Margin="5">
+                            <VerticalStackLayout Padding="5" HeightRequest="{Binding Source={x:Reference MainCollection}, Path=BindingContext.ItemHeight}">
+                                <!-- Image Placeholder -->
+                                <Grid HeightRequest="150" BackgroundColor="LightGray">
+                                    <Label Text="★" HorizontalOptions="End" VerticalOptions="Start" Margin="5" />
+                                </Grid>
+                                <!-- Item Info -->
+                                <VerticalStackLayout Spacing="10">
+                                    <Grid ColumnDefinitions="*">
+                                        <Label Text="{Binding Name}" 
+                                               HorizontalTextAlignment="Center"
+                                               VerticalOptions="Center"
+                                               Margin="5,2"/>
+                                    </Grid>
+                                    <Label Text="{Binding Category}" HorizontalOptions="Start" FontSize="12"/>
+                                    <Label Text="{Binding Status, StringFormat='Status: {0}'}"  HorizontalOptions="Start" FontSize="12"/>
+
+
+
+                                    <!-- Action Buttons -->
+                                    <HorizontalStackLayout Spacing="5" HorizontalOptions="End" Margin="0,5">
+                                        <Button Text="Edit"
+                                                Command="{Binding Source={x:Reference RootContentView}, Path=BindingContext.EditItemCommand}"
+                                                CommandParameter="{Binding}"
+                                                BackgroundColor="White"
+                                                BorderColor="Black"
+                                                BorderWidth="1"
+                                                CornerRadius="0"
+                                                TextColor="Black"/>
+                                        <Button Text="Delete"
+                                                Command="{Binding Source={x:Reference RootContentView}, Path=BindingContext.DeleteItemCommand}"
+                                                CommandParameter="{Binding}"
+                                                BackgroundColor="White"
+                                                BorderColor="Black"
+                                                BorderWidth="1"
+                                                CornerRadius="0"
+                                                TextColor="Black"   />
+                                    </HorizontalStackLayout>
+                                </VerticalStackLayout>
+
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+
+        </StackLayout>
+
+    </ScrollView>
+</ContentView>

@@ -1,0 +1,238 @@
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DineTab_v1.Views.Admin.Dashboard">
+    <ScrollView Grid.Column="1" Padding="20">
+        <VerticalStackLayout Spacing="20" IsVisible="{Binding DashboardVisible}">
+            <!-- Header -->
+            <Grid BackgroundColor="DimGray" Padding="20">
+                <!-- Define two columns: Left and Right -->
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <!-- Left side -->
+                    <ColumnDefinition Width="Auto" />
+                    <!-- Right side -->
+                </Grid.ColumnDefinitions>
+
+                <!-- Left side content -->
+                <VerticalStackLayout Grid.Column="0" Spacing="2">
+                    <Label Text="Welcome Admin!" FontSize="24" FontAttributes="Bold" TextColor="White"/>
+                    <Label Text="Tuesday, June 10, 2025" FontSize="12" TextColor="White"/>
+                </VerticalStackLayout>
+
+                <!-- Right side content -->
+                <VerticalStackLayout Grid.Column="1" HorizontalOptions="End" Spacing="2">
+                    <HorizontalStackLayout>
+                        <Image Source="icon.png" HeightRequest="30"/>
+                        <Label Text="00.00" FontSize="30" TextColor="White"/>
+                    </HorizontalStackLayout>
+                    <Label Text="Today's Revenue" FontSize="12" FontAttributes="Bold" TextColor="White"/>
+                </VerticalStackLayout>
+            </Grid>
+
+
+            <!-- Cards Grid -->
+            <Grid ColumnSpacing="15" RowSpacing="15">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+
+                <!-- Daily Revenue -->
+                <Border StrokeThickness="2" Stroke="#000000" BackgroundColor="White" Padding="15" Grid.Row="0" Grid.Column="0">
+                    <VerticalStackLayout Spacing="40">
+                        <Grid VerticalOptions="Center" ColumnSpacing="0">
+                            <!-- Define two columns: Label takes all space, Image auto-sized -->
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <!-- Label column -->
+                                <ColumnDefinition Width="Auto" />
+                                <!-- Image column -->
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Label on the left -->
+                            <Label Text="Daily Revenue" 
+                                   FontSize="14" 
+                                   TextColor="#2C3E50" 
+                                   Grid.Column="0" 
+                                   VerticalOptions="Center" />
+
+                            <!-- Image on the right -->
+                            <Image Source="icon.png" 
+                                   HeightRequest="30" 
+                                   Grid.Column="1" 
+                                   VerticalOptions="Center" />
+                        </Grid>
+                        <VerticalStackLayout>
+                            <HorizontalStackLayout>
+                                <Image Source="icon.png" HeightRequest="30"/>
+                                <Label Text="0.00" FontSize="20" FontAttributes="Bold"/>
+                            </HorizontalStackLayout>
+                            <Label Text="From 0 orders today" FontSize="10" TextColor="#000000"/>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Active Orders -->
+                <Border  StrokeThickness="2" Stroke="#000000" BackgroundColor="White" Padding="15" Grid.Row="0" Grid.Column="1">
+                    <VerticalStackLayout Spacing="40">
+                        <Grid VerticalOptions="Center" ColumnSpacing="0">
+                            <!-- Define two columns: Label takes all space, Image auto-sized -->
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <!-- Label column -->
+                                <ColumnDefinition Width="Auto" />
+                                <!-- Image column -->
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Label on the left -->
+                            <Label Text="Daily Revenue" 
+                                    FontSize="14" 
+                                    TextColor="#000000" 
+                                    Grid.Column="0" 
+                                    VerticalOptions="Center" />
+
+                            <!-- Image on the right -->
+                            <Image Source="icon.png" 
+                                    HeightRequest="30" 
+                                    Grid.Column="1" 
+                                    VerticalOptions="Center" />
+                        </Grid>
+                        <VerticalStackLayout>
+                            <Label Text="0" FontSize="20" FontAttributes="Bold"/>
+                            <Label Text="0 pending  0 cooking  0 ready" FontSize="10" TextColor="#000000"/>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Staff Status -->
+                <Border StrokeThickness="2" Stroke="#000000" BackgroundColor="White" Padding="15"  Grid.Row="0" Grid.Column="2">
+                    <VerticalStackLayout Spacing="40">
+                        <Grid VerticalOptions="Center" ColumnSpacing="0">
+                            <!-- Define two columns: Label takes all space, Image auto-sized -->
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <!-- Label column -->
+                                <ColumnDefinition Width="Auto" />
+                                <!-- Image column -->
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Label on the left -->
+                            <Label Text="Daily Revenue" 
+                                    FontSize="14" 
+                                    TextColor="#000000" 
+                                    Grid.Column="0" 
+                                    VerticalOptions="Center" />
+
+                            <!-- Image on the right -->
+                            <Image Source="icon.png" 
+                                    HeightRequest="30" 
+                                    Grid.Column="1" 
+                                    VerticalOptions="Center" />
+                        </Grid>
+                        <VerticalStackLayout>
+                            <Label Text="0" FontSize="20" FontAttributes="Bold"/>
+                            <Label Text="0 active of 0 total staff" FontSize="10" TextColor="#000000"/>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Orders Completed -->
+                <Border StrokeThickness="2" Stroke="#000000" BackgroundColor="White" Padding="15" Grid.Row="0" Grid.Column="3">
+                    <VerticalStackLayout Spacing="40">
+                        <Grid VerticalOptions="Center" ColumnSpacing="0">
+                            <!-- Define two columns: Label takes all space, Image auto-sized -->
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <!-- Label column -->
+                                <ColumnDefinition Width="Auto" />
+                                <!-- Image column -->
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Label on the left -->
+                            <Label Text="Daily Revenue" 
+                                    FontSize="14" 
+                                    TextColor="#000000" 
+                                    Grid.Column="0" 
+                                    VerticalOptions="Center" />
+
+                            <!-- Image on the right -->
+                            <Image Source="icon.png" 
+                                    HeightRequest="30" 
+                                    Grid.Column="1" 
+                                    VerticalOptions="Center" />
+                        </Grid>
+                        <VerticalStackLayout>
+                            <Label Text="0" FontSize="20" FontAttributes="Bold"/>
+                            <Label Text="Orders served today" FontSize="10" TextColor="#000000"/>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Order Types Today -->
+                <Border StrokeThickness="2" Stroke="#000000" BackgroundColor="White" Padding="15" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Order Types Today" FontSize="14" TextColor="#2C3E50"/>
+                        <Grid ColumnSpacing="10" BackgroundColor="#D9D9D9" Padding="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Text="Dine In"/>
+                            <Label Text="0" Grid.Column="1"/>
+                        </Grid>
+                        <Grid ColumnSpacing="10" BackgroundColor="#D9D9D9" Padding="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Text="Take Out"/>
+                            <Label Text="0" Grid.Column="1"/>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Kitchen Status -->
+                <VerticalStackLayout>
+
+                </VerticalStackLayout>
+                <Border StrokeThickness="2" Stroke="#000000" BackgroundColor="White" Padding="15" Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="2">
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Kitchen Status" FontSize="14" TextColor="#000000"/>
+                        <Grid ColumnSpacing="10" BackgroundColor="#D9D9D9" Padding="5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Text="Pending"/>
+                            <Label Text="0" Grid.Column="1"/>
+                        </Grid>
+                        <Grid ColumnSpacing="10" BackgroundColor="#D9D9D9" Padding="5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Text="Preparing"/>
+                            <Label Text="0" Grid.Column="1"/>
+                        </Grid>
+                        <Grid ColumnSpacing="10" BackgroundColor="#D9D9D9" Padding="5">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Text="Ready"/>
+                            <Label Text="0" Grid.Column="1"/>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+            </Grid>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentView>

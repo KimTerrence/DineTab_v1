@@ -1,0 +1,151 @@
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:DineTab_v1.ViewModels.Admin"
+             x:Class="DineTab_v1.Views.Admin.ModifyCategoriesPage"
+             x:Name="RootContentView">
+
+    <ContentView.BindingContext>
+        <vm:ModifyCategoriesViewModel />
+    </ContentView.BindingContext>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="200,50" Spacing="15">
+
+            <!-- Title -->
+            <Label Text="Category Management"
+                   FontSize="22"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+
+            <!-- Current Category + Add Button -->
+            <Grid ColumnSpacing="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Text="Current Category"
+                       VerticalOptions="Center"
+                       FontAttributes="Bold"
+                       FontSize="16" />
+
+                <Button Grid.Column="1"
+                        Text="+ Add New Category"
+                        BorderColor="Black"
+                        BorderWidth="1"
+                        BackgroundColor="White"
+                        TextColor="Black"
+                        CornerRadius="0"
+                        Command="{Binding ShowAddCategoryCommand}"
+                        IsEnabled="{Binding IsNotAddingCategory}" />
+            </Grid>
+
+            <!-- Category List -->
+            <Border Stroke="Black" Padding="5">
+                <CollectionView ItemsSource="{Binding Categories}" SelectionMode="None">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Horizontal" ItemSpacing="8" />
+                    </CollectionView.ItemsLayout>
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border Padding="8,2" BackgroundColor="#BCBCBC" >
+                                <Grid ColumnSpacing="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- Category Name -->
+                                    <Label Text="{Binding .}" VerticalOptions="Center" FontSize="12" TextColor="Black" />
+
+                                    <!-- Remove Button -->
+                                    <Button Grid.Column="1"
+                                        Text="x"
+                                        FontSize="12"
+                                        WidthRequest="20"
+                                        HeightRequest="20"
+                                        BackgroundColor="Transparent"
+                                        Padding="0"
+                                        TextColor="Black"
+                                        Command="{Binding Source={x:Reference RootContentView}, Path=BindingContext.DeleteCategoryCommand}"
+                                        CommandParameter="{Binding .}" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Border>
+            <VerticalStackLayout>
+                <Label TextColor="#7D7D7D" FontSize="12" Text="Click the X button to remove a category"/>
+                <Label TextColor="#7D7D7D" FontSize="12" Text="Items within the removed category will not display in the menu"/>
+            </VerticalStackLayout>
+
+            <!-- New category input -->
+            <Label Text="Add New Category" />
+            <HorizontalStackLayout IsVisible="{Binding IsAddingCategory}" Spacing="10">
+                <!-- Styled Entry -->
+             
+                <Border BackgroundColor="White" Stroke="Black" StrokeThickness="1">
+                    <Entry x:Name="NewCategoryEntry" 
+                          Placeholder="Enter category name..." 
+                          FontSize="14"
+                          Text="{Binding NewCategoryName}"
+                          BackgroundColor="Transparent"
+                          Margin="5,0"
+                           WidthRequest="500"/>
+
+                </Border>
+
+                <!-- Add Button -->
+                <Button Text="+Add" 
+                       Command="{Binding AddCategoryCommand}"
+                       BackgroundColor="White"
+                       TextColor="Black"
+                       BorderColor="Black"
+                       BorderWidth="1"
+                       CornerRadius="0"
+                       Padding="10,0"/>
+
+                <!-- Cancel Button -->
+                <Button Text="Cancel" 
+                       Command="{Binding CancelAddCategoryCommand}"
+                       BackgroundColor="White"
+                       TextColor="Black"
+                       BorderColor="Black"
+                       BorderWidth="1"
+                       CornerRadius="0"
+                       Padding="10,0"/>
+            </HorizontalStackLayout>
+
+            <!-- Tip Box -->
+            <Frame BorderColor="Black"
+                   CornerRadius="0"
+                   Padding="10"
+                   BackgroundColor="White">
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Tips for Category Management:" FontAttributes="Bold" />
+                    <Label Text="Keep category names short and descriptive" FontSize="12"/>
+                    <Label Text="Group similar items together for better organization" FontSize="12"/>
+                    <Label Text="Consider your customers' browsing habits" FontSize="12"/>
+                </VerticalStackLayout>
+            </Frame>
+
+         
+
+
+            <!-- Save Button -->
+            <Button Text="Save Changes"
+                    BackgroundColor="White"
+                    TextColor="Black"
+                    BorderColor="Black"
+                    BorderWidth="1"
+                    FontAttributes="Bold"
+                    CornerRadius="0"
+                    HorizontalOptions="Center"
+                    WidthRequest="200"
+                    Command="{Binding SaveChangesCommand}" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentView>
