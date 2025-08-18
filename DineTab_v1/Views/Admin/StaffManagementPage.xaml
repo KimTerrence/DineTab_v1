@@ -1,10 +1,108 @@
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="DineTab_v1.Views.Admin.StaffManagementPage">
+             x:Class="DineTab_v1.Views.Admin.StaffManagementPage"
+             >
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="15">
-            <Label Text="Staff Management" FontSize="24" FontAttributes="Bold"/>
-            <!-- Add staff management UI here -->
+
+            <!-- Header Row: Search Box and Add Account Button -->
+            <Grid ColumnSpacing="10"
+      VerticalOptions="Start">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <!-- Entry stays small -->
+                    <ColumnDefinition Width="*" />
+                    <!-- Spacer pushes button to right -->
+                    <ColumnDefinition Width="Auto" />
+                    <!-- Button auto-sized -->
+                </Grid.ColumnDefinitions>
+
+                <!-- Search Entry (fixed small width) -->
+                <Border Stroke="Black">
+                    <Entry x:Name="SearchBar"
+                           Placeholder="Search Account..."
+                           WidthRequest="200"
+                           Grid.Column="0"/>
+                </Border>
+                <!-- Spacer -->
+                <BoxView Grid.Column="1" BackgroundColor="Transparent"/>
+
+                <!-- Add Account Button (right aligned) -->
+                <Button Text="Add Account"
+                        Grid.Column="2"
+                        HorizontalOptions="End"
+                        BackgroundColor="White"
+                        CornerRadius="0"
+                        TextColor="Black"
+                        BorderColor="Black"
+                        BorderWidth="1"
+                        Command="{Binding AddAccountCommand}"/>
+            </Grid>
+
+
+            <!-- Filter Buttons -->
+            <HorizontalStackLayout Spacing="10">
+                <Button Text="All Account" 
+                         BackgroundColor="White"
+                         CornerRadius="0"
+                         TextColor="Black"
+                         BorderColor="Black"
+                         BorderWidth="1"/>
+                <Button Text="Admin" 
+                         BackgroundColor="White"
+                         CornerRadius="0"
+                         TextColor="Black"
+                         BorderColor="Black"
+                         BorderWidth="1"/>
+                <Button Text="Cashier" 
+                         BackgroundColor="White"
+                         CornerRadius="0"
+                         TextColor="Black"
+                         BorderColor="Black"
+                         BorderWidth="1" />
+                <Button Text="Kitchen Staff" 
+                         BackgroundColor="White"
+                         CornerRadius="0"
+                         TextColor="Black"
+                         BorderColor="Black"
+                         BorderWidth="1"/>
+            </HorizontalStackLayout>
+
+            <!-- Accounts Display Section -->
+            <HorizontalStackLayout Spacing="20" Margin="0,20,0,0">
+                <!-- Repeat this frame for each account card -->
+                <Border Stroke="LightGray" Padding="15" WidthRequest="250">
+                    <VerticalStackLayout Spacing="5">
+                        <!-- Avatar (placeholder) -->
+                        <Image Source="icon.png" HeightRequest="100"/>
+                        <Label Text="John Lester Lapitan" FontAttributes="Bold" FontSize="16" HorizontalOptions="Center"/>
+                        <Label Text="Admin" FontAttributes="Italic" FontSize="14" HorizontalOptions="Center" />
+                        <StackLayout Spacing="2" Margin="0,5,0,5">
+                            <Label Text="Username: " FontSize="12"/>
+                            <Label Text="Password: " FontSize="12"/>
+                            <Label Text="Email: " FontSize="12"/>
+                            <Label Text="Lester@gmail.com" FontSize="12" TextDecorations="Underline" />
+                        </StackLayout>
+                        <HorizontalStackLayout Spacing="10">
+                            <Button Text="Modify Account" 
+                                     BackgroundColor="White"
+                                     CornerRadius="0"
+                                     TextColor="Black"
+                                     BorderColor="Black"
+                                     BorderWidth="1"
+                                     Command="{Binding GoToModifyStaffCommand}"/>
+                            <Button Text="Delete"  BackgroundColor="White"
+                                     CornerRadius="0"
+                                     TextColor="Black"
+                                     BorderColor="Black"
+                                     BorderWidth="1"
+                                     Command="{Binding GoToRemoveStaffCommand}"/>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+            </HorizontalStackLayout>
         </VerticalStackLayout>
     </ScrollView>
 </ContentView>

@@ -2,102 +2,130 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="DineTab_v1.Views.Admin.AddNewItemPage"
-             Title="AddNewItemPage">
-    <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="20">
+             BackgroundColor="#80000000"
+             Title="Add New Item">
 
-            <!-- Header -->
-            <Label Text="Create New Item"
-                   FontSize="24"
-                   HorizontalOptions="Center"
-                   FontAttributes="Bold"/>
+    <Grid VerticalOptions="Center" HorizontalOptions="Center">
+        <Border Padding="20"             
+                   BackgroundColor="White"
+                   WidthRequest="500"     
+                   VerticalOptions="Center"
+                   HorizontalOptions="Center">
 
-            <!-- Image Upload -->
-            <Frame BorderColor="Gray"
-                   BackgroundColor="#F5F5F5"
-                   HeightRequest="150"
-                   CornerRadius="10"
-                   HasShadow="False"
-                   Padding="0"
-                   >
-                <Grid>
-                    <Image Source="{Binding ItemImage}"
-                           Aspect="AspectFit"
+            <VerticalStackLayout Spacing="20">
+
+                <!-- Header -->
+                <Label Text="Create New Item"
+                           FontSize="24"
                            HorizontalOptions="Center"
-                           VerticalOptions="Center"
-                           HeightRequest="100"
-                           WidthRequest="100"/>
-                    <Label Text="Click to upload image"
-                           HorizontalOptions="Center"
-                           VerticalOptions="Center"
-                           TextColor="Gray"/>
-                    <Label Text="PNG, JPG up to 10MB"
-                           FontSize="10"
-                           HorizontalOptions="Center"
-                           VerticalOptions="End"
-                           Margin="0,0,0,10"
-                           TextColor="Gray"/>
-                    <Grid.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding UploadImageCommand}" />
-                    </Grid.GestureRecognizers>
+                           FontAttributes="Bold"
+                           TextColor="Black"/>
+
+                <!-- Image Upload -->
+                <Border 
+                           BackgroundColor="#F5F5F5"
+                           HeightRequest="150"                    
+                           Padding="0">
+                    <Grid>
+                        <Image Source="{Binding ItemImage}"
+                                   Aspect="AspectFit"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"
+                                   HeightRequest="100"
+                                   WidthRequest="100"/>
+                        <Label Text="Click to upload image"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"
+                                   TextColor="Gray"/>
+                        <Label Text="PNG, JPG up to 10MB"
+                                   FontSize="10"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="End"
+                                   Margin="0,0,0,10"
+                                   TextColor="Gray"/>
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding UploadImageCommand}" />
+                        </Grid.GestureRecognizers>
+                    </Grid>
+                </Border>
+
+                <!-- Item Name -->
+                <Label Text="Item Name*" FontAttributes="Bold" TextColor="Black"/>
+                <Border Stroke="Black">
+                    <Entry Placeholder="Enter item name"
+                               Text="{Binding ItemName}" />
+                </Border>
+
+                <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="*,*"
+                      ColumnSpacing="10" RowSpacing="15">
+
+                    <!-- Price -->
+                    <VerticalStackLayout Grid.Row="0" Grid.Column="0">
+                        <Label Text="Price*" FontAttributes="Bold" TextColor="Black"/>
+                        <Border Stroke="Black" StrokeThickness="1">
+                            <Entry Keyboard="Numeric"
+                                   Text="{Binding Price}"
+                                   Margin="5"/>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Category -->
+                    <VerticalStackLayout Grid.Row="0" Grid.Column="1">
+                        <Label Text="Category*" FontAttributes="Bold" TextColor="Black"/>
+                        <Border Stroke="Black" StrokeThickness="1">
+                            <Picker ItemsSource="{Binding Categories}"
+                                    SelectedItem="{Binding SelectedCategory}"
+                                    Margin="5"/>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Availability -->
+                    <VerticalStackLayout Grid.Row="1" Grid.Column="0">
+                        <Label Text="Availability Status" FontAttributes="Bold" TextColor="Black"/>
+                        <Border Stroke="Black" StrokeThickness="1">
+                            <Picker ItemsSource="{Binding AvailabilityOptions}"
+                                    SelectedItem="{Binding SelectedAvailability}"
+                                    Margin="5"/>        
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Spicy -->
+                    <VerticalStackLayout Grid.Row="1" Grid.Column="1">
+                        <Label Text="Spicy" FontAttributes="Bold" TextColor="Black"/>
+                        <Border Stroke="Black" StrokeThickness="1">
+                            <Picker ItemsSource="{Binding SpicyOptions}"
+                                    SelectedItem="{Binding SelectedSpicy}"
+                                    Margin="5"/>        
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Buttons spanning 2 columns -->
+                    <Grid Grid.Row="2" Grid.ColumnSpan="2" ColumnDefinitions="*,*"
+                          ColumnSpacing="20" Margin="0,10,0,0">
+
+                        <Button Text="Cancel"
+                                Command="{Binding CancelCommand}"
+                                BackgroundColor="White"
+                                TextColor="Black"
+                                BorderColor="Black"
+                                BorderWidth="1"
+                                CornerRadius="0"
+                                Grid.Column="0"/>
+
+                        <Button Text="Add New Item"
+                                Command="{Binding AddItemCommand}"
+                                 BackgroundColor="White"
+                                 TextColor="Black"
+                                 BorderColor="Black"
+                                 BorderWidth="1"
+                                 CornerRadius="0"
+                                Grid.Column="1"/>       
+                    </Grid>
+
                 </Grid>
-            </Frame>
 
-            <!-- Item Name -->
-            <Label Text="Item Name*" FontAttributes="Bold"/>
-            <Entry Placeholder="Enter item name"
-                   Text="{Binding ItemName}" />
 
-            <!-- Price and Category -->
-            <HorizontalStackLayout Spacing="10">
-                <VerticalStackLayout HorizontalOptions="FillAndExpand">
-                    <Label Text="Price*" FontAttributes="Bold"/>
-                    <Entry Keyboard="Numeric"
-                           Text="{Binding Price}" />
-                </VerticalStackLayout>
-
-                <VerticalStackLayout HorizontalOptions="FillAndExpand">
-                    <Label Text="Category*" FontAttributes="Bold"/>
-                    <Picker ItemsSource="{Binding Categories}"
-                            SelectedItem="{Binding SelectedCategory}"
-                            Title="Select category" />
-                </VerticalStackLayout>
-            </HorizontalStackLayout>
-
-            <!-- Availability and Spicy -->
-            <HorizontalStackLayout Spacing="10">
-                <VerticalStackLayout HorizontalOptions="FillAndExpand">
-                    <Label Text="Availability Status" FontAttributes="Bold"/>
-                    <Picker ItemsSource="{Binding AvailabilityOptions}"
-                            SelectedItem="{Binding SelectedAvailability}" />
-                </VerticalStackLayout>
-
-                <VerticalStackLayout HorizontalOptions="FillAndExpand">
-                    <Label Text="Spicy" FontAttributes="Bold"/>
-                    <Picker ItemsSource="{Binding SpicyOptions}"
-                            SelectedItem="{Binding SelectedSpicy}" />
-                </VerticalStackLayout>
-            </HorizontalStackLayout>
-
-            <!-- Buttons -->
-            <HorizontalStackLayout Spacing="20" HorizontalOptions="Center">
-                <Button Text="Cancel"
-                        Command="{Binding CancelCommand}"
-                        BackgroundColor="White"
-                        TextColor="Black"
-                        BorderColor="Black"
-                        BorderWidth="2"
-                        CornerRadius="5"
-                        WidthRequest="120"/>
-                <Button Text="Add New Item"
-                        Command="{Binding AddItemCommand}"
-                        BackgroundColor="Black"
-                        TextColor="White"
-                        CornerRadius="5"
-                        WidthRequest="120"/>
-
-            </HorizontalStackLayout>
-
-        </VerticalStackLayout>
-    </ScrollView>
+            </VerticalStackLayout>
+        </Border>
+    </Grid>
 </ContentPage>

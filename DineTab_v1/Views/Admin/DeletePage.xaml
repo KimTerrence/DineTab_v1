@@ -1,0 +1,102 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DineTab_v1.Views.Admin.DeletePage"
+             BackgroundColor="#80000000"
+             Padding="30">
+
+    <Border VerticalOptions="Center"
+           HorizontalOptions="Center"
+           Padding="25"
+           BackgroundColor="White">
+
+        <VerticalStackLayout Spacing="20">
+            <!-- Title -->
+            <Label Text="Delete Menu Item"
+                   FontSize="16"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   TextColor="Black" />
+
+            <!-- Warning Icon -->
+            <Label Text="⚠"
+                   FontSize="40"
+                   HorizontalOptions="Center"
+                   TextColor="Black" />
+
+            <!-- Confirmation Message -->
+            <Label Text="Are you sure you want to delete this item?"
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   HorizontalTextAlignment="Center"
+                   TextColor="Black" />
+
+            <Label Text="This action cannot be undone"
+                   FontSize="14"
+                   HorizontalOptions="Center"
+                   HorizontalTextAlignment="Center"
+                   TextColor="Gray" />
+
+            <Label Text="Selected Item to delete"
+                   FontSize="14"
+                   HorizontalOptions="Start"
+                   HorizontalTextAlignment="Center"
+                   TextColor="Black" />
+
+            <!-- Item Preview -->
+            <Border Stroke="Black" Padding="10">
+                <HorizontalStackLayout Spacing="10">
+                    <Image Source="icon.png" HeightRequest="50"/>
+                    <VerticalStackLayout>
+                        <Label Text="{Binding Name}"
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               TextColor="Black"/>
+                        <HorizontalStackLayout>
+                            <Label Text="{Binding Price}" FontSize="14" TextColor="Black" Padding="0, 0, 20, 0"/>
+                            <Label Text="{Binding Category}" FontSize="14" TextColor="Black" Padding="0, 0, 20, 0"/>
+                            <Label Text="{Binding Status}" FontSize="14" TextColor="Black" Padding="0, 0, 20, 0"/>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </HorizontalStackLayout>
+            </Border>
+
+            <!-- Important Notes -->
+            <VerticalStackLayout Spacing="5">
+                <Label Text="Important:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
+                <Label Text="• This will permanently remove the item from your menu"
+                       FontSize="13" TextColor="Black"/>
+                <Label Text="• Any pending orders with this item will be affected"
+                       FontSize="13" TextColor="Black"/>
+                <Label Text="• Sales history will be preserved for reporting"
+                       FontSize="13" TextColor="Black"/>
+            </VerticalStackLayout>
+
+            <!-- Buttons -->
+            <Grid ColumnSpacing="20" Padding="5,10,5,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button Text="Cancel"
+                        Command="{Binding CancelCommand}"
+                        BackgroundColor="Transparent"
+                        BorderColor="Black"
+                        BorderWidth="1"
+                        TextColor="Black"
+                        Grid.Column="0"
+                        CornerRadius="0"/>
+
+                <Button Text="Delete item"
+                        Command="{Binding ConfirmDeleteCommand}"
+                        BackgroundColor="White"                        
+                        BorderColor="Black"
+                        BorderWidth="1"
+                        TextColor="Black"
+                        Grid.Column="1"
+                        CornerRadius="0"/>
+            </Grid>
+        </VerticalStackLayout>
+    </Border>
+</ContentPage>

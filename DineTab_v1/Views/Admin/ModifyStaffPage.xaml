@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DineTab_v1.Views.Admin.ModifyStaffPage"
+             Title="ModifyStaffPage"
+             Background="#80000000">
+    <!-- Full overlay -->
+    <Grid>
+
+        <!-- Centered Dialog -->
+        <Border BackgroundColor="White"
+                Padding="20"
+                WidthRequest="450"
+                MaximumHeightRequest="600"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                Stroke="Black"
+                StrokeThickness="1">
+
+            <ScrollView>
+                <VerticalStackLayout Spacing="20">
+
+                    <!-- Header -->
+                    <Label Text="Modify Staff Member"
+                           FontSize="20"
+                           HorizontalOptions="Center"
+                           FontAttributes="Bold"/>
+
+                    <Border Stroke="Black" Padding="10">
+                        <Grid ColumnSpacing="15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <!-- Image -->
+                                <ColumnDefinition Width="*"/>
+                                <!-- Info -->
+                                <ColumnDefinition Width="*"/>
+                                <!-- Status -->
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Profile Image -->
+                            <Image Source="icon.png"
+                                   HeightRequest="60"
+                                   WidthRequest="60"
+                                   Grid.Column="0"
+                                   VerticalOptions="Center" />
+
+                            <!-- Info labels -->
+                            <VerticalStackLayout Grid.Column="1"
+                             VerticalOptions="Center"
+                             Spacing="2">
+                                <Label Text="Empty" />
+                                <Label Text="Empty" />
+                                <Label Text="Empty" />
+                                <Label Text="Empty" />
+                            </VerticalStackLayout>
+
+                            <!-- Status / Switch -->
+                            <VerticalStackLayout Grid.Column="2"
+                             VerticalOptions="Center"
+                             Spacing="5">
+                                <Label Text="Status"
+                                       HorizontalOptions="Center"/>
+
+                                <Border Stroke="Black" Padding="5">
+                                    <HorizontalStackLayout HeightRequest="20" HorizontalOptions="Center">
+                                        <Switch VerticalOptions="Center"/>
+                                        <Label Text="Active"
+                                               VerticalOptions="Center"/>       
+                                    </HorizontalStackLayout>
+                                </Border>
+
+                                <Label Text="Toggle to activate or deactivate this staff member's account"
+                                       TextColor="#B35F00"
+                                       FontSize="12"
+                                       HorizontalOptions="Center"
+                                       HorizontalTextAlignment="Center"/>   
+                                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+
+
+                    <!-- Staff Info -->
+                    <Grid RowDefinitions="Auto" ColumnDefinitions="*,*"
+                          ColumnSpacing="10" RowSpacing="15">
+
+                        <!-- firs name -->
+                        <VerticalStackLayout Grid.Row="0" Grid.Column="0">
+                            <Label Text="First Name*" FontAttributes="Bold" TextColor="Black"/>
+                            <Border Stroke="Black" StrokeThickness="1">
+                                <Entry Margin="5"/>
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <!-- lastname -->
+                        <VerticalStackLayout Grid.Row="0" Grid.Column="1">
+                            <Label Text="Last Name*" FontAttributes="Bold" TextColor="Black"/>
+                            <Border Stroke="Black" StrokeThickness="1">
+                                <Entry Margin="5"/>
+                            </Border>
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <!---Email-->
+                    <VerticalStackLayout>
+                        <Label Text="Email Address*" />
+                        <Border Stroke="Black">
+                            <Entry></Entry>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!---Accesibiloty-->
+                    <VerticalStackLayout>
+                        <Label Text="Accesibility*" />
+                        <HorizontalStackLayout  Spacing="20">
+                            <Border Stroke="Black">
+                                <HorizontalStackLayout >
+                                    <CheckBox Color="Black"/>
+                                    <Label Text="Admin" VerticalOptions="Center" WidthRequest="60"/>
+                                </HorizontalStackLayout>
+                            </Border>
+                            <Border Stroke="Black">
+                                <HorizontalStackLayout >
+                                    <CheckBox Color="Black"/>
+                                    <Label Text="Cashier" VerticalOptions="Center" WidthRequest="60"/>
+                                </HorizontalStackLayout>
+                            </Border>
+                            <Border Stroke="Black">
+                                <HorizontalStackLayout >
+                                    <CheckBox Color="Black"/>
+                                    <Label Text="Kitchen Staff" VerticalOptions="Center" WidthRequest="100"/>
+                                </HorizontalStackLayout>
+                            </Border>
+                        </HorizontalStackLayout>
+                        
+                    </VerticalStackLayout>
+
+                    <!---Button-->
+                    <Grid RowDefinitions="Auto" ColumnDefinitions="*,*"
+                          ColumnSpacing="10" RowSpacing="15">
+
+                        <Button Text="Cancel" 
+                                WidthRequest="150"
+                                BackgroundColor="White"
+                                TextColor="black"
+                                CornerRadius="0" 
+                                HorizontalOptions="Start"
+                                BorderColor="Black"
+                                BorderWidth="1"/>
+
+                        <Button Text="Add Account" 
+                                WidthRequest="150"
+                                BackgroundColor="White"
+                                TextColor="Black"
+                                CornerRadius="0"
+                                Grid.Column="1"
+                                HorizontalOptions="End"
+                                BorderColor="Black"
+                                BorderWidth="1"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </ScrollView>
+        </Border>
+    </Grid>
+</ContentPage>

@@ -49,18 +49,16 @@ namespace DineTab_v1.ViewModels.Admin
             DeleteItemCommand = new Command<Item>(OnDeleteItem);
         }
 
-        private void OnModifyCategories()
+        private async void OnModifyCategories()
         {
-            MessagingCenter.Send(this, "ShowModifyCategories");
+            await Application.Current.MainPage.Navigation.PushModalAsync(new ModifyCategoriesPage());
         }
 
         private async void OnOpenAddItemPage()
         {
             // Navigate to AddNewItemPage
-            if (Application.Current.MainPage is Shell shell)
-            {
-                await shell.Navigation.PushAsync(new Views.Admin.AddNewItemPage(MenuItems));
-            }
+            var page = new Views.Admin.AddNewItemPage(MenuItems);
+            await Application.Current.MainPage.Navigation.PushModalAsync(page);
         }
 
         private async void OnEditItem(Item item)
@@ -70,10 +68,18 @@ namespace DineTab_v1.ViewModels.Admin
         }
 
 
-        private void OnDeleteItem(Item item)
+        private async void OnDeleteItem(Item item)
         {
-            if (item != null && MenuItems.Contains(item))
-                MenuItems.Remove(item);
+            if (item == null) return;
+
+            var page = new Views.Admin.DeletePage(item, (confirmedItem) =>
+            {
+                if (MenuItems.Contains(confirmedItem))
+                    MenuItems.Remove(confirmedItem);
+            });
+
+            await Application.Current.MainPage.Navigation.PushModalAsync(page);
         }
+
     }
 }

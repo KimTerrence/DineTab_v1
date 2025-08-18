@@ -45,6 +45,7 @@
                             <VerticalStackLayout Padding="5" HeightRequest="{Binding Source={x:Reference MainCollection}, Path=BindingContext.ItemHeight}">
                                 <!-- Image Placeholder -->
                                 <Grid HeightRequest="150" BackgroundColor="LightGray">
+                                    <Image Source="icon.png" Aspect="AspectFill" />
                                     <Label Text="★" HorizontalOptions="End" VerticalOptions="Start" Margin="5" />
                                 </Grid>
                                 <!-- Item Info -->

@@ -23,7 +23,7 @@ namespace DineTab_v1.Views.Admin
                     "Dashboard" => new Dashboard(),
                     "MenuManagement" => new MenuManagementPage(),
                     "StaffManagement" => new StaffManagementPage(),
-                    // "Reports" => new ReportsPage(),
+                    "Reports" => new ReportsPage(),
                     _ => new Dashboard()
                 };
             });
@@ -31,12 +31,12 @@ namespace DineTab_v1.Views.Admin
             // Listen for Modify Categories from MenuManagement
             MessagingCenter.Subscribe<MenuManagementViewModel>(this, "ShowModifyCategories", (sender) =>
             {
-                MainPanelContainer.Content = new ModifyCategoriesPage();
+                 Navigation.PushAsync(new ModifyCategoriesPage());
             });
 
             MessagingCenter.Subscribe<MenuManagementViewModel>(this, "ShowModifyCategories", (sender) =>
             {
-                MainPanelContainer.Content = new ModifyCategoriesPage();
+                 Navigation.PushAsync(new ModifyCategoriesPage());
             });
 
             MessagingCenter.Subscribe<ModifyCategoriesViewModel>(this, "BackToMenuManagement", (sender) =>

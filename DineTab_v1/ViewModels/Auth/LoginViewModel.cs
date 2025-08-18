@@ -23,11 +23,13 @@ namespace DineTab_v1.ViewModels.Auth
         public LoginViewModel()
         {
             LoginCommand = new Command(OnLogin);
+
         }
 
         private async void OnLogin()
         {
-            var user = _authService.Login(Username, Password);
+            var user = _authService.Login("admin", "1234");
+            //var user = _authService.Login(Username, Password);
 
             if (user == null)
             {

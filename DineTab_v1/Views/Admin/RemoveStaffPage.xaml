@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DineTab_v1.Views.Admin.RemoveStaffPage"
+             Title="RemoveStaffPage"
+             BackgroundColor="#80000000">
+    <Grid VerticalOptions="Center" HorizontalOptions="Center">
+        <Border Padding="20"             
+                   BackgroundColor="White"
+                   WidthRequest="500"     
+                   VerticalOptions="Center"
+                   HorizontalOptions="Center">
+
+            <VerticalStackLayout Spacing="20">
+
+                <!-- Header -->
+                <Label Text="Remove Staff Member"
+                           FontSize="24"
+                           HorizontalOptions="Center"
+                           FontAttributes="Bold"
+                           TextColor="Black"/>
+
+                <Border Stroke="Black">
+                    <VerticalStackLayout Padding="20">
+                        <Label Text="⚠  This action requires careful consideration"
+                               TextColor="#FE0000"
+                               HorizontalOptions="Center"/>
+                        <Label Text="Removing a staff member will affect their access to the system and may impact ongoing operations. Please ensure you have proper authorization and documentation for this action. "
+                                TextColor="#B35F00"
+                               HorizontalTextAlignment="Center"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Select a staff member to remove" />
+                    <Border Stroke="Black" Padding="5">
+                        <HorizontalStackLayout>
+                            <Image Source="icon.png" HeightRequest="60"/>
+                            <VerticalStackLayout>
+                                <Label Text="Name" />
+                                <Label Text="Role" />
+                                <Label Text="Employee ID" />
+                                <Label Text="Last Login" />
+                            </VerticalStackLayout>
+                        </HorizontalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+
+                <Border Stroke="Black">
+                    <HorizontalStackLayout VerticalOptions="Center">
+                        <CheckBox Color="Black"/>
+                        <Label TextColor="#B35F00" 
+                               Text="I understand the consequences of this action and confirm that I want to proceed with removing this staff member. "
+                               VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+                </Border>
+
+                <Grid Grid.Row="2" Grid.ColumnSpan="2" ColumnDefinitions="*,*"
+                      ColumnSpacing="20" Margin="0,10,0,0">
+
+                    <Button Text="Cancel"
+                            Command="{Binding CancelCommand}"
+                            BackgroundColor="White"
+                            TextColor="Black"
+                            BorderColor="Black"
+                            BorderWidth="1"
+                            CornerRadius="0"
+                            Grid.Column="0"/>
+
+                    <Button Text="Remove Staff"
+                            Command="{Binding RemoveStaffCommand}"
+                            BackgroundColor="White"
+                            TextColor="Black"
+                            BorderColor="Black"
+                            BorderWidth="1"
+                            CornerRadius="0"
+                            Grid.Column="1"/> 
+                </Grid>
+
+            </VerticalStackLayout>
+        </Border>
+    </Grid>
+</ContentPage>

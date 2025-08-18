@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DineTab_v1.Views.Admin.AddStaffPage"
+             Title="Add Staff"
+             BackgroundColor="#80000000">
+    <!-- semi-transparent backdrop -->
+
+    <!-- Full overlay -->
+    <Grid>
+
+        <!-- Centered Dialog -->
+        <Border BackgroundColor="White"
+                Padding="20"
+                WidthRequest="450"
+                MaximumHeightRequest="650"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                Stroke="Black"
+                StrokeThickness="1">
+
+            <ScrollView>
+                <VerticalStackLayout Spacing="10">
+
+                    <!-- Header -->
+                    <Label Text="Add New Staff Member"
+                           FontSize="20"
+                           HorizontalOptions="Center"
+                           FontAttributes="Bold"/>
+
+                    <!-- Upload photo -->
+                    <VerticalStackLayout BackgroundColor="Transparent">
+                        <Image Source="icon.png"
+                                   Aspect="AspectFit"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="Center"
+                                   HeightRequest="80"
+                                   WidthRequest="80"/>
+                        <Button Text="Upload Photo" 
+                            WidthRequest="150"
+                            BackgroundColor="#D9D9D9"
+                            TextColor="#7D7D7D"
+                            CornerRadius="0"/>
+                    </VerticalStackLayout>
+                   
+                    <!-- Staff Info -->
+                    <Grid RowDefinitions="Auto" ColumnDefinitions="*,*"
+                          ColumnSpacing="10" RowSpacing="15">
+
+                        <!-- firs name -->
+                        <VerticalStackLayout Grid.Row="0" Grid.Column="0">
+                            <Label Text="First Name*" FontAttributes="Bold" TextColor="Black"/>
+                            <Border Stroke="Black" StrokeThickness="1">
+                                <Entry Margin="5"/> 
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <!-- lastname -->
+                        <VerticalStackLayout Grid.Row="0" Grid.Column="1">
+                            <Label Text="Last Name*" FontAttributes="Bold" TextColor="Black"/>
+                            <Border Stroke="Black" StrokeThickness="1">
+                                <Entry Margin="5"/>
+                            </Border>
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <!---Email-->
+                    <VerticalStackLayout>
+                        <Label Text="Email Address*" />
+                        <Border Stroke="Black">
+                            <Entry></Entry>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!---Paassword-->
+                    <VerticalStackLayout>
+                        <Label Text="Password*" />
+                        <Border Stroke="Black">
+                            <Entry></Entry>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!---Confirm Pasword-->
+                    <VerticalStackLayout>
+                        <Label Text="Confirm Password*" />
+                        <Border Stroke="Black">
+                            <Entry></Entry>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!---Acccesibility-->
+                    <VerticalStackLayout>
+                        <Label Text="Accesibitlity*" />
+                        <Border Stroke="Black">
+                            <Picker>
+                                <Picker.Items>
+                                    <x:String>Admin</x:String>
+                                    <x:String>Cashier</x:String>
+                                    <x:String>Admin Staff</x:String>
+                                </Picker.Items>
+                            </Picker>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!---Button-->
+                    <Grid RowDefinitions="Auto" ColumnDefinitions="*,*"
+                          ColumnSpacing="10" RowSpacing="15">
+
+                        <Button Text="Cancel" 
+                                WidthRequest="150"
+                                BackgroundColor="White"
+                                TextColor="black"
+                                CornerRadius="0" 
+                                HorizontalOptions="Start"
+                                BorderColor="Black"
+                                BorderWidth="1"/>
+
+                        <Button Text="Add Account" 
+                                WidthRequest="150"
+                                BackgroundColor="White"
+                                TextColor="Black"
+                                CornerRadius="0"
+                                Grid.Column="1"
+                                HorizontalOptions="End"
+                                BorderColor="Black"
+                                BorderWidth="1"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </ScrollView>
+        </Border>
+    </Grid>
+</ContentPage>

@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DineTab_v1.Views.Admin.ReportsPage">
+    <ScrollView Grid.Column="1" Padding="20">
+        <VerticalStackLayout Spacing="20" IsVisible="{Binding DashboardVisible}">
+            <!-- Header -->
+            <Grid BackgroundColor="DimGray" Padding="20">
+                <!-- Define two columns: Left and Right -->
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <!-- Left side -->
+                    <ColumnDefinition Width="Auto" />
+                    <!-- Right side -->
+                </Grid.ColumnDefinitions>
+
+                <!-- Left side content -->
+                <VerticalStackLayout Grid.Column="0" Spacing="2">
+                    <Label Text="Sales Report" FontSize="24" FontAttributes="Bold" TextColor="White"/>
+                    <Label Text="Tuesday, June 10, 2025" FontSize="12" TextColor="White"/>
+                </VerticalStackLayout>
+
+                <!-- Right side content -->
+                <Button Text="Print Report" 
+                        Grid.Column="1"
+                        BackgroundColor="#B3B3B3"
+                        TextColor="Black"
+                        CornerRadius="0"/>
+            </Grid>
+
+
+            <!-- Cards Grid -->
+            <Grid ColumnSpacing="15" RowSpacing="15">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+
+                <!-- Daily Revenue -->
+                <Border StrokeThickness="2" Stroke="#000000" BackgroundColor="White" Padding="15" Grid.Row="0" Grid.Column="0">
+                    <VerticalStackLayout Spacing="40">
+                        <Grid VerticalOptions="Center" ColumnSpacing="0">
+                            <!-- Define two columns: Label takes all space, Image auto-sized -->
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <!-- Label column -->
+                                <ColumnDefinition Width="Auto" />
+                                <!-- Image column -->
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Label on the left -->
+                            <Label Text="Total Sold Item" 
+                                FontSize="14" 
+                                TextColor="#2C3E50" 
+                                Grid.Column="0" 
+                                VerticalOptions="Center" />
+
+                            <!-- Image on the right -->
+                            <Image Source="icon.png" 
+                                HeightRequest="30" 
+                                Grid.Column="1" 
+                                VerticalOptions="Center" />
+                        </Grid>
+                        <VerticalStackLayout>
+                            <HorizontalStackLayout>
+                                <Label Text="0" FontSize="20" FontAttributes="Bold"/>
+                            </HorizontalStackLayout>
+                          
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Active Orders -->
+                <Border  StrokeThickness="2" Stroke="#000000" BackgroundColor="White" Padding="15" Grid.Row="0" Grid.Column="1">
+                    <VerticalStackLayout Spacing="40">
+                        <Grid VerticalOptions="Center" ColumnSpacing="0">
+                            <!-- Define two columns: Label takes all space, Image auto-sized -->
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <!-- Label column -->
+                                <ColumnDefinition Width="Auto" />
+                                <!-- Image column -->
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Label on the left -->
+                            <Label Text="Total Revenue" 
+                                 FontSize="14" 
+                                 TextColor="#000000" 
+                                 Grid.Column="0" 
+                                 VerticalOptions="Center" />
+
+                            <!-- Image on the right -->
+                            <Image Source="icon.png" 
+                                 HeightRequest="30" 
+                                 Grid.Column="1" 
+                                 VerticalOptions="Center" />
+                        </Grid>
+                        <VerticalStackLayout>
+                            <Label Text="0" FontSize="20" FontAttributes="Bold"/>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Staff Status -->
+                <Border StrokeThickness="2" Stroke="#000000" BackgroundColor="White" Padding="15"  Grid.Row="0" Grid.Column="2">
+                    <VerticalStackLayout Spacing="40">
+                        <Grid VerticalOptions="Center" ColumnSpacing="0">
+                            <!-- Define two columns: Label takes all space, Image auto-sized -->
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <!-- Label column -->
+                                <ColumnDefinition Width="Auto" />
+                                <!-- Image column -->
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Label on the left -->
+                            <Label Text="Orders Today" 
+                                 FontSize="14" 
+                                 TextColor="#000000" 
+                                 Grid.Column="0" 
+                                 VerticalOptions="Center" />
+
+                            <!-- Image on the right -->
+                            <Image Source="icon.png" 
+                                 HeightRequest="30" 
+                                 Grid.Column="1" 
+                                 VerticalOptions="Center" />
+                        </Grid>
+                        <VerticalStackLayout>
+                            <Label Text="0" FontSize="20" FontAttributes="Bold"/>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Orders Completed -->
+                <Border StrokeThickness="2" Stroke="#000000" BackgroundColor="White" Padding="15" Grid.Row="0" Grid.Column="3">
+                    <VerticalStackLayout Spacing="40">
+                        <Grid VerticalOptions="Center" ColumnSpacing="0">
+                            <!-- Define two columns: Label takes all space, Image auto-sized -->
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <!-- Label column -->
+                                <ColumnDefinition Width="Auto" />
+                                <!-- Image column -->
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Label on the left -->
+                            <Label Text="Total Order" 
+                                 FontSize="14" 
+                                 TextColor="#000000" 
+                                 Grid.Column="0" 
+                                 VerticalOptions="Center" />
+
+                            <!-- Image on the right -->
+                            <Image Source="icon.png" 
+                                 HeightRequest="30" 
+                                 Grid.Column="1" 
+                                 VerticalOptions="Center" />
+                        </Grid>
+                        <VerticalStackLayout>
+                            <Label Text="0" FontSize="20" FontAttributes="Bold"/>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+            </Grid>
+            <Border Stroke="Black" StrokeThickness="1" Padding="10">
+                <VerticalStackLayout Spacing="10">
+
+                    <!-- Header Section -->
+                    <Grid ColumnSpacing="10" VerticalOptions="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <!-- Title takes available space -->
+                            <ColumnDefinition Width="Auto" />
+                            <!-- Filters auto-sized -->
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Title -->
+                        <Label Text="Sold Item Report"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               VerticalOptions="Center"
+                               Grid.Column="0" />
+
+                        <!-- Filters (aligned to end) -->
+                        <HorizontalStackLayout Spacing="10" Grid.Column="1" VerticalOptions="Center">
+                            <Border Stroke="Black" StrokeThickness="1" Padding="5">
+                                <Picker Title="Show all category"/>
+                            </Border>
+
+                            <Border Stroke="Black" StrokeThickness="1" Padding="5">
+                                <Picker Title="Sort by quantity"/>
+                            </Border>
+                        </HorizontalStackLayout>
+                    </Grid>
+                    <!-- Table Header -->
+                    <Grid BackgroundColor="#D9D9D9"
+              Padding="5"
+              ColumnSpacing="10"
+              RowSpacing="0">
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Text="Item Name" Grid.Column="0" FontAttributes="Bold"/>
+                        <Label Text="Category"  Grid.Column="1" FontAttributes="Bold"/>
+                        <Label Text="Date"      Grid.Column="2" FontAttributes="Bold"/>
+                        <Label Text="Unit Price" Grid.Column="3" FontAttributes="Bold"/>
+                        <Label Text="Quantity Sold" Grid.Column="4" FontAttributes="Bold"/>
+                        <Label Text="Revenue"   Grid.Column="5" FontAttributes="Bold"/>
+                    </Grid>
+
+                    <!-- Example Row (bind your data here via CollectionView) -->
+                    <Grid Padding="5" ColumnSpacing="10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Label Text="Coke" Grid.Column="0"/>
+                        <Label Text="Drinks" Grid.Column="1"/>
+                        <Label Text="2025-08-18" Grid.Column="2"/>
+                        <Label Text="₱20" Grid.Column="3"/>
+                        <Label Text="5" Grid.Column="4"/>
+                        <Label Text="₱100" Grid.Column="5"/>
+                    </Grid>
+
+                </VerticalStackLayout>
+            </Border>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentView>
