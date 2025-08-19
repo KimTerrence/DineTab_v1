@@ -2,13 +2,104 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="DineTab_v1.Views.Auth.LoginPage"
-             Title="LoginPage">
-    <VerticalStackLayout Padding="30" Spacing="15" VerticalOptions="Center">
-        <Label Text="Login" FontSize="24" HorizontalOptions="Center" />
+             Title="HomePage">
 
-        <Entry Placeholder="Username" Text="{Binding Username}" />
-        <Entry Placeholder="Password" Text="{Binding Password}" IsPassword="True" />
+    <Grid>
+        <!-- Main Click to Order Button -->
+        <Button Text="Click to Order"
+                BackgroundColor="#A1A1A1"
+                TextColor="Black"
+                FontSize="36"
+                CornerRadius="20"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                WidthRequest="1500"
+                HeightRequest="150"
+                Clicked="OrderButton_Clicked"/>
 
-        <Button Text="Login" Command="{Binding LoginCommand}" />
-    </VerticalStackLayout>
+        <!-- Login Button on Top-Left -->
+        <Button Text="Login"
+                BackgroundColor="Transparent"
+                TextColor="Black"
+                FontSize="16"
+                CornerRadius="10"
+                WidthRequest="100"
+                HeightRequest="40"
+                HorizontalOptions="Start"
+                VerticalOptions="Start"
+                Margin="20"
+                Clicked="LoginButton_Clicked"/>
+
+        <!-- Dark overlay behind login form -->
+        <BoxView x:Name="Overlay"
+                 BackgroundColor="#80000000"
+            IsVisible="False"
+                 HorizontalOptions="Fill"
+                 VerticalOptions="Fill"/>
+
+            <!-- Login Form Overlay (Initially Hidden) -->
+        <Border x:Name="LoginFormFrame"
+               BackgroundColor="#D9D9D9"              
+               Padding="30"             
+               IsVisible="False"
+               WidthRequest="400"
+               HeightRequest="500"
+               HorizontalOptions="Center"
+               VerticalOptions="Center">
+
+            <Grid>
+                <!-- Close Button (X) at Top-Right -->
+                <Button Text="X"
+                        BackgroundColor="Transparent"
+                        TextColor="Black"
+                        FontAttributes="Bold"
+                        HorizontalOptions="End"
+                        VerticalOptions="Start"
+                        WidthRequest="40"
+                        HeightRequest="40"
+                        Clicked="CloseLoginForm_Clicked"/>
+
+                <!-- Login Form Content -->
+                <VerticalStackLayout Spacing="20" Margin="0,50,0,0">
+                    <Label Text="Login" 
+                           FontSize="44" 
+                           HorizontalOptions="Center"/>
+
+                    <!-- Username -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Email"/>
+                        <Border Stroke="Black">
+                            <Entry Placeholder="Username" 
+                                   Text="{Binding Email}" 
+                                   BackgroundColor="White"/>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Password -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Password"/>
+                        <Border Stroke="Black">
+                            <Entry Placeholder="Password"
+                                   IsPassword="True"
+                                   Text="{Binding Password}"
+                                   BackgroundColor="White"/>
+                        </Border>
+                        <Label Text="Forgot Password" 
+                               HorizontalOptions="End"/>
+                    </VerticalStackLayout>
+
+                    <!-- Login Button -->
+                    <Button Text="Login"
+                            BackgroundColor="White"
+                            BorderColor="Black"
+                            BorderWidth="1"
+                            TextColor="Black"
+                            Command="{Binding LoginCommand}"
+                            WidthRequest="200"
+                            HorizontalOptions="Center"
+                            CornerRadius="0"/>
+                </VerticalStackLayout>
+            </Grid>
+        </Border>
+    </Grid>
 </ContentPage>

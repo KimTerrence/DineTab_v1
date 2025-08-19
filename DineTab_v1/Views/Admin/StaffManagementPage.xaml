@@ -8,7 +8,7 @@
 
             <!-- Header Row: Search Box and Add Account Button -->
             <Grid ColumnSpacing="10"
-      VerticalOptions="Start">
+                  VerticalOptions="Start">
 
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
@@ -71,38 +71,83 @@
             </HorizontalStackLayout>
 
             <!-- Accounts Display Section -->
-            <HorizontalStackLayout Spacing="20" Margin="0,20,0,0">
-                <!-- Repeat this frame for each account card -->
-                <Border Stroke="LightGray" Padding="15" WidthRequest="250">
-                    <VerticalStackLayout Spacing="5">
-                        <!-- Avatar (placeholder) -->
-                        <Image Source="icon.png" HeightRequest="100"/>
-                        <Label Text="John Lester Lapitan" FontAttributes="Bold" FontSize="16" HorizontalOptions="Center"/>
-                        <Label Text="Admin" FontAttributes="Italic" FontSize="14" HorizontalOptions="Center" />
-                        <StackLayout Spacing="2" Margin="0,5,0,5">
-                            <Label Text="Username: " FontSize="12"/>
-                            <Label Text="Password: " FontSize="12"/>
-                            <Label Text="Email: " FontSize="12"/>
-                            <Label Text="Lester@gmail.com" FontSize="12" TextDecorations="Underline" />
-                        </StackLayout>
-                        <HorizontalStackLayout Spacing="10">
-                            <Button Text="Modify Account" 
-                                     BackgroundColor="White"
-                                     CornerRadius="0"
-                                     TextColor="Black"
-                                     BorderColor="Black"
-                                     BorderWidth="1"
-                                     Command="{Binding GoToModifyStaffCommand}"/>
-                            <Button Text="Delete"  BackgroundColor="White"
-                                     CornerRadius="0"
-                                     TextColor="Black"
-                                     BorderColor="Black"
-                                     BorderWidth="1"
-                                     Command="{Binding GoToRemoveStaffCommand}"/>
-                        </HorizontalStackLayout>
-                    </VerticalStackLayout>
-                </Border>
-            </HorizontalStackLayout>
+            <CollectionView x:Name="StaffCollection"
+                ItemsSource="{Binding StaffList}"
+                Margin="0,20,0,0">
+                <CollectionView.ItemsLayout>
+                    <!-- 4 columns, vertical scrolling -->
+                    <GridItemsLayout Orientation="Vertical"
+                         Span="4" />
+                </CollectionView.ItemsLayout>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Stroke="LightGray" Padding="15" Margin="5">
+                            <VerticalStackLayout Spacing="20">
+                                <!-- Avatar -->
+                                <HorizontalStackLayout VerticalOptions="Center" Spacing="10">
+                                    <Image Source="icon.png" HeightRequest="50"/>
+                                    <VerticalStackLayout>
+                                        <!-- Full Name -->
+                                        <Label Text="{Binding FullName}" 
+                                               FontAttributes="Bold" 
+                                               FontSize="14" 
+                                               HorizontalOptions="Center"/>
+                                        <!-- Role -->
+                                        <Label Text="{Binding Role}" 
+                                             FontAttributes="Italic" 
+                                             FontSize="12" 
+                                             HorizontalOptions="Center" />
+                                    </VerticalStackLayout>
+
+                                </HorizontalStackLayout>
+
+                                <!-- Account Info -->
+                                <StackLayout Spacing="2" Margin="0,5,0,5" >
+                                    <Grid ColumnDefinitions="Auto,*" >
+                                        <Label Text="Email:" FontSize="12" Grid.Column="0" VerticalOptions="Center"/>
+                                        <Label Text="{Binding Email}" FontSize="12" 
+                                               TextDecorations="Underline" 
+                                               Grid.Column="1"
+                                               HorizontalOptions="End"
+                                               VerticalOptions="Center"/>
+                                    </Grid>
+
+                                    <Grid ColumnDefinitions="Auto,*">
+                                        <Label Text="Password:" FontSize="12" Grid.Column="0" VerticalOptions="Center"/>
+                                        <Label Text="{Binding MaskedPassword}" FontSize="12"                                              
+                                               Grid.Column="1"
+                                               HorizontalOptions="End"
+                                               VerticalOptions="Center"/>
+                                    </Grid>
+                                </StackLayout>
+
+
+                                <!-- Buttons -->
+                                <HorizontalStackLayout Spacing="10" Padding="0, 40, 0, 0">
+                                    <Button Text="Modify Account"  
+                                            BackgroundColor="White"
+                                            CornerRadius="0"
+                                            TextColor="Black"
+                                            BorderColor="Black"
+                                            BorderWidth="1"
+                                            Command="{Binding BindingContext.GoToModifyStaffCommand, Source={x:Reference StaffCollection}}"
+                                            CommandParameter="{Binding .}"/>
+
+                                    <Button Text="Delete"  
+                                            BackgroundColor="White"
+                                            CornerRadius="0"
+                                            TextColor="Black"
+                                            BorderColor="Black"
+                                            BorderWidth="1"
+                                            Command="{Binding BindingContext.GoToRemoveStaffCommand, Source={x:Reference StaffCollection}}"
+                                            CommandParameter="{Binding .}"/>        
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
         </VerticalStackLayout>
     </ScrollView>
 </ContentView>

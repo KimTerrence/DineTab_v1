@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DineTab_v1.Views.Admin.NotificationPage">
+    <ScrollView Grid.Column="1" Padding="20">
+        <VerticalStackLayout Spacing="20" IsVisible="{Binding DashboardVisible}">
+            <!-- Header -->
+            <Border BackgroundColor="DimGray" Padding="20">
+                <VerticalStackLayout>
+                    <Label Text="Notification" 
+                           FontAttributes="Bold"
+                           TextColor="White"
+                           FontSize="24"/>
+                    <Label Text="Tuesday, June 24, 2025" 
+                           TextColor="White"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <VerticalStackLayout Spacing="10">
+                <Border Stroke="Black">
+                    <HorizontalStackLayout Spacing="10">
+                        <Image Source="icon.png" 
+                               HeightRequest="60"/>
+                        <VerticalStackLayout VerticalOptions="Center">
+                            <Label Text="sdsdsd" FontAttributes="Bold"/>
+                            <Label Text="ssaopfjioapswjfd"
+                                   TextColor="#B0ACAC"/>
+                        </VerticalStackLayout>
+                    </HorizontalStackLayout>
+                </Border>
+                
+                <Border Stroke="Black">
+                    <HorizontalStackLayout Spacing="10">
+                        <Image Source="icon.png" 
+               HeightRequest="60"/>
+                        <VerticalStackLayout VerticalOptions="Center">
+                            <Label Text="sdsdsd" FontAttributes="Bold"/>
+                            <Label Text="ssaopfjioapswjfd"
+                   TextColor="#B0ACAC"/>
+                        </VerticalStackLayout>
+                    </HorizontalStackLayout>
+                </Border>
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentView>

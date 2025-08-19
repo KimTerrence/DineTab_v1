@@ -24,6 +24,7 @@ namespace DineTab_v1.Views.Admin
                     "MenuManagement" => new MenuManagementPage(),
                     "StaffManagement" => new StaffManagementPage(),
                     "Reports" => new ReportsPage(),
+                    "Notification" => new NotificationPage(),
                     _ => new Dashboard()
                 };
             });
@@ -43,8 +44,6 @@ namespace DineTab_v1.Views.Admin
             {
                 MainPanelContainer.Content = new MenuManagementPage();
             });
-
-
         }
     }
 }

@@ -51,7 +51,8 @@
                         <VerticalStackLayout Grid.Row="0" Grid.Column="0">
                             <Label Text="First Name*" FontAttributes="Bold" TextColor="Black"/>
                             <Border Stroke="Black" StrokeThickness="1">
-                                <Entry Margin="5"/> 
+                                <Entry Margin="5"
+                                       Text="{Binding FirstName}"/> 
                             </Border>
                         </VerticalStackLayout>
 
@@ -59,7 +60,8 @@
                         <VerticalStackLayout Grid.Row="0" Grid.Column="1">
                             <Label Text="Last Name*" FontAttributes="Bold" TextColor="Black"/>
                             <Border Stroke="Black" StrokeThickness="1">
-                                <Entry Margin="5"/>
+                                <Entry Margin="5"
+                                       Text="{Binding LastName}"/>
                             </Border>
                         </VerticalStackLayout>
                     </Grid>
@@ -68,7 +70,8 @@
                     <VerticalStackLayout>
                         <Label Text="Email Address*" />
                         <Border Stroke="Black">
-                            <Entry></Entry>
+                            <Entry Margin="5"
+                                   Text="{Binding Email}"/>
                         </Border>
                     </VerticalStackLayout>
 
@@ -76,7 +79,8 @@
                     <VerticalStackLayout>
                         <Label Text="Password*" />
                         <Border Stroke="Black">
-                            <Entry></Entry>
+                            <Entry Margin="5"
+                                   Text="{Binding Password}"/>
                         </Border>
                     </VerticalStackLayout>
 
@@ -84,7 +88,8 @@
                     <VerticalStackLayout>
                         <Label Text="Confirm Password*" />
                         <Border Stroke="Black">
-                            <Entry></Entry>
+                            <Entry Margin="5"
+                                   Text="{Binding ConfirmPassword}"/>
                         </Border>
                     </VerticalStackLayout>
 
@@ -92,11 +97,11 @@
                     <VerticalStackLayout>
                         <Label Text="Accesibitlity*" />
                         <Border Stroke="Black">
-                            <Picker>
+                            <Picker SelectedItem="{Binding Role}">
                                 <Picker.Items>
                                     <x:String>Admin</x:String>
                                     <x:String>Cashier</x:String>
-                                    <x:String>Admin Staff</x:String>
+                                    <x:String>Staff</x:String>
                                 </Picker.Items>
                             </Picker>
                         </Border>
@@ -113,7 +118,8 @@
                                 CornerRadius="0" 
                                 HorizontalOptions="Start"
                                 BorderColor="Black"
-                                BorderWidth="1"/>
+                                BorderWidth="1"
+                                Command="{Binding CancelCommand}"/>
 
                         <Button Text="Add Account" 
                                 WidthRequest="150"
@@ -123,7 +129,8 @@
                                 Grid.Column="1"
                                 HorizontalOptions="End"
                                 BorderColor="Black"
-                                BorderWidth="1"/>
+                                BorderWidth="1"
+                                Command="{Binding AddAccountCommand}"/>
                     </Grid>
                 </VerticalStackLayout>
             </ScrollView>

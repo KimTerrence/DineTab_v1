@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using DineTab_v1.Services;
 using DineTab_v1.Views.Admin;
+using DineTab_v1.Views.KitchenStaff;
+using DineTab_v1.Views.Cashier;
 
 namespace DineTab_v1.ViewModels.Auth
 {
@@ -13,7 +15,7 @@ namespace DineTab_v1.ViewModels.Auth
     {
         private readonly AuthService _authService = new();
 
-        public string Username { get; set; }
+        public string Email { get; set; }
         public string Password { get; set; }
 
         public ICommand LoginCommand { get; }
@@ -28,8 +30,8 @@ namespace DineTab_v1.ViewModels.Auth
 
         private async void OnLogin()
         {
-            var user = _authService.Login("admin", "1234");
-            //var user = _authService.Login(Username, Password);
+            //var user = _authService.Login("admin", "1234");
+            var user = _authService.Login(Email, Password);
 
             if (user == null)
             {
@@ -43,10 +45,10 @@ namespace DineTab_v1.ViewModels.Auth
                     await Navigation.PushAsync(new AdminPage(user));
                     break;
                 case "Staff":
-                   
+                    await Navigation.PushAsync(new KitchenStaffPage());
                     break;
-                case "Employee":
-                  
+                case "Cashier":
+                    await Navigation.PushAsync(new CashierMenuPage());
                     break;
             }
         }

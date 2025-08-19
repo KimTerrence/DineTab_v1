@@ -10,6 +10,7 @@ public class AdminViewModel : BaseViewModel
     public ICommand ShowMenuManagementCommand { get; }
     public ICommand ShowStaffManagementCommand { get; }
     public ICommand ShowReportsCommand { get; }
+    public ICommand ShowNotificationCommand { get; }
 
     public AdminViewModel(User user)
     {
@@ -17,5 +18,6 @@ public class AdminViewModel : BaseViewModel
         ShowMenuManagementCommand = new Command(() => MessagingCenter.Send(this, "MenuSelected", "MenuManagement"));
         ShowStaffManagementCommand = new Command(() => MessagingCenter.Send(this, "MenuSelected", "StaffManagement"));
         ShowReportsCommand = new Command(() => MessagingCenter.Send(this, "MenuSelected", "Reports"));
+        ShowNotificationCommand = new Command(() => MessagingCenter.Send(this, "MenuSelected", "Notification"));
     }
 }
