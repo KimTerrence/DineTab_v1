@@ -1,7 +1,9 @@
 ﻿using DineTab_v1.Models;
 using DineTab_v1.Services;
 using DineTab_v1.Views.Admin;
+using Microsoft.Maui.Controls;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace DineTab_v1.ViewModels.Admin
@@ -19,40 +21,51 @@ namespace DineTab_v1.ViewModels.Admin
         {
             _dbService = new DatabaseService();
 
-            // Load staff/User from SQL Server
-            LoadUser();
+            // Subscribe to updates from Add/Modify/Delete staff
+            MessagingCenter.Subscribe<AddStaffViewModel>(this, "StaffUpdated", (sender) => LoadUser());
+            MessagingCenter.Subscribe<ModifyStaffViewModel>(this, "StaffUpdated", (sender) => LoadUser());
+            MessagingCenter.Subscribe<RemoveStaffViewModel>(this, "StaffUpdated", (sender) => LoadUser());
 
+            // Commands
             AddAccountCommand = new Command(OnAddAccount);
-            GoToRemoveStaffCommand = new Command(GoToRemoveStaff);
-            GoToModifyStaffCommand = new Command(GoToModifyStaff);
+            GoToRemoveStaffCommand = new Command<User>(async (user) => await GoToRemoveStaff(user));
+            GoToModifyStaffCommand = new Command<User>(async (user) => await GoToModifyStaff(user));
+
+            // Load staff from DB
+            LoadUser();
         }
 
         private async void OnAddAccount()
         {
-            // Navigate to modal AddStaffPage
             await Application.Current.MainPage.Navigation.PushModalAsync(new AddStaffPage());
         }
 
-        private async void GoToRemoveStaff()
+        private async Task GoToRemoveStaff(User user)
         {
-            // Navigate to modal AddStaffPage
-            await Application.Current.MainPage.Navigation.PushModalAsync(new RemoveStaffPage());
+            await Application.Current.MainPage.Navigation.PushModalAsync(new RemoveStaffPage(user));
         }
 
-        private async void GoToModifyStaff()
+        private async Task GoToModifyStaff(User user)
         {
-            // Navigate to modal AddStaffPage
-            await Application.Current.MainPage.Navigation.PushModalAsync(new ModifyStaffPage());
+            await Application.Current.MainPage.Navigation.PushModalAsync(new ModifyStaffPage(user));
         }
 
         private async void LoadUser()
         {
-            var staffFromDb = await _dbService.GetAllStaffAsync();
+            try
+            {
+                var staffFromDb = await _dbService.GetAllStaffAsync();
+                StaffList.Clear();
 
-            StaffList.Clear();
-            foreach (var s in staffFromDb)
-                StaffList.Add(s);
+                foreach (var u in staffFromDb)
+                {
+                    StaffList.Add(u);
+                }
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", $"Failed to load staff: {ex.Message}", "OK");
+            }
         }
-
     }
 }

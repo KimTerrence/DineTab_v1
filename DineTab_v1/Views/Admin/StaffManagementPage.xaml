@@ -86,7 +86,7 @@
                             <VerticalStackLayout Spacing="20">
                                 <!-- Avatar -->
                                 <HorizontalStackLayout VerticalOptions="Center" Spacing="10">
-                                    <Image Source="icon.png" HeightRequest="50"/>
+                                    <Image Source="{Binding ProfileImageSource}" HeightRequest="50" WidthRequest="50"/>
                                     <VerticalStackLayout>
                                         <!-- Full Name -->
                                         <Label Text="{Binding FullName}" 

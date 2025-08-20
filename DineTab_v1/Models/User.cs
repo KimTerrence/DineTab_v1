@@ -1,31 +1,61 @@
-﻿namespace DineTab_v1.Models
+﻿using Microsoft.Maui.Controls;
+using Microsoft.Maui.Storage;
+using System;
+using System.ComponentModel;
+using System.IO;
+
+namespace DineTab_v1.Models
 {
-    public class User
+    public class User : INotifyPropertyChanged
     {
-        public string FullName => $"{FirstName} {LastName}";
+
+        public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public string Role { get; set; } // Admin, Staff, Cashier
-        public string Status { get; set; } // Active, Inactive, etc.
-        public string PhotoPath { get; set; } // Path to user's photo, if any
+        public string Role { get; set; }
+        public string Status { get; set; }
 
-
-         public string MaskedPassword // hash a portion of the passwrd
-    {
-        get
+        private string profileImageFile;
+        public string ProfileImageFile
         {
-            if (string.IsNullOrEmpty(Password))
-                return "";
-
-            // Show only first 3 characters, mask the rest
-            if (Password.Length <= 3)
-                return new string('*', Password.Length);
-
-            return Password.Substring(0, 3) + new string('*', Password.Length - 3);
+            get => profileImageFile;
+            set
+            {
+                if (profileImageFile != value)
+                {
+                    profileImageFile = value;
+                    OnPropertyChanged(nameof(ProfileImageFile));
+                    OnPropertyChanged(nameof(ProfileImageSource));
+                }
+            }
         }
-    }
-    }
 
+        // This forces a unique path every time so MAUI reloads it
+        public ImageSource ProfileImageSource
+        {
+            get
+            {
+                if (!string.IsNullOrWhiteSpace(ProfileImageFile))
+                {
+                    var imagesFolder = AppPaths.GetImagesFolder();
+                    var fullPath = Path.Combine(imagesFolder, ProfileImageFile);
+                    if (File.Exists(fullPath))
+                        return ImageSource.FromFile(fullPath + $"?{DateTime.Now.Ticks}");
+                }
+                return "icon.png";
+            }
+        }
+
+        public string FullName => $"{FirstName} {LastName}";
+        public string MaskedPassword =>
+            string.IsNullOrEmpty(Password) ? "" :
+            (Password.Length <= 3 ? new string('*', Password.Length)
+                                  : Password[..3] + new string('*', Password.Length - 3));
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string propertyName) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
 }

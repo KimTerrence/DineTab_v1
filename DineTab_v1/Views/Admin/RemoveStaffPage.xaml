@@ -37,10 +37,11 @@
                         <HorizontalStackLayout>
                             <Image Source="icon.png" HeightRequest="60"/>
                             <VerticalStackLayout>
-                                <Label Text="Name" />
-                                <Label Text="Role" />
-                                <Label Text="Employee ID" />
-                                <Label Text="Last Login" />
+                                <Label Text="{Binding FullName}" FontAttributes="Bold"/>
+                                <Label Text="{Binding FullName}" FontAttributes="Bold"/>
+                                <Label Text="{Binding Role}"/>
+                                <Label Text="{Binding EmployeeId, StringFormat='Employee ID: {0}'}"/>
+                                <Label Text="{Binding LastLogin, StringFormat='Last Login: {0}'}"/>
                             </VerticalStackLayout>
                         </HorizontalStackLayout>
                     </Border>

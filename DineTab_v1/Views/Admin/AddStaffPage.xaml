@@ -30,7 +30,7 @@
 
                     <!-- Upload photo -->
                     <VerticalStackLayout BackgroundColor="Transparent">
-                        <Image Source="icon.png"
+                        <Image Source="{Binding ProfileImage}"
                                    Aspect="AspectFit"
                                    HorizontalOptions="Center"
                                    VerticalOptions="Center"
@@ -40,7 +40,8 @@
                             WidthRequest="150"
                             BackgroundColor="#D9D9D9"
                             TextColor="#7D7D7D"
-                            CornerRadius="0"/>
+                            CornerRadius="0"
+                            Command="{Binding UploadPhotoCommand}"/>
                     </VerticalStackLayout>
                    
                     <!-- Staff Info -->
@@ -101,7 +102,7 @@
                                 <Picker.Items>
                                     <x:String>Admin</x:String>
                                     <x:String>Cashier</x:String>
-                                    <x:String>Staff</x:String>
+                                    <x:String>Kitchen Staff</x:String>
                                 </Picker.Items>
                             </Picker>
                         </Border>

@@ -1,5 +1,6 @@
 ﻿using DineTab_v1.Models;
 using Microsoft.Data.SqlClient;
+
 namespace DineTab_v1.Services
 {
     public class AuthService
@@ -15,7 +16,7 @@ namespace DineTab_v1.Services
                 {
                     conn.Open();
                     var cmd = new SqlCommand(
-                        "SELECT Email, Role, FirstName, LastName FROM Users WHERE Email = @Email AND Password = @Password",
+                        "SELECT Id, Email, Role, FirstName, LastName FROM Users WHERE Email = @Email AND Password = @Password",
                         conn);
 
                     cmd.Parameters.AddWithValue("@Email", email);
@@ -25,10 +26,19 @@ namespace DineTab_v1.Services
                     {
                         if (reader.Read())
                         {
+                            // Get user ID for updating last login
+                            int userId = Convert.ToInt32(reader["Id"]);
+
+                            // Update LastLogin timestamp
+                            UpdateLastLogin(userId);
+
                             return new User
                             {
+                                Id = userId,
                                 Email = reader["Email"].ToString(),
-                                Role = reader["Role"].ToString()
+                                Role = reader["Role"].ToString(),
+                                FirstName = reader["FirstName"].ToString(),
+                                LastName = reader["LastName"].ToString()
                             };
                         }
                     }
@@ -36,10 +46,30 @@ namespace DineTab_v1.Services
             }
             catch (Exception ex)
             {
-                // Show the real error instead of crashing
                 Console.WriteLine($"❌ Login error: {ex.Message}");
             }
+
             return null;
+        }
+
+        private void UpdateLastLogin(int userId)
+        {
+            try
+            {
+                using (var conn = new SqlConnection(_connectionString))
+                {
+                    conn.Open();
+                    var cmd = new SqlCommand(
+                        "UPDATE Users SET LastLogin = @LastLogin WHERE Id = @Id", conn);
+                    cmd.Parameters.AddWithValue("@LastLogin", DateTime.Now);
+                    cmd.Parameters.AddWithValue("@Id", userId);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ Failed to update LastLogin: {ex.Message}");
+            }
         }
     }
 }

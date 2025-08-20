@@ -2,15 +2,24 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="DineTab_v1.Views.Admin.ModifyStaffPage"
+             xmlns:local="clr-namespace:DineTab_v1.Converters"
              Title="ModifyStaffPage"
              Background="#80000000">
+
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:BoolToStatusConverter x:Key="BoolToStatusConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
     <!-- Full overlay -->
     <Grid>
 
         <!-- Centered Dialog -->
         <Border BackgroundColor="White"
                 Padding="20"
-                WidthRequest="450"
+                WidthRequest="500"
                 MaximumHeightRequest="600"
                 VerticalOptions="Center"
                 HorizontalOptions="Center"
@@ -38,20 +47,22 @@
                             </Grid.ColumnDefinitions>
 
                             <!-- Profile Image -->
-                            <Image Source="icon.png"
-                                   HeightRequest="60"
-                                   WidthRequest="60"
-                                   Grid.Column="0"
-                                   VerticalOptions="Center" />
+                                <Image Source="{Binding ProfileImage}" 
+                                       HeightRequest="80" WidthRequest="80" 
+                                       Aspect="AspectFill"/>
 
-                            <!-- Info labels -->
+                                <!-- Info labels -->
                             <VerticalStackLayout Grid.Column="1"
                              VerticalOptions="Center"
                              Spacing="2">
-                                <Label Text="Empty" />
-                                <Label Text="Empty" />
-                                <Label Text="Empty" />
-                                <Label Text="Empty" />
+                                <Label Text="{Binding Fullname}" />
+                                <HorizontalStackLayout>
+                                    <Label Text="Role: " FontAttributes="Bold" />
+                                    <Label Text="{Binding Role}" />
+                                </HorizontalStackLayout>
+                                
+                                <Label Text="{Binding Id}" />
+                                <Label Text="Last Login" />
                             </VerticalStackLayout>
 
                             <!-- Status / Switch -->
@@ -63,7 +74,11 @@
 
                                 <Border Stroke="Black" Padding="5">
                                     <HorizontalStackLayout HeightRequest="20" HorizontalOptions="Center">
-                                        <Switch VerticalOptions="Center"/>
+                                        <!-- Active Switch -->
+                                        <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+                                            <Switch IsToggled="{Binding IsActive, Mode=TwoWay}" />
+                                            <Label Text="{Binding StatusText}" VerticalOptions="Center"/>
+                                        </HorizontalStackLayout>
                                         <Label Text="Active"
                                                VerticalOptions="Center"/>       
                                     </HorizontalStackLayout>
@@ -87,7 +102,8 @@
                         <VerticalStackLayout Grid.Row="0" Grid.Column="0">
                             <Label Text="First Name*" FontAttributes="Bold" TextColor="Black"/>
                             <Border Stroke="Black" StrokeThickness="1">
-                                <Entry Margin="5"/>
+                                <Entry Margin="5"
+                                       Text="{Binding FirstName}"/>
                             </Border>
                         </VerticalStackLayout>
 
@@ -95,7 +111,8 @@
                         <VerticalStackLayout Grid.Row="0" Grid.Column="1">
                             <Label Text="Last Name*" FontAttributes="Bold" TextColor="Black"/>
                             <Border Stroke="Black" StrokeThickness="1">
-                                <Entry Margin="5"/>
+                                <Entry Margin="5"
+                                       Text="{Binding LastName}"/>
                             </Border>
                         </VerticalStackLayout>
                     </Grid>
@@ -104,39 +121,56 @@
                     <VerticalStackLayout>
                         <Label Text="Email Address*" />
                         <Border Stroke="Black">
-                            <Entry></Entry>
+                            <Entry Margin="5"
+                                   Text="{Binding Email}"/>
                         </Border>
                     </VerticalStackLayout>
 
-                    <!---Accesibiloty-->
-                    <VerticalStackLayout>
-                        <Label Text="Accesibility*" />
-                        <HorizontalStackLayout  Spacing="20">
-                            <Border Stroke="Black">
-                                <HorizontalStackLayout >
-                                    <CheckBox Color="Black"/>
-                                    <Label Text="Admin" VerticalOptions="Center" WidthRequest="60"/>
-                                </HorizontalStackLayout>
-                            </Border>
-                            <Border Stroke="Black">
-                                <HorizontalStackLayout >
-                                    <CheckBox Color="Black"/>
-                                    <Label Text="Cashier" VerticalOptions="Center" WidthRequest="60"/>
-                                </HorizontalStackLayout>
-                            </Border>
-                            <Border Stroke="Black">
-                                <HorizontalStackLayout >
-                                    <CheckBox Color="Black"/>
-                                    <Label Text="Kitchen Staff" VerticalOptions="Center" WidthRequest="100"/>
-                                </HorizontalStackLayout>
-                            </Border>
-                        </HorizontalStackLayout>
-                        
+                    <!-- Role Selection -->
+                    <HorizontalStackLayout Spacing="20">
+                        <RadioButton IsChecked="{Binding IsAdmin, Mode=TwoWay}"
+                                     Content="Admin"
+                                     GroupName="RoleGroup"/>
+
+                        <RadioButton IsChecked="{Binding IsCashier, Mode=TwoWay}"
+                                     Content="Cashier"
+                                     GroupName="RoleGroup"/>
+
+                        <RadioButton IsChecked="{Binding IsKitchenStaff, Mode=TwoWay}"
+                                     Content="Kitchen Staff"
+                                     GroupName="RoleGroup"/>
+                    </HorizontalStackLayout>
+
+                    <VerticalStackLayout Spacing="10" IsVisible="{Binding IsResetPasswordVisible}">
+                        <Label Text="New Password*" FontAttributes="Bold"/>
+                        <Border Stroke="Black" Padding="5">
+                            <Entry Margin="5"
+                                   IsPassword="True"
+                                   Text="{Binding NewPassword}" />
+                        </Border>
+
+                        <Label Text="Confirm Password*" FontAttributes="Bold"/>
+                        <Border Stroke="Black" Padding="5">
+                            <Entry Margin="5"
+                                   IsPassword="True"
+                                   Text="{Binding ConfirmPassword}" />      
+                        </Border>
                     </VerticalStackLayout>
 
                     <!---Button-->
-                    <Grid RowDefinitions="Auto" ColumnDefinitions="*,*"
+                    <Grid RowDefinitions="Auto" ColumnDefinitions="Auto,Auto,Auto"
                           ColumnSpacing="10" RowSpacing="15">
+
+                        <Button Text="ResetPassword" 
+                                WidthRequest="150"
+                                BackgroundColor="White"
+                                TextColor="black"
+                                CornerRadius="0" 
+                                HorizontalOptions="Start"
+                                BorderColor="Black"
+                                BorderWidth="1"
+                                Grid.Column="0"
+                                Command="{Binding ToggleResetPasswordCommand}"/>
 
                         <Button Text="Cancel" 
                                 WidthRequest="150"
@@ -145,17 +179,20 @@
                                 CornerRadius="0" 
                                 HorizontalOptions="Start"
                                 BorderColor="Black"
-                                BorderWidth="1"/>
+                                BorderWidth="1"
+                                Grid.Column="1"
+                                Command="{Binding CancelCommand}"/>
 
-                        <Button Text="Add Account" 
-                                WidthRequest="150"
+                        <Button Text="Save" 
+                                WidthRequest="135"
                                 BackgroundColor="White"
                                 TextColor="Black"
                                 CornerRadius="0"
-                                Grid.Column="1"
+                                Grid.Column="2"
                                 HorizontalOptions="End"
                                 BorderColor="Black"
-                                BorderWidth="1"/>
+                                BorderWidth="1"
+                                Command="{Binding SaveCommand}"/>
                     </Grid>
                 </VerticalStackLayout>
             </ScrollView>
