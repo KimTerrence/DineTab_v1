@@ -6,11 +6,14 @@ namespace DineTab_v1.Services
 {
     public class DatabaseService
     {
+        public List<Category> Categories { get; set; } = new();
+
         private readonly string _connectionString =
             "Server=192.168.43.57\\SQLEXPRESS;Database=dinetab_db;User Id=appuser;Password=12345;TrustServerCertificate=True;";
 
         public async Task<bool> AddStaffAsync(User user)
         {
+
             using (SqlConnection conn = new SqlConnection(_connectionString))
             {
                 await conn.OpenAsync();
@@ -143,5 +146,223 @@ namespace DineTab_v1.Services
             }
         }
 
+        //Add  Menu Item
+        public async Task<bool> AddMenuItemAsync(Item item)
+        {
+            try
+            {
+                using SqlConnection conn = new SqlConnection(_connectionString);
+                await conn.OpenAsync();
+
+                string query = @"INSERT INTO Items (Name, Price, CategoryId, Availability, Spicy, Image)
+                         VALUES (@ItemName, @Price, @CategoryId, @Availability, @Spicy, @Image)";
+
+                using SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@ItemName", item.ItemName);
+                cmd.Parameters.AddWithValue("@Price", item.Price);
+                cmd.Parameters.AddWithValue("@CategoryId", item.CategoryId);
+                cmd.Parameters.AddWithValue("@Availability", item.Availability);
+                cmd.Parameters.AddWithValue("@Spicy", item.Spicy);
+                cmd.Parameters.AddWithValue("@Image", item.Image ?? new byte[0]);
+
+                int rows = await cmd.ExecuteNonQueryAsync();
+                return rows > 0;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"AddMenuItemAsync error: {ex.Message}");
+                return false;
+            }
+        }
+
+
+        // Update an existing menu item
+        public async Task<bool> UpdateMenuItemAsync(Item item)
+        {
+            using SqlConnection conn = new SqlConnection(_connectionString);
+            await conn.OpenAsync();
+
+            var cmd = conn.CreateCommand();
+            cmd.CommandText = @"
+                UPDATE Items
+                SET ItemName = $name,
+                    Price = $price,
+                    CategoryId = $categoryId,
+                    Availability = $availability,
+                    Spicy = $spicy,
+                    Image = $image
+                WHERE Id = $id;
+            ";
+
+            cmd.Parameters.AddWithValue("$name", item.ItemName);
+            cmd.Parameters.AddWithValue("$price", item.Price);
+            cmd.Parameters.AddWithValue("$categoryId", item.CategoryId);
+            cmd.Parameters.AddWithValue("$availability", item.Availability);
+            cmd.Parameters.AddWithValue("$spicy", item.Spicy);
+            cmd.Parameters.AddWithValue("$image", item.Image ?? new byte[0]);
+            cmd.Parameters.AddWithValue("$id", item.Id);
+
+            var result = await cmd.ExecuteNonQueryAsync();
+            return result > 0;
+        }
+  
+        // Get all categories
+        public async Task<List<Category>> GetCategoriesAsync()
+        {
+            var categories = new List<Category>();
+            using SqlConnection conn = new SqlConnection(_connectionString);
+            await conn.OpenAsync();
+
+            string query = "SELECT Id, Name FROM Categories";
+            using SqlCommand cmd = new SqlCommand(query, conn);
+            using SqlDataReader reader = await cmd.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                categories.Add(new Category
+                {
+                    Id = reader.GetInt32(0),
+                    Name = reader.GetString(1)
+                });
+            }
+            return categories;
+        }
+
+
+        // Add new category
+        public async Task<int> AddCategoryAsync(string categoryName)
+        {
+            try
+            {
+                using SqlConnection conn = new SqlConnection(_connectionString);
+                await conn.OpenAsync();
+
+                string query = @"INSERT INTO Categories (Name) OUTPUT INSERTED.Id VALUES (@Name)";
+                using SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@Name", categoryName);
+
+                // Returns the new Id
+                int newId = (int)await cmd.ExecuteScalarAsync();
+                return newId;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"AddCategoryAsync error: {ex.Message}");
+                return 0; // 0 means failed
+            }
+        }
+
+
+        // Delete category
+        public async Task<bool> DeleteCategoryAsync(int categoryId)
+        {
+            try
+            {
+                using SqlConnection conn = new SqlConnection(_connectionString);
+                await conn.OpenAsync();
+
+                string query = "DELETE FROM Categories WHERE Id = @Id";
+                using SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@Id", categoryId);
+
+                int rows = await cmd.ExecuteNonQueryAsync();
+                return rows > 0;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"DeleteCategoryAsync error: {ex.Message}");
+                return false;
+            }
+        }
+
+
+        public async Task LoadCategoriesAsync()
+        {
+            using SqlConnection conn = new SqlConnection(_connectionString);
+            await conn.OpenAsync();
+
+            string query = "SELECT Id, Name FROM Categories";
+            using SqlCommand cmd = new SqlCommand(query, conn);
+            using SqlDataReader reader = await cmd.ExecuteReaderAsync();
+
+            Categories.Clear();
+            while (await reader.ReadAsync())
+            {
+                Categories.Add(new Category
+                {
+                    Id = reader.GetInt32(0),
+                    Name = reader.GetString(1)
+                });
+            }
+        }
+
+
+        // Get all items
+        public async Task<List<Item>> GetMenuItemsAsync()
+        {
+            var items = new List<Item>();
+
+            try
+            {
+                using SqlConnection conn = new SqlConnection(_connectionString);
+                await conn.OpenAsync();
+
+                string query = @"
+                SELECT i.Id, i.Name, i.Price, i.CategoryId, i.Availability, i.Spicy, i.Image, c.Name AS CategoryName
+                FROM Items i
+                LEFT JOIN Categories c ON i.CategoryId = c.Id";
+
+                using SqlCommand cmd = new SqlCommand(query, conn);
+                using SqlDataReader reader = await cmd.ExecuteReaderAsync();
+
+                while (await reader.ReadAsync())
+                {
+                    items.Add(new Item
+                    {
+                        Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                        ItemName = reader.GetString(reader.GetOrdinal("Name")),
+                        Price = reader.GetDecimal(reader.GetOrdinal("Price")),
+                        CategoryId = reader.GetInt32(reader.GetOrdinal("CategoryId")),
+                        Availability = reader.GetString(reader.GetOrdinal("Availability")),
+                        Spicy = reader.GetString(reader.GetOrdinal("Spicy")),
+                        CategoryName = reader.IsDBNull(reader.GetOrdinal("CategoryName"))
+                                       ? "Unknown"
+                                       : reader.GetString(reader.GetOrdinal("CategoryName")),
+                        Image = reader.IsDBNull(reader.GetOrdinal("Image"))
+                                ? null
+                                : (byte[])reader["Image"]
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"GetMenuItemsAsync error: {ex.Message}");
+            }
+
+            return items;
+        }
+
+        // Delete a menu item by ID
+        public async Task<bool> DeleteMenuItemAsync(int itemId)
+        {
+            try
+            {
+                using SqlConnection conn = new SqlConnection(_connectionString);
+                await conn.OpenAsync();
+
+                using var cmd = conn.CreateCommand();
+                cmd.CommandText = "DELETE FROM Items WHERE Id = @Id";
+                cmd.Parameters.AddWithValue("@Id", itemId);
+
+                int rows = await cmd.ExecuteNonQueryAsync();
+                return rows > 0;
+            }
+            catch (Exception ex)
+            {
+                // Log exception if needed
+                return false;
+            }
+        }
+
+        // Other database methods like GetMenuItemsAsync(), GetCategoriesAsync(), etc.
     }
 }

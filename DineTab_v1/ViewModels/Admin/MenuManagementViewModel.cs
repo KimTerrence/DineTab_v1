@@ -10,8 +10,11 @@ namespace DineTab_v1.ViewModels.Admin
 {
     public class MenuManagementViewModel : BaseViewModel
     {
-        public ObservableCollection<string> Categories => CategoryService.Instance.Categories;
-        public ObservableCollection<Item> MenuItems { get; set; }
+
+        private readonly DatabaseService _dbService = new DatabaseService(); //database service instance
+
+
+        public ObservableCollection<Item> MenuItems { get; set; } = new();
 
         // Inputs for new item
         private string _newItemName;
@@ -32,21 +35,44 @@ namespace DineTab_v1.ViewModels.Admin
         public ICommand OpenAddItemPageCommand { get; }
         public ICommand EditItemCommand { get; }
         public ICommand DeleteItemCommand { get; }
+        public ObservableCollection<Category> Categories { get; set; } = new();
+
+        public ObservableCollection<Item> Items { get; set; }
+        public ICommand LoadDataCommand { get; }
 
         public MenuManagementViewModel()
         {
-            MenuItems = new ObservableCollection<Item>
+            MessagingCenter.Subscribe<DeleteItemViewModel>(this, "MenuUpdated", async (sender) =>
             {
-                new Item { Name="Burger", Category="Food", Status="Available" },
-                new Item { Name="Pizza", Category="Food", Status="Out of Stock" },
-                new Item { Name="Coke", Category="Drinks", Status="Available" },
-                new Item { Name="Ice Cream", Category="Desserts", Status="Available" }
-            };
+                await LoadMenuItemsAsync();
+            });
+
+            MessagingCenter.Subscribe<ModifyCategoriesViewModel>(this, "CategoriesUpdated", async (sender) =>
+            {
+                await LoadCategories();
+            });
+
+         
+            MenuItems = new ObservableCollection<Item>(); //
 
             ModifyCategoriesCommand = new Command(OnModifyCategories);
             OpenAddItemPageCommand = new Command(OnOpenAddItemPage);
             EditItemCommand = new Command<Item>(OnEditItem);
             DeleteItemCommand = new Command<Item>(OnDeleteItem);
+
+            // Load initial data
+            LoadDataCommand = new Command(async () => await LoadData());
+            LoadDataCommand.Execute(null);
+        }
+        //
+        private async Task LoadData()
+        {
+            // Load categories from database
+            var categoriesFromDb = await _dbService.GetCategoriesAsync();
+            Categories.Clear();
+            foreach (var cat in categoriesFromDb)
+                Categories.Add(cat);
+
         }
 
         private async void OnModifyCategories()
@@ -57,28 +83,45 @@ namespace DineTab_v1.ViewModels.Admin
         private async void OnOpenAddItemPage()
         {
             // Navigate to AddNewItemPage
-            var page = new Views.Admin.AddNewItemPage(MenuItems);
+            var page = new Views.Admin.AddNewItemPage();
             await Application.Current.MainPage.Navigation.PushModalAsync(page);
         }
-
-        private async void OnEditItem(Item item)
-        {
-            if (item == null) return;
-            await Application.Current.MainPage.Navigation.PushAsync(new Views.Admin.AddNewItemPage(item));
-        }
-
 
         private async void OnDeleteItem(Item item)
         {
             if (item == null) return;
 
-            var page = new Views.Admin.DeletePage(item, (confirmedItem) =>
-            {
-                if (MenuItems.Contains(confirmedItem))
-                    MenuItems.Remove(confirmedItem);
-            });
+            var deletePage = new Views.Admin.DeletePage(item, MenuItems);
+            await Application.Current.MainPage.Navigation.PushModalAsync(deletePage);
+        }
 
-            await Application.Current.MainPage.Navigation.PushModalAsync(page);
+
+        // Load categories from database
+        private async Task LoadCategories()
+        {
+            var categoriesFromDb = await _dbService.GetCategoriesAsync();
+            Categories.Clear();
+            foreach (var cat in categoriesFromDb)
+                Categories.Add(cat);
+        }
+
+        //Load menu items from database
+        public async Task LoadMenuItemsAsync()
+        {
+            var items = await _dbService.GetMenuItemsAsync();
+            MenuItems.Clear();
+            foreach (var item in items)
+                MenuItems.Add(item);
+        }
+
+        // Edit item command handler
+        private async void OnEditItem(Item item)
+        {
+            if (item == null) return;
+
+            // Navigate to Add/Edit Item page with the selected item
+            var editPage = new Views.Admin.AddNewItemPage(item);
+            await Application.Current.MainPage.Navigation.PushModalAsync(editPage);
         }
 
     }

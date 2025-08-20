@@ -48,7 +48,7 @@
                 <HorizontalStackLayout Spacing="10">
                     <Image Source="icon.png" HeightRequest="50"/>
                     <VerticalStackLayout>
-                        <Label Text="{Binding Name}"
+                        <Label Text="{Binding ItemName}"
                                FontSize="16"
                                FontAttributes="Bold"
                                TextColor="Black"/>

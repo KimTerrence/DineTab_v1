@@ -1,29 +1,15 @@
-using DineTab_v1.ViewModels.Admin;
 using DineTab_v1.Models;
+using DineTab_v1.ViewModels.Admin;
+using System.Collections.ObjectModel;
+using DineTab_v1.ViewModels;
 
-namespace DineTab_v1.Views.Admin
+namespace DineTab_v1.Views.Admin;
+
+public partial class DeletePage : ContentPage
 {
-    public partial class DeletePage : ContentPage
+    public DeletePage(Item item, ObservableCollection<Item> menuItems)
     {
-        public DeletePage(Item item, Action<Item> onConfirmed)
-        {
-            InitializeComponent();
-
-            var vm = new DeleteViewModel(item);
-            BindingContext = vm;
-
-            vm.DeleteConfirmed += async (deletedItem) =>
-            {
-                onConfirmed?.Invoke(deletedItem);
-                if (Navigation.ModalStack.Count > 0)
-                    await Navigation.PopModalAsync();
-            };
-
-            vm.Cancelled += async () =>
-            {
-                if (Navigation.ModalStack.Count > 0)
-                    await Navigation.PopModalAsync();
-            };
-        }
+        InitializeComponent();
+        BindingContext = new DeleteItemViewModel(item, menuItems);
     }
 }

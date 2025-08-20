@@ -8,6 +8,8 @@ namespace DineTab_v1.Views.Admin
         {
             InitializeComponent();
             BindingContext = new MenuManagementViewModel();
+
+            Task.Run(async () => await ((MenuManagementViewModel)BindingContext).LoadMenuItemsAsync());
         }
     }
 }

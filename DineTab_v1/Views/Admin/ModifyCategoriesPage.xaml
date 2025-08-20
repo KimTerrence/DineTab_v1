@@ -64,7 +64,7 @@
                                         </Grid.ColumnDefinitions>
 
                                         <!-- Category Name -->
-                                        <Label Text="{Binding .}" VerticalOptions="Center" FontSize="12" TextColor="Black" />
+                                        <Label Text="{Binding Name}" VerticalOptions="Center" FontSize="12" TextColor="Black" />
 
                                         <!-- Remove Button -->
                                         <Button Grid.Column="1"
@@ -75,7 +75,7 @@
                                         BackgroundColor="Transparent"
                                         Padding="0"
                                         TextColor="Black"
-                                        Command="{Binding Source={x:Reference RootContentView}, Path=BindingContext.DeleteCategoryCommand}"
+                                        Command="{Binding Source={x:Reference RootPage}, Path=BindingContext.DeleteCategoryCommand}"
                                         CommandParameter="{Binding .}" />
                                     </Grid>
                                 </Border>

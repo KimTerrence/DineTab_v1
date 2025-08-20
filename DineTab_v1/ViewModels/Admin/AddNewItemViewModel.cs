@@ -1,4 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Microsoft.Maui.Controls;
 using DineTab_v1.Models;
@@ -8,96 +11,134 @@ namespace DineTab_v1.ViewModels.Admin
 {
     public class AddNewItemViewModel : BaseViewModel
     {
-        public ObservableCollection<string> Categories => CategoryService.Instance.Categories;
-        public ObservableCollection<string> AvailabilityOptions { get; } = new() { "Available", "Out of Stock" };
-        public ObservableCollection<string> SpicyOptions { get; } = new() { "Yes", "No" };
+        private readonly DatabaseService _dbService = new DatabaseService();
 
-        // Editable fields
-        public string ItemName { get; set; }
-        public string Price { get; set; }
-        public string SelectedCategory { get; set; }
-        public string SelectedAvailability { get; set; }
-        public string SelectedSpicy { get; set; }
-        public string ItemImage { get; set; }
+        public Item CurrentItem { get; set; }
 
+        // Form fields
+        public string ItemName { get; set; } = string.Empty;
+        public string Price { get; set; } = string.Empty;
+        public string SelectedAvailability { get; set; } = "Available";
+        public string SelectedSpicy { get; set; } = "No";
+        public Category SelectedCategory { get; set; }
+        public byte[]? ItemImage { get; set; }
+
+        // Collections for UI
+        public ObservableCollection<Category> Categories { get; set; } = new();
+        public ObservableCollection<string> AvailabilityOptions { get; set; } = new() { "Available", "Unavailable" };
+        public ObservableCollection<string> SpicyOptions { get; set; } = new() { "No", "Mild", "Spicy", "Extra Spicy" };
+
+        // Commands
         public ICommand AddItemCommand { get; }
         public ICommand CancelCommand { get; }
         public ICommand UploadImageCommand { get; }
 
-        private readonly Item _editingItem;
-        private readonly ObservableCollection<Item> _menuItems;
-
-        // Constructor for adding a new item
-        public AddNewItemViewModel(ObservableCollection<Item> menuItems)
+        public AddNewItemViewModel(Item item = null)
         {
-            _menuItems = menuItems;
-
-            AddItemCommand = new Command(OnAddItem);
-            CancelCommand = new Command(OnCancel);
-            UploadImageCommand = new Command(OnUploadImage);
-        }
-
-        // Constructor for editing an existing item
-        public AddNewItemViewModel(Item editingItem)
-        {
-            _editingItem = editingItem;
-
-            ItemName = editingItem.Name;
-            Price = editingItem.Price;
-            SelectedCategory = editingItem.Category;
-            SelectedAvailability = editingItem.Status;
-            SelectedSpicy = editingItem.Spicy;
-            ItemImage = editingItem.ImagePath;
-
-            AddItemCommand = new Command(OnEditItem);
-            CancelCommand = new Command(OnCancel);
-            UploadImageCommand = new Command(OnUploadImage);
-        }
-
-        private async void OnAddItem()
-        {
-            if (string.IsNullOrWhiteSpace(ItemName) || string.IsNullOrWhiteSpace(SelectedCategory))
+            // If item is provided, we are editing
+            if (item != null)
             {
-                await Application.Current.MainPage.DisplayAlert("Error", "Item name and category cannot be empty.", "OK");
+                CurrentItem = item;
+                ItemName = item.ItemName;
+                Price = item.Price.ToString();
+                SelectedAvailability = item.Availability;
+                SelectedSpicy = item.Spicy;
+                SelectedCategory = new Category { Id = item.CategoryId, Name = item.CategoryName };
+                ItemImage = item.Image;
+            }
+            else
+            {
+                CurrentItem = new Item();
+            }
+
+            // Commands
+            AddItemCommand = new Command(async () => await AddOrUpdateItem());
+            CancelCommand = new Command(async () => await Cancel());
+            UploadImageCommand = new Command(async () => await UploadImage());
+
+            // Load categories from database
+            _ = LoadCategories();
+        }
+
+        private async Task LoadCategories()
+        {
+            var categories = await _dbService.GetCategoriesAsync();
+            Categories.Clear();
+            foreach (var cat in categories)
+                Categories.Add(cat);
+        }
+
+        private async Task AddOrUpdateItem()
+        {
+            if (string.IsNullOrWhiteSpace(ItemName) || string.IsNullOrWhiteSpace(Price))
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", "Please fill all required fields", "OK");
                 return;
             }
 
-            _menuItems.Add(new Item
+            if (!decimal.TryParse(Price, out decimal priceValue))
             {
-                Name = ItemName,
-                Category = SelectedCategory,
-                Status = SelectedAvailability,
-                Spicy = SelectedSpicy,
-                Price = Price,
-                ImagePath = ItemImage
-            });
+                await Application.Current.MainPage.DisplayAlert("Error", "Invalid price", "OK");
+                return;
+            }
 
-            await Application.Current.MainPage.Navigation.PopAsync();
-        }
+            CurrentItem.ItemName = ItemName;
+            CurrentItem.Price = priceValue;
+            CurrentItem.CategoryId = SelectedCategory?.Id ?? 0;
+            CurrentItem.Availability = SelectedAvailability;
+            CurrentItem.Spicy = SelectedSpicy;
+            CurrentItem.Image = ItemImage;
 
-        private async void OnEditItem()
-        {
-            if (_editingItem != null)
+            bool result;
+            if (CurrentItem.Id > 0) // Existing item
             {
-                _editingItem.Name = ItemName;
-                _editingItem.Category = SelectedCategory;
-                _editingItem.Status = SelectedAvailability;
-                _editingItem.Spicy = SelectedSpicy;
-                _editingItem.Price = Price;
-                _editingItem.ImagePath = ItemImage;
+                result = await _dbService.UpdateMenuItemAsync(CurrentItem);
+            }
+            else // New item
+            {
+                result = await _dbService.AddMenuItemAsync(CurrentItem);
+            }
 
-                await Application.Current.MainPage.Navigation.PopAsync();
+            if (result)
+            {
+                await Application.Current.MainPage.DisplayAlert("Success", "Item saved successfully", "OK");
+                MessagingCenter.Send(this, "MenuUpdated"); // Notify MenuManagementPage to refresh
+                await Application.Current.MainPage.Navigation.PopModalAsync();
+            }
+            else
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", "Failed to save item", "OK");
             }
         }
 
-        private async void OnCancel()
+        private async Task Cancel()
         {
-            await Application.Current.MainPage.Navigation.PopAsync();
+            await Application.Current.MainPage.Navigation.PopModalAsync();
         }
 
-        private void OnUploadImage()
+        private async Task UploadImage()
         {
-            // implement image picker here
+            try
+            {
+                var result = await FilePicker.PickAsync(new PickOptions
+                {
+                    FileTypes = FilePickerFileType.Images,
+                    PickerTitle = "Select an image"
+                });
+
+                if (result != null)
+                {
+                    using var stream = await result.OpenReadAsync();
+                    using var ms = new MemoryStream();
+                    await stream.CopyToAsync(ms);
+                    ItemImage = ms.ToArray();
+                    OnPropertyChanged(nameof(ItemImage));
+                }
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", ex.Message, "OK");
+            }
         }
     }
 }

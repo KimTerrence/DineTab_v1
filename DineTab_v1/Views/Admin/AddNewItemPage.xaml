@@ -74,6 +74,7 @@
                         <Label Text="Category*" FontAttributes="Bold" TextColor="Black"/>
                         <Border Stroke="Black" StrokeThickness="1">
                             <Picker ItemsSource="{Binding Categories}"
+                                    ItemDisplayBinding="{Binding Name}"
                                     SelectedItem="{Binding SelectedCategory}"
                                     Margin="5"/>
                         </Border>
