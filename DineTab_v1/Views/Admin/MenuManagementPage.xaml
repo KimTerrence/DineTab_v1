@@ -48,7 +48,7 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Border Stroke="Black" StrokeThickness="1" BackgroundColor="White" Margin="5">
-                            <VerticalStackLayout Padding="5" HeightRequest="{Binding Source={x:Reference MainCollection}, Path=BindingContext.ItemHeight}">
+                            <VerticalStackLayout Padding="5">
                                 <!-- Image Placeholder -->
                                 <Grid HeightRequest="150" BackgroundColor="LightGray">
                                     <Image Source="icon.png" Aspect="AspectFill" />

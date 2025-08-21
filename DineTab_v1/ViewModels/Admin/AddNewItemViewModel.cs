@@ -108,9 +108,10 @@ namespace DineTab_v1.ViewModels.Admin
 
             if (result)
             {
-                await Application.Current.MainPage.DisplayAlert("Success", "Item saved successfully", "OK");
-                MessagingCenter.Send(this, "MenuUpdated"); // Notify MenuManagementPage to refresh
+             
+                await Application.Current.MainPage.DisplayAlert("Success", "Item saved successfully", "OK");                
                 await Application.Current.MainPage.Navigation.PopModalAsync();
+                MessagingCenter.Send(this, "MenuUpdated");
             }
             else
             {

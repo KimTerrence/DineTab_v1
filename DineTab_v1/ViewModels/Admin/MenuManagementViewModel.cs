@@ -47,6 +47,11 @@ namespace DineTab_v1.ViewModels.Admin
                 await LoadMenuItemsAsync();
             });
 
+            MessagingCenter.Subscribe<AddNewItemViewModel>(this, "MenuUpdated", async (sender) =>
+            {
+                await LoadMenuItemsAsync();
+            });
+
             MessagingCenter.Subscribe<ModifyCategoriesViewModel>(this, "CategoriesUpdated", async (sender) =>
             {
                 await LoadCategories();
@@ -55,10 +60,10 @@ namespace DineTab_v1.ViewModels.Admin
          
             MenuItems = new ObservableCollection<Item>(); //
 
-            ModifyCategoriesCommand = new Command(OnModifyCategories);
-            OpenAddItemPageCommand = new Command(OnOpenAddItemPage);
-            EditItemCommand = new Command<Item>(OnEditItem);
-            DeleteItemCommand = new Command<Item>(OnDeleteItem);
+            ModifyCategoriesCommand = new Command(async () => await OnModifyCategories());
+            OpenAddItemPageCommand = new Command(async () => await OnOpenAddItemPage());
+            EditItemCommand = new Command<Item>(async (item) => await OnEditItem(item));
+            DeleteItemCommand = new Command<Item>(async (item) => await OnDeleteItem(item));
 
             // Load initial data
             LoadDataCommand = new Command(async () => await LoadData());
@@ -75,18 +80,18 @@ namespace DineTab_v1.ViewModels.Admin
 
         }
 
-        private async void OnModifyCategories()
+        private async Task OnModifyCategories()
         {
             
             await Application.Current.MainPage.Navigation.PushModalAsync(new ModifyCategoriesPage());
         }
 
-        private async void OnOpenAddItemPage()
+        private async Task OnOpenAddItemPage()
         {
             await Application.Current.MainPage.Navigation.PushModalAsync(new AddNewItemPage());
         }
 
-        private async void OnDeleteItem(Item item)
+        private async Task OnDeleteItem(Item item)
         {
             if (item == null) return;
 
@@ -99,22 +104,27 @@ namespace DineTab_v1.ViewModels.Admin
         private async Task LoadCategories()
         {
             var categoriesFromDb = await _dbService.GetCategoriesAsync();
-            Categories.Clear();
-            foreach (var cat in categoriesFromDb)
-                Categories.Add(cat);
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                Categories.Clear();
+                foreach (var cat in categoriesFromDb)
+                    Categories.Add(cat);
+            });
         }
 
-        //Load menu items from database
         public async Task LoadMenuItemsAsync()
         {
             var items = await _dbService.GetMenuItemsAsync();
-            MenuItems.Clear();
-            foreach (var item in items)
-                MenuItems.Add(item);
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                MenuItems.Clear();
+                foreach (var item in items)
+                    MenuItems.Add(item);
+            });
         }
 
         // Edit item command handler
-        private async void OnEditItem(Item item)
+        private async Task OnEditItem(Item item)
         {
             if (item == null) return;
 
