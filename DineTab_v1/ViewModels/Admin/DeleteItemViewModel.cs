@@ -33,7 +33,14 @@ namespace DineTab_v1.ViewModels.Admin
 
         private async void OnCancel()
         {
-            await Application.Current.MainPage.Navigation.PopModalAsync();
+            try
+            {
+                await Application.Current.MainPage.Navigation.PopModalAsync();
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
         }
 
         private async Task OnConfirmDelete()

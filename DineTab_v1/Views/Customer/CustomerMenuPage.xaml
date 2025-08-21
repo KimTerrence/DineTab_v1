@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DineTab_v1.Views.Customer.CustomerMenuPage"
+             x:Name="RootPage">
+
+    <Grid ColumnDefinitions="*, 300" RowDefinitions="Auto, *" Padding="10" RowSpacing="10">
+        <!-- Top Category Icons -->
+        <ScrollView Grid.Column="0" Grid.Row="0" Orientation="Horizontal">
+            <HorizontalStackLayout Spacing="10">
+                <Button Text="Best Seller" />
+                <Button Text="Super Meals" />
+                <Button Text="Tipid Meals" />
+                <Button Text="Solo Order" />
+                <Button Text="Lechon" />
+                <Button Text="Soup  Appetizer" />
+                <Button Text="House Special" />
+                <Button Text="Dessert  Drinks" />
+                <Button Text="Add-on"/>
+            </HorizontalStackLayout>
+        </ScrollView>
+
+        <!-- Menu Items Grid -->
+        <CollectionView Grid.Column="0" Grid.Row="1" ItemsSource="{Binding MenuItems}">
+            <CollectionView.ItemsLayout>
+                <GridItemsLayout Orientation="Vertical" Span="3" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Padding="5" Margin="5" BorderColor="Gray" CornerRadius="5">
+                        <VerticalStackLayout>
+                            <BoxView HeightRequest="100" Color="LightGray" />
+                            <Label Text="{Binding ItemName}" FontAttributes="Bold" />
+                            <Label Text="{Binding Price, StringFormat='₱{0:F2}'}" />
+                            <Button Text="Add" Command="{Binding BindingContext.AddToOrderCommand, Source={x:Reference Name=RootPage}}" CommandParameter="{Binding .}" />
+                        </VerticalStackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <!-- Order Summary Panel -->
+        <VerticalStackLayout Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Padding="10" Spacing="10" BackgroundColor="#f5f5f5">
+            <Label Text="Order #12341234" FontAttributes="Bold" FontSize="16"/>
+
+            <HorizontalStackLayout Spacing="10">
+                <Button Text="Dine In" />
+                <Button Text="Take Out" />
+            </HorizontalStackLayout>
+
+            <CollectionView ItemsSource="{Binding OrderItems}" HeightRequest="300">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <HorizontalStackLayout Spacing="5">
+                            <Label Text="{Binding Name}" />
+                            <Label Text="{Binding Quantity}" />
+                            <Label Text="{Binding TotalPrice, StringFormat='₱{0:F2}'}" HorizontalOptions="EndAndExpand" />
+                        </HorizontalStackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <Label Text="{Binding SubTotal, StringFormat='Sub Total: ₱{0:F2}'}"/>
+            <Label Text="{Binding Tax, StringFormat='Tax: ₱{0:F2}'}"/>
+            <Label Text="{Binding Discount, StringFormat='Discount: ₱{0:F2}'}"/>
+            <Label Text="{Binding Total, StringFormat='Total: ₱{0:F2}'}" FontAttributes="Bold"/>
+
+            <Button Text="Cancel" BackgroundColor="LightGray"/>
+            <Button Text="Place Order" BackgroundColor="#2196F3" TextColor="White"/>
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>

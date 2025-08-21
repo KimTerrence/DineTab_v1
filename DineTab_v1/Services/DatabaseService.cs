@@ -185,22 +185,22 @@ namespace DineTab_v1.Services
             var cmd = conn.CreateCommand();
             cmd.CommandText = @"
                 UPDATE Items
-                SET ItemName = $name,
-                    Price = $price,
-                    CategoryId = $categoryId,
-                    Availability = $availability,
-                    Spicy = $spicy,
-                    Image = $image
-                WHERE Id = $id;
+                SET Name = @name,
+                    Price = @price,
+                    CategoryId = @categoryId,
+                    Availability = @availability,
+                    Spicy = @spicy,
+                    Image = @image
+                WHERE Id = @id;
             ";
 
-            cmd.Parameters.AddWithValue("$name", item.ItemName);
-            cmd.Parameters.AddWithValue("$price", item.Price);
-            cmd.Parameters.AddWithValue("$categoryId", item.CategoryId);
-            cmd.Parameters.AddWithValue("$availability", item.Availability);
-            cmd.Parameters.AddWithValue("$spicy", item.Spicy);
-            cmd.Parameters.AddWithValue("$image", item.Image ?? new byte[0]);
-            cmd.Parameters.AddWithValue("$id", item.Id);
+            cmd.Parameters.AddWithValue("@name", item.ItemName);
+            cmd.Parameters.AddWithValue("@price", item.Price);
+            cmd.Parameters.AddWithValue("@categoryId", item.CategoryId);
+            cmd.Parameters.AddWithValue("@availability", item.Availability);
+            cmd.Parameters.AddWithValue("@spicy", item.Spicy);
+            cmd.Parameters.AddWithValue("@image", item.Image ?? new byte[0]);
+            cmd.Parameters.AddWithValue("@id", item.Id);
 
             var result = await cmd.ExecuteNonQueryAsync();
             return result > 0;

@@ -8,13 +8,15 @@ namespace DineTab_v1.Services
         private readonly string _connectionString =
             "Server=192.168.43.57\\SQLEXPRESS;Database=dinetab_db;User Id=appuser;Password=12345;TrustServerCertificate=True;";
 
-        public User Login(string email, string password)
+        // Async login method
+        public async Task<User> LoginAsync(string email, string password)
         {
             try
             {
                 using (var conn = new SqlConnection(_connectionString))
                 {
-                    conn.Open();
+                    await conn.OpenAsync();
+
                     var cmd = new SqlCommand(
                         "SELECT Id, Email, Role, FirstName, LastName FROM Users WHERE Email = @Email AND Password = @Password",
                         conn);
@@ -22,15 +24,14 @@ namespace DineTab_v1.Services
                     cmd.Parameters.AddWithValue("@Email", email);
                     cmd.Parameters.AddWithValue("@Password", password);
 
-                    using (var reader = cmd.ExecuteReader())
+                    using (var reader = await cmd.ExecuteReaderAsync())
                     {
-                        if (reader.Read())
+                        if (await reader.ReadAsync())
                         {
-                            // Get user ID for updating last login
                             int userId = Convert.ToInt32(reader["Id"]);
 
-                            // Update LastLogin timestamp
-                            UpdateLastLogin(userId);
+                            // Update LastLogin asynchronously
+                            await UpdateLastLoginAsync(userId);
 
                             return new User
                             {
@@ -52,18 +53,21 @@ namespace DineTab_v1.Services
             return null;
         }
 
-        private void UpdateLastLogin(int userId)
+        // Async update last login
+        private async Task UpdateLastLoginAsync(int userId)
         {
             try
             {
                 using (var conn = new SqlConnection(_connectionString))
                 {
-                    conn.Open();
+                    await conn.OpenAsync();
+
                     var cmd = new SqlCommand(
                         "UPDATE Users SET LastLogin = @LastLogin WHERE Id = @Id", conn);
                     cmd.Parameters.AddWithValue("@LastLogin", DateTime.Now);
                     cmd.Parameters.AddWithValue("@Id", userId);
-                    cmd.ExecuteNonQuery();
+
+                    await cmd.ExecuteNonQueryAsync();
                 }
             }
             catch (Exception ex)

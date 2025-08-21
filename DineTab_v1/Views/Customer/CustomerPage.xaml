@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DineTab_v1.Views.Customer.CustomerPage"
+             Shell.NavBarIsVisible="False"
+             NavigationPage.HasBackButton="False">
+    <Grid VerticalOptions="Center">
+        <VerticalStackLayout Spacing="50">
+            <Label Text="How would you eat?" 
+               FontSize="28"
+               HorizontalOptions="Center"/>
+        <HorizontalStackLayout HorizontalOptions="Center" Spacing="50" Padding="0, 50, 0, 0">
+                <Button Text="Dine In"
+                    WidthRequest="200"
+                    HeightRequest="100"
+                    BackgroundColor="#A1A1A1"
+                    TextColor="Black"
+                    FontSize="22"
+                    FontAttributes="Bold"
+                    CornerRadius="0"
+                    Command="{Binding DineInCommand}"/>
+                <Button Text="Take Out"
+                    WidthRequest="200"
+                    HeightRequest="100"
+                    BackgroundColor="#A1A1A1"
+                    TextColor="Black"
+                    FontSize="22"
+                    FontAttributes="Bold"
+                    CornerRadius="0"
+                    Command="{Binding TakeOutCommand}"/>
+            </HorizontalStackLayout>
+        
+        <Button Text="Cancel"
+           WidthRequest="200"
+           HeightRequest="100"
+           BackgroundColor="#A1A1A1"
+           TextColor="Black"
+           FontSize="22"
+           FontAttributes="Bold"
+           CornerRadius="0"
+           Command="{Binding CancelCommand}"/>
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>

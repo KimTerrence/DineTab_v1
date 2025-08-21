@@ -1,9 +1,11 @@
 using DineTab_v1.Models;
 using DineTab_v1.ViewModels.Admin;
 using Microsoft.Maui.Controls;
+using DineTab_v1.Services;
 
 namespace DineTab_v1.Views.Admin
 {
+    [Preserve(AllMembers = true)]
     public partial class AddNewItemPage : ContentPage
     {
         // Parameterless constructor for XAML

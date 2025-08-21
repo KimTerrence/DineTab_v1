@@ -1,49 +1,44 @@
+using Microsoft.Maui.Controls;
 using DineTab_v1.Models;
 using DineTab_v1.ViewModels.Admin;
+using DineTab_v1.Views.Admin;
 
-namespace DineTab_v1.Views.Admin
+namespace DineTab_v1.Views.Admin;
+
+public partial class AdminPage : ContentPage
 {
-    public partial class AdminPage : ContentPage
+    public AdminPage(User currentUser)
     {
-        public AdminPage(User currentUser)
+        InitializeComponent();
+        NavigationPage.SetHasNavigationBar(this, false);
+        // Bind ViewModel
+        BindingContext = new AdminViewModel(currentUser ?? throw new ArgumentNullException(nameof(currentUser)));
+
+        // Load default dashboard
+        MainPanelContainer.Content = new Dashboard();
+
+        // Subscribe to side menu selection
+        MessagingCenter.Subscribe<AdminViewModel, string>(this, "MenuSelected", OnMenuSelected);
+    }
+
+    private void OnMenuSelected(AdminViewModel sender, string page)
+    {
+        MainPanelContainer.Content = page switch
         {
-            InitializeComponent();
+            "Dashboard" => new Dashboard(),
+            "MenuManagement" => new MenuManagementPage(),
+            "StaffManagement" => new StaffManagementPage(),
+            "Reports" => new ReportsPage(),
+            "Notification" => new NotificationPage(),
+            //"POS" => new CashierMenuView(),
+            //"Kitchen" => new KitchenDisplayView(),
+            _ => new Dashboard()
+        };
+    }
 
-            var viewModel = new AdminViewModel(currentUser);
-            BindingContext = viewModel;
-
-            // Load default Dashboard
-            MainPanelContainer.Content = new Dashboard();
-
-            // Listen for side panel menu selections
-            MessagingCenter.Subscribe<AdminViewModel, string>(this, "MenuSelected", (sender, page) =>
-            {
-                MainPanelContainer.Content = page switch
-                {
-                    "Dashboard" => new Dashboard(),
-                    "MenuManagement" => new MenuManagementPage(),
-                    "StaffManagement" => new StaffManagementPage(),
-                    "Reports" => new ReportsPage(),
-                    "Notification" => new NotificationPage(),
-                    _ => new Dashboard()
-                };
-            });
-
-            // Listen for Modify Categories from MenuManagement
-            MessagingCenter.Subscribe<MenuManagementViewModel>(this, "ShowModifyCategories", (sender) =>
-            {
-                 Navigation.PushAsync(new ModifyCategoriesPage());
-            });
-
-            MessagingCenter.Subscribe<MenuManagementViewModel>(this, "ShowModifyCategories", (sender) =>
-            {
-                 Navigation.PushAsync(new ModifyCategoriesPage());
-            });
-
-            MessagingCenter.Subscribe<ModifyCategoriesViewModel>(this, "BackToMenuManagement", (sender) =>
-            {
-                MainPanelContainer.Content = new MenuManagementPage();
-            });
-        }
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+        MessagingCenter.Unsubscribe<AdminViewModel, string>(this, "MenuSelected");
     }
 }

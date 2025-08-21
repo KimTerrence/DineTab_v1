@@ -1,12 +1,13 @@
 using DineTab_v1.Models;
 using DineTab_v1.ViewModels.Admin;
 using System.Collections.ObjectModel;
-using DineTab_v1.ViewModels;
+using DineTab_v1.Services;
 
 namespace DineTab_v1.Views.Admin;
 
 public partial class DeletePage : ContentPage
 {
+    [Preserve(AllMembers = true)]
     public DeletePage(Item item, ObservableCollection<Item> menuItems)
     {
         InitializeComponent();

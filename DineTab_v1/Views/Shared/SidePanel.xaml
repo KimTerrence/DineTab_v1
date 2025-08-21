@@ -1,8 +1,7 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="DineTab_v1.Views.Shared.SidePanel"
-             Title="SidePanel">
+             x:Class="DineTab_v1.Views.Shared.SidePanel">
+
     <Grid BackgroundColor="#D9D9D9">
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
@@ -12,47 +11,49 @@
 
         <!-- Logo -->
         <HorizontalStackLayout Grid.Row="0" VerticalOptions="Center" Padding="10,0">
-            <Image Source="logo.png" HeightRequest="40" WidthRequest="40" BackgroundColor="#777777"/>
-            <Label Text="LOGO" TextColor="Black" FontSize="28" FontAttributes="Bold" VerticalOptions="Center"/>
+            <Image Source="icon.png" HeightRequest="40" WidthRequest="40"/>
+            <Label Text="LOGO" FontSize="28" FontAttributes="Bold"/>
         </HorizontalStackLayout>
 
-        <!-- Navigation Buttons -->
-        <VerticalStackLayout Grid.Row="1" VerticalOptions="Center" Spacing="5" Padding="10,0">
-            <Button Text="Dashboard" HorizontalOptions="Start" FontAttributes="Bold"
-                    BackgroundColor="Transparent" TextColor="Black" CornerRadius="8"
-                    Command="{Binding ShowDashboardCommand}"/>
-
-            <Button Text="Menu Management" HorizontalOptions="Start" FontAttributes="Bold"
-                    BackgroundColor="Transparent" TextColor="Black" CornerRadius="8"
-                    Command="{Binding ShowMenuManagementCommand}"/>
-
-            <Button Text="Staff Management" HorizontalOptions="Start" FontAttributes="Bold"
-                    BackgroundColor="Transparent" TextColor="Black" CornerRadius="8"
-                    Command="{Binding ShowStaffManagementCommand}"/>
-
-            <Button Text="Reports" HorizontalOptions="Start" FontAttributes="Bold"
-                    BackgroundColor="Transparent" TextColor="Black" CornerRadius="8"
-                    Command="{Binding ShowReportsCommand}"/>
-
-            <Button Text="Notification" HorizontalOptions="Start" FontAttributes="Bold"
-                    BackgroundColor="Transparent" TextColor="Black" CornerRadius="8"
-                    Command="{Binding ShowNotificationCommand}"/>
-
-            <Label Text="Employee's Tab" TextColor="Black" Padding="0,20,0,5" FontSize="10"/>
-
-            <Button Text="Point of Sale" HorizontalOptions="Start" FontAttributes="Bold"
-                    BackgroundColor="Transparent" TextColor="Black" CornerRadius="8"
-                    Command="{Binding ShowPOSCommand}"/>
-
-            <Button Text="Kitchen Display" HorizontalOptions="Start" FontAttributes="Bold"
-                    BackgroundColor="Transparent" TextColor="Black" CornerRadius="8"
-                    Command="{Binding ShowKitchenCommand}"/>
+        <!-- Menu Buttons -->
+        <VerticalStackLayout Grid.Row="1" Spacing="5" Padding="0,60, 0,0">
+            <Button Text="Dashboard" 
+                    Command="{Binding ShowDashboardCommand}"
+                    BackgroundColor="#D9D9D9"
+                    TextColor="Black"
+                    FontAttributes="Bold" />
+            <Button Text="Menu Management" 
+                    Command="{Binding ShowMenuManagementCommand}"
+                    BackgroundColor="#D9D9D9"
+                    TextColor="Black"
+                    FontAttributes="Bold" />
+            <Button Text="Staff Management" Command="{Binding ShowStaffManagementCommand}"
+                    BackgroundColor="#D9D9D9"
+                    TextColor="Black"
+                    FontAttributes="Bold" />
+            <Button Text="Reports" Command="{Binding ShowReportsCommand}"
+                    BackgroundColor="#D9D9D9"
+                    TextColor="Black"
+                    FontAttributes="Bold" />
+            <Button Text="Notification" Command="{Binding ShowNotificationCommand}"
+                    BackgroundColor="#D9D9D9"
+                    TextColor="Black"
+                    FontAttributes="Bold" />
+            <!--
+            <Label Text="Employee's Tab" FontSize="10" Padding="0,20,0,5"/>
+            <Button Text="Point of Sale" Command="{Binding ShowPOSCommand}"/>
+            <Button Text="Kitchen Display" Command="{Binding ShowKitchenCommand}"/>
+            -->
         </VerticalStackLayout>
 
         <!-- Footer / Sign Out -->
-        <Button Text="Sign Out" Grid.Row="2" BackgroundColor="#7B7A7A" TextColor="#000000"
-                FontAttributes="Bold" CornerRadius="0" HorizontalOptions="Center"
-                VerticalOptions="Center" WidthRequest="180"
-                Command="{Binding SignOutCommand}"/>
+        <Button Text="Sign Out" Grid.Row="2" 
+                Command="{Binding SignOutCommand}" 
+                WidthRequest="180"
+                BackgroundColor="#777777"
+                TextColor="Black"
+                FontAttributes="Bold" 
+                HeightRequest="20"
+                CornerRadius="0"/>
     </Grid>
-</ContentPage>
+</ContentView>

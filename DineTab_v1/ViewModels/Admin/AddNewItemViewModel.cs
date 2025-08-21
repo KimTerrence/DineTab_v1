@@ -66,6 +66,13 @@ namespace DineTab_v1.ViewModels.Admin
             Categories.Clear();
             foreach (var cat in categories)
                 Categories.Add(cat);
+
+            // Set SelectedCategory if editing
+            if (CurrentItem.Id > 0)
+            {
+                SelectedCategory = Categories.FirstOrDefault(c => c.Id == CurrentItem.CategoryId);
+                OnPropertyChanged(nameof(SelectedCategory));
+            }
         }
 
         private async Task AddOrUpdateItem()

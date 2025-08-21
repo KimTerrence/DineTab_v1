@@ -31,30 +31,44 @@ namespace DineTab_v1.ViewModels.Admin
 
         private async void OnCancel()
         {
-            await Application.Current.MainPage.Navigation.PopModalAsync();
+            try
+            {
+                await Application.Current.MainPage.Navigation.PopModalAsync();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in OnCancel: {ex.Message}");
+            }          
         }
 
         private async Task OnRemoveStaff()
         {
-            bool confirm = await Application.Current.MainPage.DisplayAlert(
-                "Confirm Removal",
-                $"Are you sure you want to remove {FullName}?",
-                "Yes", "No");
-
-            if (!confirm) return;
-
-            bool success = await _dbService.DeleteStaffAsync(SelectedStaff.Id);
-
-            if (success)
+            try
             {
-                await Application.Current.MainPage.Navigation.PopModalAsync();
-                MessagingCenter.Send(this, "StaffUpdated");
+                bool confirm = await Application.Current.MainPage.DisplayAlert(
+               "Confirm Removal",
+               $"Are you sure you want to remove {FullName}?",
+               "Yes", "No");
 
+                if (!confirm) return;
+
+                bool success = await _dbService.DeleteStaffAsync(SelectedStaff.Id);
+
+                if (success)
+                {
+                    await Application.Current.MainPage.Navigation.PopModalAsync();
+                    MessagingCenter.Send(this, "StaffUpdated");
+
+                }
+                else
+                {
+                    await Application.Current.MainPage.DisplayAlert("Error", "Failed to remove staff.", "OK");
+                }
             }
-            else
-            {
-                await Application.Current.MainPage.DisplayAlert("Error", "Failed to remove staff.", "OK");
+            catch (Exception ex) { 
+            Console.WriteLine(ex.Message);
             }
+           
         }
     }
 }

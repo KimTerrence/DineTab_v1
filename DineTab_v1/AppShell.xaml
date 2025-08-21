@@ -2,6 +2,7 @@
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:auth="clr-namespace:DineTab_v1.Views.Auth"
        xmlns:admin="clr-namespace:DineTab_v1.Views.Admin"
+       xmlns:customer="clr-namespace:DineTab_v1.Views.Customer"
        x:Class="DineTab_v1.AppShell"
        Shell.NavBarIsVisible="False">
 
@@ -10,4 +11,5 @@
 
     <!-- Dashboards -->
     <ShellContent Route="admin" ContentTemplate="{DataTemplate admin:AdminPage}" />
+
 </Shell>
