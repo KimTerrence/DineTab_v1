@@ -16,29 +16,34 @@
         </HorizontalStackLayout>
 
         <!-- Menu Buttons -->
-        <VerticalStackLayout Grid.Row="1" Spacing="5" Padding="0,60, 0,0">
+        <VerticalStackLayout Grid.Row="1" Spacing="5" Padding="10,60, 0,0">
             <Button Text="Dashboard" 
                     Command="{Binding ShowDashboardCommand}"
                     BackgroundColor="#D9D9D9"
                     TextColor="Black"
-                    FontAttributes="Bold" />
+                    FontAttributes="Bold" 
+                    HorizontalOptions="Start"/>
             <Button Text="Menu Management" 
                     Command="{Binding ShowMenuManagementCommand}"
                     BackgroundColor="#D9D9D9"
                     TextColor="Black"
-                    FontAttributes="Bold" />
+                    FontAttributes="Bold"
+                    HorizontalOptions="Start"/>
             <Button Text="Staff Management" Command="{Binding ShowStaffManagementCommand}"
                     BackgroundColor="#D9D9D9"
                     TextColor="Black"
-                    FontAttributes="Bold" />
+                    FontAttributes="Bold" 
+                    HorizontalOptions="Start"/>
             <Button Text="Reports" Command="{Binding ShowReportsCommand}"
                     BackgroundColor="#D9D9D9"
                     TextColor="Black"
-                    FontAttributes="Bold" />
+                    FontAttributes="Bold" 
+                    HorizontalOptions="Start"/>
             <Button Text="Notification" Command="{Binding ShowNotificationCommand}"
                     BackgroundColor="#D9D9D9"
                     TextColor="Black"
-                    FontAttributes="Bold" />
+                    FontAttributes="Bold"
+                    HorizontalOptions="Start"/>
             <!--
             <Label Text="Employee's Tab" FontSize="10" Padding="0,20,0,5"/>
             <Button Text="Point of Sale" Command="{Binding ShowPOSCommand}"/>

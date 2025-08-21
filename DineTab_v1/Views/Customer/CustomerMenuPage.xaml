@@ -4,21 +4,28 @@
              x:Class="DineTab_v1.Views.Customer.CustomerMenuPage"
              x:Name="RootPage">
 
-    <Grid ColumnDefinitions="*, 300" RowDefinitions="Auto, *" Padding="10" RowSpacing="10">
+    <Grid ColumnDefinitions="*, 300" 
+          RowDefinitions="Auto, *" 
+          RowSpacing="10">
+
         <!-- Top Category Icons -->
-        <ScrollView Grid.Column="0" Grid.Row="0" Orientation="Horizontal">
-            <HorizontalStackLayout Spacing="10">
-                <Button Text="Best Seller" />
-                <Button Text="Super Meals" />
-                <Button Text="Tipid Meals" />
-                <Button Text="Solo Order" />
-                <Button Text="Lechon" />
-                <Button Text="Soup  Appetizer" />
-                <Button Text="House Special" />
-                <Button Text="Dessert  Drinks" />
-                <Button Text="Add-on"/>
+        <ScrollView Grid.Column="0" Grid.Row="0" Orientation="Horizontal" Padding="10">
+            <HorizontalStackLayout Spacing="10"
+                                   BindableLayout.ItemsSource="{Binding Categories}">
+
+                <BindableLayout.ItemTemplate>
+                    <DataTemplate>
+                        <Button Text="{Binding Name}"
+                                Command="{Binding BindingContext.CategorySelectedCommand, Source={x:Reference RootPage}}"
+                                CommandParameter="{Binding .}" 
+                                CornerRadius="0"
+                                BackgroundColor="#D3D3D3"
+                                TextColor="Black"/>
+                    </DataTemplate>
+                </BindableLayout.ItemTemplate>
             </HorizontalStackLayout>
         </ScrollView>
+
 
         <!-- Menu Items Grid -->
         <CollectionView Grid.Column="0" Grid.Row="1" ItemsSource="{Binding MenuItems}">
@@ -27,46 +34,176 @@
             </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Frame Padding="5" Margin="5" BorderColor="Gray" CornerRadius="5">
-                        <VerticalStackLayout>
-                            <BoxView HeightRequest="100" Color="LightGray" />
-                            <Label Text="{Binding ItemName}" FontAttributes="Bold" />
-                            <Label Text="{Binding Price, StringFormat='₱{0:F2}'}" />
-                            <Button Text="Add" Command="{Binding BindingContext.AddToOrderCommand, Source={x:Reference Name=RootPage}}" CommandParameter="{Binding .}" />
+                    <Border Padding="5" Margin="5">
+                        <VerticalStackLayout Spacing="20">
+                            <BoxView HeightRequest="150" Color="LightGray" />
+                            <Label Text="{Binding ItemName}" FontAttributes="Bold" HorizontalOptions="Center"/>
+                            <Grid ColumnDefinitions="*,Auto"
+                                  Padding="10"
+                                  Margin="5"
+                                  BackgroundColor="White">
+
+                                <!-- Price -->
+                                <Label Text="{Binding Price, StringFormat='₱{0:F2}'}"
+                                       Grid.Column="0"
+                                       VerticalOptions="Center"
+                                       FontSize="16"
+                                       FontAttributes="Bold"
+                                       TextColor="Black" />
+
+                                <!-- Add Button -->
+                                <Button Text="Add"
+                                        Grid.Column="1"
+                                        BackgroundColor="White"
+                                        TextColor="Black"
+                                        CornerRadius="0"
+                                        BorderColor="Black"
+                                        BorderWidth="1"
+                                        WidthRequest="100"
+                                        Command="{Binding BindingContext.AddToOrderCommand, Source={x:Reference Name=RootPage}}"
+                                        CommandParameter="{Binding .}" />   
+                            </Grid>
+
                         </VerticalStackLayout>
-                    </Frame>
+                    </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
 
         <!-- Order Summary Panel -->
-        <VerticalStackLayout Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Padding="10" Spacing="10" BackgroundColor="#f5f5f5">
-            <Label Text="Order #12341234" FontAttributes="Bold" FontSize="16"/>
-
-            <HorizontalStackLayout Spacing="10">
-                <Button Text="Dine In" />
-                <Button Text="Take Out" />
-            </HorizontalStackLayout>
-
-            <CollectionView ItemsSource="{Binding OrderItems}" HeightRequest="300">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <HorizontalStackLayout Spacing="5">
-                            <Label Text="{Binding Name}" />
-                            <Label Text="{Binding Quantity}" />
-                            <Label Text="{Binding TotalPrice, StringFormat='₱{0:F2}'}" HorizontalOptions="EndAndExpand" />
+        <Border Stroke="Black" Grid.Column="1" Grid.Row="0"  Grid.RowSpan="2" >
+            <VerticalStackLayout Spacing="10" BackgroundColor="#f5f5f5">
+                <Border Stroke="Black">
+                    <VerticalStackLayout Spacing="10" Padding="10">
+                        <HorizontalStackLayout>
+                            <Label Text="Order #" FontAttributes="Bold" FontSize="16"/>
+                            <Label Text="" FontAttributes="Bold" FontSize="16"/>
                         </HorizontalStackLayout>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+                        
 
-            <Label Text="{Binding SubTotal, StringFormat='Sub Total: ₱{0:F2}'}"/>
-            <Label Text="{Binding Tax, StringFormat='Tax: ₱{0:F2}'}"/>
-            <Label Text="{Binding Discount, StringFormat='Discount: ₱{0:F2}'}"/>
-            <Label Text="{Binding Total, StringFormat='Total: ₱{0:F2}'}" FontAttributes="Bold"/>
+                        <Grid ColumnDefinitions="*,*">
 
-            <Button Text="Cancel" BackgroundColor="LightGray"/>
-            <Button Text="Place Order" BackgroundColor="#2196F3" TextColor="White"/>
-        </VerticalStackLayout>
+                            <!-- Price -->
+                            <Button Text="Dine In"
+                                    Grid.Column="0"
+                                    BackgroundColor="White"
+                                    TextColor="Black"
+                                    CornerRadius="0"
+                                    BorderColor="Black"
+                                    BorderWidth="1"
+                                    WidthRequest="100"/>
+
+                            <!-- Add Button -->
+                            <Button Text="Take Out"
+                                    Grid.Column="1"
+                                    BackgroundColor="White"
+                                    TextColor="Black"
+                                    CornerRadius="0"
+                                    BorderColor="Black"
+                                    BorderWidth="1"
+                                    WidthRequest="100"/>   
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <ScrollView>
+                    <CollectionView ItemsSource="{Binding OrderItems}" HeightRequest="390">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border Stroke="Transparent" Padding="10">
+                                    <VerticalStackLayout Padding="5" BackgroundColor="White">
+                                        <Grid ColumnDefinitions="*,Auto">
+                                            <!-- Item Name -->
+                                            <Label Text="{Binding Name}" 
+                                                    Grid.Column="0" 
+                                                    VerticalOptions="Center" 
+                                                    HorizontalOptions="Start"
+                                                    FontSize="18"/>
+
+                                            <!-- Remove Button -->
+                                            <Button Text="x" 
+                                                     Grid.Column="1" 
+                                                     HorizontalOptions="End"
+                                                     VerticalOptions="Center"
+                                                     BackgroundColor="Transparent"
+                                                     TextColor="Black"
+                                                     Command="{Binding BindingContext.RemoveItemCommand, Source={x:Reference RootPage}}"
+                                                      CommandParameter="{Binding}" /> 
+                                        </Grid>
+
+                                        <Grid>
+                                            <!-- Item Price -->
+                                            <Label Text="{Binding Price, StringFormat='₱{0:F2}'}"
+                                                    VerticalOptions="Center"
+                                                    HorizontalOptions="Start"
+                                                    TextColor="#787878"
+                                                     FontSize="12"/>
+
+                                            <!-- Quantity Controls -->
+                                            <HorizontalStackLayout VerticalOptions="Center" HorizontalOptions="Center">
+                                                <!-- Decrease Quantity -->
+                                                <Button Text="-" 
+                                                         WidthRequest="0"
+                                                         Command="{Binding DecreaseQuantityCommand}"
+                                                         CommandParameter="{Binding}" 
+                                                         CornerRadius="30"
+                                                         Background="#D9D9D9"
+                                                         TextColor="Black"
+                                                          FontSize="12"/>
+                                                <!-- Quantity Display -->
+                                                <Label Text="{Binding Quantity}" 
+                                                        FontSize="12" 
+                                                        WidthRequest="40"
+                                                        HorizontalOptions="Center"
+                                                        VerticalOptions="Center"
+                                                        HorizontalTextAlignment="Center"/>
+
+                                                <!-- Increase Quantity -->
+                                                <Button Text="+" 
+                                                         WidthRequest="30"
+                                                         Command="{Binding IncreaseQuantityCommand}"
+                                                         CommandParameter="{Binding}" 
+                                                         CornerRadius="30"
+                                                         Background="#D9D9D9"
+                                                         TextColor="Black"
+                                                         FontSize="12"/>
+                                            </HorizontalStackLayout>
+
+                                            <!-- Total Price -->
+                                            <Label Text="{Binding TotalPrice, StringFormat='₱{0:F2}'}"
+                                                    VerticalOptions="Center"
+                                                    HorizontalOptions="End"
+                                                    FontSize="12"/>
+                                        </Grid>
+                                    </VerticalStackLayout>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </ScrollView>
+
+                <Border Stroke="Black">
+                    <VerticalStackLayout Padding="10">
+                        <Label Text="{Binding SubTotal, StringFormat='Sub Total: ₱{0:F2}'}"/>
+                        <Label Text="{Binding Tax, StringFormat='Tax: ₱{0:F2}'}"/>
+                        <Label Text="{Binding Discount, StringFormat='Discount: ₱{0:F2}'}"/>
+                        
+                    </VerticalStackLayout>
+                </Border>
+                <VerticalStackLayout Spacing="10" Padding="10">
+                    <Label Text="{Binding Total, StringFormat='Total: ₱{0:F2}'}" FontAttributes="Bold"/>
+                    <Button Text="Cancel" BackgroundColor="White"
+                            BorderColor="Black"
+                            BorderWidth="1"
+                            CornerRadius="0"
+                            TextColor="Black"/>
+                    <Button Text="Place Order" BackgroundColor="White"
+                            BorderColor="Black"
+                            BorderWidth="1"
+                            CornerRadius="0"
+                            TextColor="Black"/>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </Border>
     </Grid>
 </ContentPage>

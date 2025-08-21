@@ -24,7 +24,7 @@ namespace DineTab_v1.ViewModels.Admin
             });
             AddCategoryCommand = new Command(async () => await AddCategory());
             DeleteCategoryCommand = new Command<Category>(async (cat) => await DeleteCategory(cat));
-            SaveChangesCommand = new Command(async () => await LoadCategories());
+            SaveChangesCommand = new Command(async () => await SaveChanges());
         }
 
         public ObservableCollection<Category> Categories { get; set; }

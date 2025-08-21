@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DineTab_v1.Views.Customer.AddOrderPage"
+             BackgroundColor="#80000000">
+    <Grid  VerticalOptions="Center" HorizontalOptions="Center"
+              Grid.ColumnSpan="2"
+              Grid.RowSpan="2"
+              IsVisible="{Binding IsOverlayVisible}"
+              Padding="40"
+              ZIndex="10">
+
+        <Border Padding="20"
+                   BackgroundColor="White"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Center"
+                   WidthRequest="300">
+
+            <VerticalStackLayout Spacing="15">
+
+                <!-- Item Name -->
+                <Label Text="{Binding SelectedItem.ItemName}" 
+                           FontAttributes="Bold" FontSize="20" 
+                           HorizontalOptions="Center" />
+
+                <!-- Quantity -->
+                <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                    <Button Text="-" Command="{Binding DecreaseQuantityCommand}" />
+                    <Label Text="{Binding Quantity}" FontSize="18" VerticalOptions="Center"/>
+                    <Button Text="+" Command="{Binding IncreaseQuantityCommand}" />
+                </HorizontalStackLayout>
+
+                <!-- Spicy Option -->
+                <Picker Title="Select Spicy"
+                            ItemsSource="{Binding SpicyLevels}"
+                            SelectedItem="{Binding SelectedSpicy}" />
+
+                <!-- Buttons -->
+                <HorizontalStackLayout Spacing="15" HorizontalOptions="Center">
+                    <Button Text="Cancel" 
+                                BackgroundColor="LightGray"
+                                Command="{Binding CancelCommand}" />
+
+                    <Button Text="Add"
+                                BackgroundColor="#2196F3" TextColor="White"
+                                Command="{Binding ConfirmAddCommand}" />
+                </HorizontalStackLayout>
+
+            </VerticalStackLayout>
+        </Border>
+    </Grid>
+</ContentPage>

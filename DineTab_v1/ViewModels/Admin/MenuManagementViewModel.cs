@@ -77,14 +77,13 @@ namespace DineTab_v1.ViewModels.Admin
 
         private async void OnModifyCategories()
         {
+            
             await Application.Current.MainPage.Navigation.PushModalAsync(new ModifyCategoriesPage());
         }
 
         private async void OnOpenAddItemPage()
         {
-            // Navigate to AddNewItemPage
-            var page = new Views.Admin.AddNewItemPage();
-            await Application.Current.MainPage.Navigation.PushModalAsync(page);
+            await Application.Current.MainPage.Navigation.PushModalAsync(new AddNewItemPage());
         }
 
         private async void OnDeleteItem(Item item)

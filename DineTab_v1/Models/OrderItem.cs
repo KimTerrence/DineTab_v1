@@ -1,26 +1,28 @@
-﻿using System.Linq;
-using Microsoft.Maui.Controls;
+﻿using Microsoft.Maui.Controls;
 
 namespace DineTab_v1.Models
 {
     public class OrderItem : BindableObject
     {
-        private int quantity;
+        public int ItemId { get; set; }
+        public string Name { get; set; } = "";
+        public decimal Price { get; set; }
 
-        public string Name { get; set; }
-        public decimal UnitPrice { get; set; }
-
+        private int quantity = 1;
         public int Quantity
         {
             get => quantity;
             set
             {
-                quantity = value;
-                OnPropertyChanged(nameof(Quantity));
-                OnPropertyChanged(nameof(TotalPrice));
+                if (quantity != value)
+                {
+                    quantity = value;
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(TotalPrice)); // 🔑 Updates UI
+                }
             }
         }
 
-        public decimal TotalPrice => UnitPrice * Quantity;
+        public decimal TotalPrice => Price * Quantity;
     }
 }
