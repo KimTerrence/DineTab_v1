@@ -18,7 +18,8 @@
                     FontSize="22"
                     FontAttributes="Bold"
                     CornerRadius="0"
-                    Command="{Binding DineInCommand}"/>
+                    IsEnabled="{Binding IsDineIn, Converter={StaticResource InvertBoolConverter}}"
+            Command="{Binding DineInCommand}"/>
                 <Button Text="Take Out"
                     WidthRequest="200"
                     HeightRequest="100"

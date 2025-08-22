@@ -1,14 +1,15 @@
-﻿using Microsoft.Maui.Controls;
+﻿using System.ComponentModel;
 
 namespace DineTab_v1.Models
 {
-    public class OrderItem : BindableObject
+    public class OrderItem : INotifyPropertyChanged
     {
         public int ItemId { get; set; }
-        public string Name { get; set; } = "";
+        public string Name { get; set; }
         public decimal Price { get; set; }
-
+        public string OrderType { get; set; } 
         private int quantity = 1;
+        
         public int Quantity
         {
             get => quantity;
@@ -17,12 +18,18 @@ namespace DineTab_v1.Models
                 if (quantity != value)
                 {
                     quantity = value;
-                    OnPropertyChanged();
-                    OnPropertyChanged(nameof(TotalPrice)); // 🔑 Updates UI
+                    OnPropertyChanged(nameof(Quantity));
+                    OnPropertyChanged(nameof(TotalPrice));
                 }
             }
         }
 
         public decimal TotalPrice => Price * Quantity;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string name)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
     }
 }

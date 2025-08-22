@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DineTab_v1.Views.Customer.ThankYouPage"
+             Title="Thank You">
+    <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center">
+        <Label Text="🎉 Thank you for your order!"
+               FontSize="34"
+               HorizontalOptions="Center"
+               VerticalOptions="Center"
+               FontAttributes="Bold"/>
+        <Label Text="Please take your reciept and proceed to the cashier for payment"
+               FontSize="26"
+               HorizontalOptions="Center"
+               VerticalOptions="Center"
+               TextColor="Gray"/>
+    </VerticalStackLayout>
+</ContentPage>

@@ -1,5 +1,6 @@
-﻿using Microsoft.Data.SqlClient;
-using DineTab_v1.Models;
+﻿using DineTab_v1.Models;
+using Microsoft.Data.SqlClient;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 
 namespace DineTab_v1.Services
@@ -363,6 +364,84 @@ namespace DineTab_v1.Services
             }
         }
 
+
+        //Place Order
+
+        // Insert Order, get back OrderId
+        public async Task<int> InsertOrderAsync(string orderNumber, string orderType, decimal total)
+        {
+            using var connection = new SqlConnection(_connectionString);
+            await connection.OpenAsync();
+            var query = "INSERT INTO Orders (OrderNumber, OrderType, Total, CreatedAt) OUTPUT INSERTED.Id VALUES (@OrderNumber, @OrderType, @Total, GETDATE())";
+            using var cmd = new SqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@OrderNumber", orderNumber);
+            cmd.Parameters.AddWithValue("@OrderType", orderType);
+            cmd.Parameters.AddWithValue("@Total", total);
+            return (int)await cmd.ExecuteScalarAsync();
+        }
+
+        // Insert OrderItems linked to orderId
+        public async Task InsertOrderItemsAsync(int orderId, ObservableCollection<OrderItem> items)
+        {
+            using var connection = new SqlConnection(_connectionString);
+            await connection.OpenAsync();
+            foreach (var item in items)
+            {
+                var query = "INSERT INTO OrderItems (Id, ItemId, Quantity, Price) VALUES (@OrderId, @ItemId, @Quantity, @Price)";
+                using var cmd = new SqlCommand(query, connection);
+                cmd.Parameters.AddWithValue("@OrderId", orderId);
+                cmd.Parameters.AddWithValue("@ItemId", item.ItemId);
+                cmd.Parameters.AddWithValue("@Quantity", item.Quantity);
+                cmd.Parameters.AddWithValue("@Price", item.Price);
+                await cmd.ExecuteNonQueryAsync();
+            }
+        }
+
+        // Get all orders
+        public async Task<List<Order>> GetOrdersAsync()
+        {
+            var list = new List<Order>();
+            using var connection = new SqlConnection(_connectionString);
+            await connection.OpenAsync();
+            var query = "SELECT Id, OrderNumber, OrderType, Total, CreatedAt FROM Orders ORDER BY CreatedAt DESC";
+            using var cmd = new SqlCommand(query, connection);
+            using var reader = await cmd.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                list.Add(new Order
+                {
+                    OrderId = reader.IsDBNull(0) ? 0 : reader.GetInt32(0),                  // fallback 0 if null
+                    OrderNumber = reader.IsDBNull(1) ? string.Empty : reader.GetString(1),  // fallback "" if null
+                    OrderType = reader.IsDBNull(2) ? string.Empty : reader.GetString(2),
+                    Total = reader.IsDBNull(3) ? 0m : reader.GetDecimal(3),
+                    CreatedAt = reader.IsDBNull(4) ? DateTime.MinValue : reader.GetDateTime(4)
+                });
+            }
+            return list;
+        }
+
+        // Get items of a specific order
+        public async Task<ObservableCollection<OrderItem>> GetOrderItemsAsync(int orderId)
+        {
+            var items = new ObservableCollection<OrderItem>();
+            using var connection = new SqlConnection(_connectionString);
+            await connection.OpenAsync();
+            var query = "SELECT ItemId, Name, Quantity, Price FROM OrderItems WHERE Id=@OrderId";
+            using var cmd = new SqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@OrderId", orderId);
+            using var reader = await cmd.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                items.Add(new OrderItem
+                {
+                    ItemId = reader.GetInt32(0),
+                    Name = reader.IsDBNull(1) ? string.Empty : reader.GetString(1),
+                    Quantity = reader.GetInt32(2),
+                    Price = reader.GetDecimal(3)
+                });
+            }
+            return items;
+        }
         // Other database methods like GetMenuItemsAsync(), GetCategoriesAsync(), etc.
     }
 }

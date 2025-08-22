@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DineTab_v1.Views.Customer.OrderOverviewPage"
+             BackgroundColor="#80000000">
+
+    <Grid VerticalOptions="Center" HorizontalOptions="Center">
+        <Border Padding="20" BackgroundColor="White" WidthRequest="400">
+            <VerticalStackLayout Spacing="15">
+
+                <!-- Header -->
+                <HorizontalStackLayout Spacing="10" HorizontalOptions="Center">
+                    <Label Text="Order #" FontSize="20" FontAttributes="Bold"/>
+                    <Label Text="{Binding OrderNumber}" FontSize="20" FontAttributes="Bold"/>
+                </HorizontalStackLayout>
+
+                <!-- Table Headers -->
+                <Grid ColumnDefinitions="2*,*,*"
+                      BackgroundColor="#f0f0f0"
+                      Padding="5">
+                    <Label Text="Item" FontAttributes="Bold" Grid.Column="0"/>
+                    <Label Text="Qty" FontAttributes="Bold" HorizontalOptions="Center" Grid.Column="1"/>
+                    <Label Text="Price" FontAttributes="Bold" HorizontalOptions="End" Grid.Column="2"/>
+                </Grid>
+
+                <!-- List of Order Items -->
+                <CollectionView ItemsSource="{Binding OrderItems}" HeightRequest="250">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid ColumnDefinitions="2*,*,*" Padding="5" BackgroundColor="White">
+                                <Label Text="{Binding Name}" Grid.Column="0"/>
+                                <Label Text="{Binding Quantity}" HorizontalOptions="Center" Grid.Column="1"/>
+                                <Label Text="{Binding TotalPrice, StringFormat='₱{0:F2}'}" HorizontalOptions="End" Grid.Column="2"/>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+                <!-- Totals Table -->
+                <Grid ColumnDefinitions="*,*" Padding="5" RowSpacing="2">
+                    <Label Text="Total:" FontAttributes="Bold" Grid.Column="0" Grid.Row="0"/>
+                    <Label Text="{Binding Total, StringFormat='₱{0:F2}'}" 
+                                   FontAttributes="Bold" 
+                                   Grid.Column="1" 
+                                   Grid.Row="0" 
+                                   HorizontalOptions="End"/>
+                </Grid>
+
+
+
+                <!-- Buttons -->
+                <Grid RowSpacing="10" ColumnDefinitions="*,*">
+                    <Button Grid.Column="0" Text="Cancel" BackgroundColor="White" TextColor="Black" BorderColor="Black" BorderWidth="1" CornerRadius="0" Command="{Binding CancelCommand}" WidthRequest="150" HorizontalOptions="Start"/>
+                    <Button Grid.Column="1" Text="Confirm" BackgroundColor="White" TextColor="Black" BorderColor="Black" BorderWidth="1" CornerRadius="0" WidthRequest="150" Command="{Binding ConfirmCommand}" HorizontalOptions="End"/>
+                </Grid>
+
+            </VerticalStackLayout>
+        </Border>
+    </Grid>
+</ContentPage>

@@ -1,5 +1,6 @@
 ﻿using System.Windows.Input;
 using Microsoft.Maui.Controls;
+using DineTab_v1.Views.Customer;
 
 namespace DineTab_v1.ViewModels.Customer
 {
@@ -19,14 +20,18 @@ namespace DineTab_v1.ViewModels.Customer
 
         private async void OnDineIn()
         {
-            Application.Current.MainPage = new NavigationPage(new Views.Customer.CustomerMenuPage());
+            Application.Current.MainPage = new NavigationPage(
+                new Views.Customer.CustomerMenuPage("Dine In")
+            );
         }
 
         private async void OnTakeOut()
         {
-          
-            Application.Current.MainPage = new NavigationPage(new Views.Customer.CustomerMenuPage());
+            Application.Current.MainPage = new NavigationPage(
+                new Views.Customer.CustomerMenuPage("Take Out")
+            );
         }
+
 
         private async void OnCancel()
         {
