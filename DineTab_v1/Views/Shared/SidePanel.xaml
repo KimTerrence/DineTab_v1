@@ -16,44 +16,36 @@
         </HorizontalStackLayout>
 
         <!-- Menu Buttons -->
-        <VerticalStackLayout Grid.Row="1" Spacing="5" Padding="10,60, 0,0">
-            <Button Text="Dashboard" 
-                    Command="{Binding ShowDashboardCommand}"
-                    BackgroundColor="#D9D9D9"
+        <VerticalStackLayout Grid.Row="1" Spacing="5" Padding="10,60,0,0">
+            <Button x:Name="DashboardButton" Text="Dashboard" 
+                    BackgroundColor="Transparent"
+                    HorizontalOptions="Start"
                     TextColor="Black"
-                    FontAttributes="Bold" 
-                    HorizontalOptions="Start"/>
-            <Button Text="Menu Management" 
-                    Command="{Binding ShowMenuManagementCommand}"
-                    BackgroundColor="#D9D9D9"
-                    TextColor="Black"
-                    FontAttributes="Bold"
-                    HorizontalOptions="Start"/>
-            <Button Text="Staff Management" Command="{Binding ShowStaffManagementCommand}"
-                    BackgroundColor="#D9D9D9"
-                    TextColor="Black"
-                    FontAttributes="Bold" 
-                    HorizontalOptions="Start"/>
-            <Button Text="Reports" Command="{Binding ShowReportsCommand}"
-                    BackgroundColor="#D9D9D9"
-                    TextColor="Black"
-                    FontAttributes="Bold" 
-                    HorizontalOptions="Start"/>
-            <Button Text="Notification" Command="{Binding ShowNotificationCommand}"
-                    BackgroundColor="#D9D9D9"
-                    TextColor="Black"
-                    FontAttributes="Bold"
-                    HorizontalOptions="Start"/>
-            <!--
-            <Label Text="Employee's Tab" FontSize="10" Padding="0,20,0,5"/>
-            <Button Text="Point of Sale" Command="{Binding ShowPOSCommand}"/>
-            <Button Text="Kitchen Display" Command="{Binding ShowKitchenCommand}"/>
-            -->
+                    FontAttributes="Bold"/>
+            <Button x:Name="MenuManagementButton" Text="Menu Management" 
+                     BackgroundColor="Transparent"
+                       HorizontalOptions="Start"
+ TextColor="Black"
+ FontAttributes="Bold"/>
+            <Button x:Name="StaffManagementButton" Text="Staff Management"
+                     BackgroundColor="Transparent"
+                       HorizontalOptions="Start"
+ TextColor="Black"
+ FontAttributes="Bold"/>
+            <Button x:Name="ReportsButton" Text="Reports" 
+                     BackgroundColor="Transparent"
+                       HorizontalOptions="Start"
+ TextColor="Black"
+ FontAttributes="Bold"/>
+            <Button x:Name="NotificationButton" Text="Notification"
+                     BackgroundColor="Transparent"
+                       HorizontalOptions="Start"
+ TextColor="Black"
+ FontAttributes="Bold"/>
         </VerticalStackLayout>
 
         <!-- Footer / Sign Out -->
-        <Button Text="Sign Out" Grid.Row="2" 
-                Command="{Binding SignOutCommand}" 
+        <Button x:Name="SignOutButton" Text="Sign Out" Grid.Row="2" 
                 WidthRequest="180"
                 BackgroundColor="#777777"
                 TextColor="Black"

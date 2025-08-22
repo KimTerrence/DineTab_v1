@@ -60,7 +60,11 @@ namespace DineTab_v1.ViewModels.Admin
                 await Application.Current.MainPage.DisplayAlert("Error", "Failed to delete item", "OK");
             }
 
-            await Application.Current.MainPage.Navigation.PopModalAsync();
+            try
+            {
+                await Application.Current.MainPage.Navigation.PopModalAsync(); //close modal
+            }
+            catch (Exception ex) { }
         }
 
         // Bindable properties for XAML

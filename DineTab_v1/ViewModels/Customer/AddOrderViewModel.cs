@@ -120,10 +120,11 @@ namespace DineTab_v1.ViewModels.Customer
             }
 
             // Close the modal/page
-            if (Application.Current.MainPage.Navigation.ModalStack.Count > 0)
-                await Application.Current.MainPage.Navigation.PopModalAsync();
-            else
-                await Application.Current.MainPage.Navigation.PopAsync();
+            try
+            {
+                await Application.Current.MainPage.Navigation.PopModalAsync(); //close modal
+            }
+            catch (Exception ex) { }
         }
 
 
@@ -138,10 +139,11 @@ namespace DineTab_v1.ViewModels.Customer
 
         public async void Close()
         {
-            if (Application.Current.MainPage.Navigation.ModalStack.Count > 0)
-                await Application.Current.MainPage.Navigation.PopModalAsync();
-            else
-                await Application.Current.MainPage.Navigation.PopAsync();
+            try
+            {
+                await Application.Current.MainPage.Navigation.PopModalAsync(); //close modal
+            }
+            catch (Exception ex) { }
         }
     }
 }

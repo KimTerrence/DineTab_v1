@@ -89,7 +89,12 @@ namespace DineTab_v1.ViewModels.Admin
         // Cancel command to close the modal
         private async void OnCancel()
         {
-            await Application.Current.MainPage.Navigation.PopModalAsync();
+            try
+            {
+                await Application.Current.MainPage.Navigation.PopModalAsync(); //close modal
+            }
+            catch (Exception ex) { }
+
         }
 
 
@@ -119,7 +124,11 @@ namespace DineTab_v1.ViewModels.Admin
                 if (success)
                 {
                     await Application.Current.MainPage.DisplayAlert("Success", "Staff added successfully", "OK");
-                    await Application.Current.MainPage.Navigation.PopModalAsync();
+                    try
+                    {
+                        await Application.Current.MainPage.Navigation.PopModalAsync(); //close modal
+                    }
+                    catch (Exception ex) { }
                     MessagingCenter.Send(this, "StaffUpdated");
                 }
                 else

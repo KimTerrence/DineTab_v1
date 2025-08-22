@@ -108,10 +108,15 @@ namespace DineTab_v1.ViewModels.Admin
 
             if (result)
             {
-             
-                await Application.Current.MainPage.DisplayAlert("Success", "Item saved successfully", "OK");                
-                await Application.Current.MainPage.Navigation.PopModalAsync();
-                MessagingCenter.Send(this, "MenuUpdated");
+                try
+                {
+                    await Application.Current.MainPage.DisplayAlert("Success", "Item saved successfully", "OK");
+                    await Application.Current.MainPage.Navigation.PopModalAsync();
+                    MessagingCenter.Send(this, "MenuUpdated");
+                }
+                catch (Exception ex) { 
+                
+                }                             
             }
             else
             {
@@ -121,7 +126,12 @@ namespace DineTab_v1.ViewModels.Admin
 
         private async Task Cancel()
         {
-            await Application.Current.MainPage.Navigation.PopModalAsync();
+            try
+            {
+                await Application.Current.MainPage.Navigation.PopModalAsync();
+            }
+            catch (Exception ex) { }
+            
         }
 
         private async Task UploadImage()

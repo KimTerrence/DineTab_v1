@@ -56,7 +56,11 @@ namespace DineTab_v1.ViewModels.Admin
 
                 if (success)
                 {
-                    await Application.Current.MainPage.Navigation.PopModalAsync();
+                    try
+                    {
+                        await Application.Current.MainPage.Navigation.PopModalAsync(); //close modal
+                    }
+                    catch (Exception ex) { }
                     MessagingCenter.Send(this, "StaffUpdated");
 
                 }

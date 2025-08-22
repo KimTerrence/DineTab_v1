@@ -1,27 +1,29 @@
 using Microsoft.Maui.Controls;
 using DineTab_v1.Models;
-using DineTab_v1.ViewModels.Admin;
-using DineTab_v1.Views.Admin;
+using DineTab_v1.Views.Shared;
 
 namespace DineTab_v1.Views.Admin;
 
 public partial class AdminPage : ContentPage
 {
+    private readonly User _currentUser;
+
     public AdminPage(User currentUser)
     {
         InitializeComponent();
+        _currentUser = currentUser ?? throw new ArgumentNullException(nameof(currentUser));
+
         NavigationPage.SetHasNavigationBar(this, false);
-        // Bind ViewModel
-        BindingContext = new AdminViewModel(currentUser ?? throw new ArgumentNullException(nameof(currentUser)));
+
+        // Create side panel in code-behind and pass current page reference
+        SidePanelContainer.Content = new SidePanel(_currentUser, this);
 
         // Load default dashboard
         MainPanelContainer.Content = new Dashboard();
-
-        // Subscribe to side menu selection
-        MessagingCenter.Subscribe<AdminViewModel, string>(this, "MenuSelected", OnMenuSelected);
     }
 
-    private void OnMenuSelected(AdminViewModel sender, string page)
+    // Method to switch main panel content
+    public void ShowPage(string page)
     {
         MainPanelContainer.Content = page switch
         {
@@ -30,15 +32,7 @@ public partial class AdminPage : ContentPage
             "StaffManagement" => new StaffManagementPage(),
             "Reports" => new ReportsPage(),
             "Notification" => new NotificationPage(),
-            //"POS" => new CashierMenuView(),
-            //"Kitchen" => new KitchenDisplayView(),
             _ => new Dashboard()
         };
-    }
-
-    protected override void OnDisappearing()
-    {
-        base.OnDisappearing();
-        MessagingCenter.Unsubscribe<AdminViewModel, string>(this, "MenuSelected");
     }
 }

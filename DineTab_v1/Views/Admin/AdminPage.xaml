@@ -12,7 +12,7 @@
         </Grid.ColumnDefinitions>
 
         <!-- SidePanel -->
-        <views:SidePanel Grid.Column="0"/>
+        <ContentView x:Name="SidePanelContainer" Grid.Column="0"/>
 
         <!-- MainPanel container -->
         <ContentView Grid.Column="1" x:Name="MainPanelContainer"/>
