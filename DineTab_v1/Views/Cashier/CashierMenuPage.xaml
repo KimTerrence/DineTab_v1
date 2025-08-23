@@ -189,11 +189,11 @@
                             CornerRadius="0"
                             TextColor="Black"
                             Command="{Binding CancelOrderCommand}"/>
-                    <Button Text="Place Order" BackgroundColor="White"
+                    <Button Text="Confirm Payment" BackgroundColor="White"
                             BorderColor="Black"
                             BorderWidth="1"
                             CornerRadius="0"
-                            Command="{Binding PlaceOrderCommand}"
+                            Command="{Binding ConfirmPaymentCommand}"
                             TextColor="Black"/>
                 </VerticalStackLayout>
             </VerticalStackLayout>

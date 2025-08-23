@@ -1,0 +1,105 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DineTab_v1.Views.Cashier.PaymentPage"
+             BackgroundColor="#80000000">
+    <!-- semi-transparent black overlay -->
+
+    <!-- Center Modal Layout -->
+    <Grid VerticalOptions="Center"
+          HorizontalOptions="Center"
+          Padding="20">
+
+        <Frame BackgroundColor="White"
+               Padding="20"
+               CornerRadius="20"
+               HasShadow="True"
+               WidthRequest="350"
+               VerticalOptions="Center"
+               HorizontalOptions="Center">
+
+            <VerticalStackLayout Padding="10" Spacing="15">
+
+                <!-- Header -->
+                <Label Text="PAYMENT TRANSACTION"
+                       FontAttributes="Bold"
+                       FontSize="18"
+                       HorizontalOptions="Center"/>
+
+                <!-- Amount and Change -->
+                <Grid ColumnSpacing="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <VerticalStackLayout Grid.Column="0" Spacing="5">
+                        <Label Text="AMOUNT TO BE PAID" FontSize="12" HorizontalOptions="Center"/>
+                        <Border HeightRequest="50">
+                            <Label Text="{Binding AmountToBePaid}" 
+                                   VerticalOptions="Center" 
+                                   HorizontalOptions="Center"/>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Grid.Column="1" Spacing="5">
+                        <Label Text="CHANGE" FontSize="12" HorizontalOptions="Center"/>
+                        <Border HeightRequest="50">
+                            <Label Text="{Binding Change}" 
+                                   VerticalOptions="Center" 
+                                   HorizontalOptions="Center"/>
+                        </Border>
+                    </VerticalStackLayout>
+                </Grid>
+
+                <!-- Money Received -->
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="MONEY RECEIVED" FontSize="12" HorizontalOptions="Center"/>
+                    <Border HeightRequest="50">
+                        <Label Text="{Binding MoneyReceived}" 
+                               VerticalOptions="Center" 
+                               HorizontalOptions="Center"/>
+                    </Border>
+                </VerticalStackLayout>
+
+                <!-- Keypad -->
+                <Grid RowSpacing="10" ColumnSpacing="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Row 1 -->
+                    <Button Text="7" Grid.Row="0" Grid.Column="0" Command="{Binding NumberCommand}" CommandParameter="7"/>
+                    <Button Text="8" Grid.Row="0" Grid.Column="1" Command="{Binding NumberCommand}" CommandParameter="8"/>
+                    <Button Text="9" Grid.Row="0" Grid.Column="2" Command="{Binding NumberCommand}" CommandParameter="9"/>
+
+                    <!-- Row 2 -->
+                    <Button Text="4" Grid.Row="1" Grid.Column="0" Command="{Binding NumberCommand}" CommandParameter="4"/>
+                    <Button Text="5" Grid.Row="1" Grid.Column="1" Command="{Binding NumberCommand}" CommandParameter="5"/>
+                    <Button Text="6" Grid.Row="1" Grid.Column="2" Command="{Binding NumberCommand}" CommandParameter="6"/>
+
+                    <!-- Row 3 -->
+                    <Button Text="1" Grid.Row="2" Grid.Column="0" Command="{Binding NumberCommand}" CommandParameter="1"/>
+                    <Button Text="2" Grid.Row="2" Grid.Column="1" Command="{Binding NumberCommand}" CommandParameter="2"/>
+                    <Button Text="3" Grid.Row="2" Grid.Column="2" Command="{Binding NumberCommand}" CommandParameter="3"/>
+
+                    <!-- Row 4 -->
+                    <Button Text="C" Grid.Row="3" Grid.Column="0" Command="{Binding ClearCommand}"/>
+                    <Button Text="0" Grid.Row="3" Grid.Column="1" Command="{Binding NumberCommand}" CommandParameter="0"/>
+                    <Button Text="←" Grid.Row="3" Grid.Column="2" Command="{Binding BackspaceCommand}"/>
+
+                    <Button Text="Confirm"  Grid.Row="4" Grid.Column="1" WidthRequest="290"
+                            Command="{Binding ConfirmCommand}"/>
+                </Grid>
+            </VerticalStackLayout>
+        </Frame>
+    </Grid>
+</ContentPage>

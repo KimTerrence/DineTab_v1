@@ -9,6 +9,7 @@ namespace DineTab_v1.Models
 {
     public class OrderDisplay
     {
+        public int OrderId { get; set; }
         public string OrderNumber { get; set; }
         public string OrderType { get; set; }
         public ObservableCollection<OrderItem> Items { get; set; } = new();

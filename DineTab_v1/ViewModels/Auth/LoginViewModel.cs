@@ -95,7 +95,7 @@ namespace DineTab_v1.ViewModels.Auth
                     return;
                 }
 
-                if (SelectedRole == "Kitchen Staff" && user.Role != "Staff")
+                if (SelectedRole == "Kitchen Staff" && user.Role != "Kitchen Staff")
                 {
                     await Application.Current.MainPage.DisplayAlert("Access Denied", "You are not Kitchen Staff", "OK");
                     return;
@@ -107,7 +107,7 @@ namespace DineTab_v1.ViewModels.Auth
                     case "Admin":
                         await _navigation.PushAsync(new AdminPage(user));
                         break;
-                    case "Staff":
+                    case "Kitchen Staff":
                         await _navigation.PushAsync(new KitchenStaffPage());
                         break;
                     case "Cashier":

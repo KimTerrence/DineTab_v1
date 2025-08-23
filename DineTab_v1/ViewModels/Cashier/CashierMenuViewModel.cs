@@ -2,6 +2,7 @@
 using DineTab_v1.Services;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using DineTab_v1.Views.Cashier;
 using System.Windows.Input;
 
 namespace DineTab_v1.ViewModels.Cashier
@@ -18,12 +19,13 @@ namespace DineTab_v1.ViewModels.Cashier
         public ICommand AddOrderCommand { get; }
         public ICommand IncreaseOrderItemCommand { get; }
         public ICommand DecreaseOrderItemCommand { get; }
-
+        public ICommand ConfirmPaymentCommand { get; }
         public CashierMenuViewModel()
         {
             LoadOrders();
             AddOrderCommand = new Command<OrderDisplay>(AddOrder);
             IncreaseOrderItemCommand = new Command<OrderItem>(IncreaseQuantity);
+            ConfirmPaymentCommand = new Command(OnConfirmPayment);
             DecreaseOrderItemCommand = new Command<OrderItem>(DecreaseQuantity);
         }
 
@@ -36,12 +38,20 @@ namespace DineTab_v1.ViewModels.Cashier
                 var items = await _dbService.GetOrderItemsAsync(order.OrderId);
                 Orders.Add(new OrderDisplay
                 {
+                    OrderId = order.OrderId,
                     OrderNumber = order.OrderNumber,
                     OrderType = order.OrderType,
                     Items = items
                 });
             }
         }
+        private int _selectedOrderId;
+        public int SelectedOrderId
+        {
+            get => _selectedOrderId;
+            set { _selectedOrderId = value; OnPropertyChanged(); }
+        }
+
 
         private string _selectedOrderNumber;
         public string SelectedOrderNumber
@@ -61,20 +71,24 @@ namespace DineTab_v1.ViewModels.Cashier
 
         private void AddOrder(OrderDisplay orderDisplay)
         {
+
             if (orderDisplay == null) return;
 
             OrderItems.Clear();
             foreach (var item in orderDisplay.Items)
                 OrderItems.Add(item);
 
+            SelectedOrderId = orderDisplay.OrderId;
             SelectedOrderNumber = orderDisplay.OrderNumber;
             SelectedOrderType = orderDisplay.OrderType;
 
             OnPropertyChanged(nameof(OrderItems));
+            OnPropertyChanged(nameof(SelectedOrderId));
             OnPropertyChanged(nameof(SelectedOrderNumber));
             OnPropertyChanged(nameof(SelectedOrderType));
             OnPropertyChanged(nameof(Total));
         }
+
 
         private void IncreaseQuantity(OrderItem item)
         {
@@ -89,5 +103,17 @@ namespace DineTab_v1.ViewModels.Cashier
             item.Quantity -= 1;
             OnPropertyChanged(nameof(Total));
         }
+        private async void OnConfirmPayment()
+        {
+            var orderNumber = SelectedOrderNumber;
+            var totalAmount = Total;
+            var items = new ObservableCollection<OrderItem>(OrderItems);
+
+            await Shell.Current.Navigation.PushModalAsync(
+                new PaymentPage(orderNumber, totalAmount, items)
+            );
+        }
+
+
     }
 }
