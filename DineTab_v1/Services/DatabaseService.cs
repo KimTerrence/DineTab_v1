@@ -387,12 +387,13 @@ namespace DineTab_v1.Services
             await connection.OpenAsync();
             foreach (var item in items)
             {
-                var query = "INSERT INTO OrderItems (Id, ItemId, Quantity, Price) VALUES (@OrderId, @ItemId, @Quantity, @Price)";
+                var query = "INSERT INTO OrderItems (Id, ItemId, Quantity, Price, Name) VALUES (@OrderId, @ItemId, @Quantity, @Price, @Name)";
                 using var cmd = new SqlCommand(query, connection);
                 cmd.Parameters.AddWithValue("@OrderId", orderId);
                 cmd.Parameters.AddWithValue("@ItemId", item.ItemId);
                 cmd.Parameters.AddWithValue("@Quantity", item.Quantity);
                 cmd.Parameters.AddWithValue("@Price", item.Price);
+                cmd.Parameters.AddWithValue("@Name", item.Name);
                 await cmd.ExecuteNonQueryAsync();
             }
         }

@@ -2,7 +2,9 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="DineTab_v1.Views.Cashier.CashierMenuPage"
-             NavigationPage.HasBackButton="False">
+             x:Name="RootPage"
+             NavigationPage.HasBackButton="False"
+             Shell.NavBarIsVisible="False">
     
     <Grid ColumnDefinitions="*, 300" 
           RowDefinitions="Auto, *" 
@@ -22,30 +24,40 @@
                 </Picker.Items>
             </Picker>
             </VerticalStackLayout>
-       
+
 
             <Button Text="Create Order"
                     Grid.Column="1"
                     HorizontalOptions="End"
-                    HeightRequest="50"/>
+                    HeightRequest="50"
+                    BackgroundColor="White"
+                    TextColor="Black"
+                    BorderColor="Black"
+                    BorderWidth="1"
+                    CornerRadius="0"/>
         </Grid>
 
 
         <!-- Menu Items Grid -->
-        <CollectionView ItemsSource="{Binding Orders}">
+        <CollectionView ItemsSource="{Binding Orders}" Grid.Row="1">
+            <CollectionView.ItemsLayout>
+                <!-- 4 boxes per row -->
+                <GridItemsLayout Orientation="Vertical" Span="4"/>
+            </CollectionView.ItemsLayout>
+
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Border Padding="10" Margin="5" BackgroundColor="#f5f5f5">
-                        <VerticalStackLayout>
+                    <Border Margin="5" BackgroundColor="#f5f5f5">
+                        <VerticalStackLayout Spacing="10" Padding="10">
                             <!-- Order Header -->
-                            <Label Text="{Binding OrderNumber}" FontAttributes="Bold"/>
+                            <Label Text="{Binding OrderNumber}" FontAttributes="Bold" Background="Gray"/>
                             <Label Text="{Binding OrderType}" FontSize="12"/>
 
                             <!-- Order Items -->
                             <CollectionView ItemsSource="{Binding Items}">
                                 <CollectionView.ItemTemplate>
                                     <DataTemplate>
-                                        <Grid ColumnDefinitions="2*,*,*" Padding="5">
+                                        <Grid ColumnDefinitions="*,*,*" Padding="5">
                                             <Label Text="{Binding Name}" Grid.Column="0"/>
                                             <Label Text="{Binding Quantity}" Grid.Column="1" HorizontalOptions="Center"/>
                                             <Label Text="{Binding TotalPrice, StringFormat='₱{0:F2}'}" Grid.Column="2" HorizontalOptions="End"/>
@@ -55,12 +67,24 @@
                             </CollectionView>
 
                             <!-- Order Total -->
-                            <Label Text="{Binding Total, StringFormat='Total: ₱{0:F2}'}" FontAttributes="Bold" HorizontalOptions="End"/>
+                            <Label Text="{Binding Total, StringFormat='Total: ₱{0:F2}'}"
+                           FontAttributes="Bold"
+                           HorizontalOptions="End"/>
+                            <Button Text="Add "
+                                    HorizontalOptions="End"
+                                    BackgroundColor="White"
+                                    BorderColor="Black"
+                                    BorderWidth="1"
+                                    TextColor="Black"
+                                    CornerRadius="0"
+                                    Command="{Binding BindingContext.AddOrderCommand, Source={x:Reference RootPage}}"
+                                    CommandParameter="{Binding}" />
                         </VerticalStackLayout>
                     </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
+
 
 
         <!-- Order Summary Panel -->
@@ -70,13 +94,11 @@
                     <VerticalStackLayout Spacing="10" Padding="10">
                         <HorizontalStackLayout>
                             <Label Text="Order " FontAttributes="Bold" FontSize="16"/>
-                            <Label Text="{Binding OrderNumber}" FontAttributes="Bold" FontSize="16"/>
+                            <Label Text="{Binding SelectedOrderNumber}" FontAttributes="Bold" FontSize="16"/>
                         </HorizontalStackLayout>
                         <VerticalStackLayout Spacing="5" HorizontalOptions="Start">
 
-                            <Label Text="{Binding OrderTypeText}" 
-                                       FontSize="16" 
-                                       HorizontalOptions="Center"/>
+                            <Label Text="{Binding SelectedOrderType}" FontSize="16" HorizontalOptions="Center"/>
                         </VerticalStackLayout>
                     </VerticalStackLayout>
                 </Border>
