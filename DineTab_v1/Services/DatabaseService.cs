@@ -404,7 +404,7 @@ namespace DineTab_v1.Services
             var list = new List<Order>();
             using var connection = new SqlConnection(_connectionString);
             await connection.OpenAsync();
-            var query = "SELECT Id, OrderNumber, OrderType, Total, CreatedAt FROM Orders ORDER BY CreatedAt DESC";
+            var query = "SELECT Id, OrderNumber, OrderType, Total, CreatedAt FROM Orders WHERE Payment = 'unpaid' ORDER BY CreatedAt DESC";
             using var cmd = new SqlCommand(query, connection);
             using var reader = await cmd.ExecuteReaderAsync();
             while (await reader.ReadAsync())
@@ -443,6 +443,42 @@ namespace DineTab_v1.Services
             }
             return items;
         }
+
+        //update if Order paid
+        public async Task<bool> OrderExistsAsync(string orderNumber)
+        {
+            using var conn = new SqlConnection(_connectionString);
+            await conn.OpenAsync();
+            string sql = "SELECT COUNT(*) FROM Orders WHERE OrderNumber = @OrderNumber";
+            using var cmd = new SqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@OrderNumber", orderNumber);
+            int count = (int)await cmd.ExecuteScalarAsync();
+            return count > 0;
+        }
+
+        public async Task UpdateOrderPaymentStatusAsync(string orderNumber, string paymentStatus)
+        {
+            using var conn = new SqlConnection(_connectionString);
+            await conn.OpenAsync();
+            string sql = "UPDATE Orders SET Payment = @PaymentStatus WHERE OrderNumber = @OrderNumber";
+            using var cmd = new SqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@PaymentStatus", paymentStatus);
+            cmd.Parameters.AddWithValue("@OrderNumber", orderNumber);
+            await cmd.ExecuteNonQueryAsync();
+        }
+
+        public async Task<int> InsertPaidOrderAsync(string orderNumber, string orderType, decimal total)
+        {
+            using var connection = new SqlConnection(_connectionString);
+            await connection.OpenAsync();
+            var query = @"INSERT INTO Orders (OrderNumber, OrderType, Total, CreatedAt, Payment) OUTPUT INSERTED.Id VALUES (@OrderNumber, @OrderType, @Total, GETDATE(), 'Paid')";
+            using var cmd = new SqlCommand(query, connection);
+            cmd.Parameters.AddWithValue("@OrderNumber", orderNumber);
+            cmd.Parameters.AddWithValue("@OrderType", orderType);
+            cmd.Parameters.AddWithValue("@Total", total);
+            return (int)await cmd.ExecuteScalarAsync();
+        }
+
         // Other database methods like GetMenuItemsAsync(), GetCategoriesAsync(), etc.
     }
 }

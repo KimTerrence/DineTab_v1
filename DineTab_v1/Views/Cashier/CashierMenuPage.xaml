@@ -34,7 +34,8 @@
                     TextColor="Black"
                     BorderColor="Black"
                     BorderWidth="1"
-                    CornerRadius="0"/>
+                    CornerRadius="0"
+                    Command="{Binding CreateOrderCommand }"/>
         </Grid>
 
 

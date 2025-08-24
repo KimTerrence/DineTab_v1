@@ -20,6 +20,7 @@ namespace DineTab_v1.ViewModels.Cashier
         public ICommand IncreaseOrderItemCommand { get; }
         public ICommand DecreaseOrderItemCommand { get; }
         public ICommand ConfirmPaymentCommand { get; }
+        public ICommand CreateOrderCommand {  get; }
         public CashierMenuViewModel()
         {
             LoadOrders();
@@ -27,6 +28,7 @@ namespace DineTab_v1.ViewModels.Cashier
             IncreaseOrderItemCommand = new Command<OrderItem>(IncreaseQuantity);
             ConfirmPaymentCommand = new Command(OnConfirmPayment);
             DecreaseOrderItemCommand = new Command<OrderItem>(DecreaseQuantity);
+            CreateOrderCommand = new Command(CreateOrder);
         }
 
         private async void LoadOrders()
@@ -114,6 +116,9 @@ namespace DineTab_v1.ViewModels.Cashier
             );
         }
 
-
+        public async void CreateOrder()
+        {
+            await Shell.Current.Navigation.PushModalAsync(new CreateOrderPage());
+        }
     }
 }
