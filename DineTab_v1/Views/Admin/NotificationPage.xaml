@@ -16,31 +16,42 @@
                 </VerticalStackLayout>
             </Border>
 
-            <VerticalStackLayout Spacing="10">
-                <Border Stroke="Black">
-                    <HorizontalStackLayout Spacing="10">
-                        <Image Source="icon.png" 
-                               HeightRequest="60"/>
-                        <VerticalStackLayout VerticalOptions="Center">
-                            <Label Text="sdsdsd" FontAttributes="Bold"/>
-                            <Label Text="ssaopfjioapswjfd"
-                                   TextColor="#B0ACAC"/>
-                        </VerticalStackLayout>
-                    </HorizontalStackLayout>
-                </Border>
-                
-                <Border Stroke="Black">
-                    <HorizontalStackLayout Spacing="10">
-                        <Image Source="icon.png" 
-               HeightRequest="60"/>
-                        <VerticalStackLayout VerticalOptions="Center">
-                            <Label Text="sdsdsd" FontAttributes="Bold"/>
-                            <Label Text="ssaopfjioapswjfd"
-                   TextColor="#B0ACAC"/>
-                        </VerticalStackLayout>
-                    </HorizontalStackLayout>
-                </Border>
-            </VerticalStackLayout>
+            <CollectionView ItemsSource="{Binding Notifications}" Margin="0,10,0,0">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Stroke="Black" Padding="10" Margin="0,0,0,10">
+                            <Grid Padding="10" ColumnSpacing="10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <!-- Image -->
+                                    <ColumnDefinition Width="*"/>
+                                    <!-- Message -->
+                                    <ColumnDefinition Width="Auto"/>
+                                    <!-- Button -->
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Image -->
+                                <Image Source="icon.png" HeightRequest="60" Grid.Column="0"/>
+
+                                <!-- Message -->
+                                <Label Text="{Binding Message}" 
+                                       FontAttributes="Bold" 
+                                       VerticalOptions="Center" 
+                                       Grid.Column="1"/>
+                                <!-- Status Button -->
+                                <Button Text="{Binding Status}" 
+                                        BackgroundColor="{Binding StatusColor}" 
+                                        TextColor="Black" 
+                                        FontAttributes="Bold" 
+                                        Padding="20,1"
+                                        CornerRadius="50"
+                                        VerticalOptions="Center"
+                                        Grid.Column="2"/>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
         </VerticalStackLayout>
     </ScrollView>
 </ContentView>

@@ -8,5 +8,6 @@ public partial class HistoryPage : ContentPage
 	{
 		InitializeComponent();
 		BindingContext = new HistoryViewModel();
-	}
+        NavigationPage.SetHasNavigationBar(this, false);
+    }
 }

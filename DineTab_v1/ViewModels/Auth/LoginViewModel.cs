@@ -5,6 +5,8 @@ using DineTab_v1.Views.Admin;
 using DineTab_v1.Views.Customer;
 using DineTab_v1.Views.Cashier;
 using DineTab_v1.Views.KitchenStaff;
+using DineTab_v1.Views.Queue;
+using DineTab_v1.Views.Auth;
 
 namespace DineTab_v1.ViewModels.Auth
 {
@@ -49,6 +51,7 @@ namespace DineTab_v1.ViewModels.Auth
 
         public ICommand LoginCommand { get; }
         public ICommand OrderCommand { get; }
+        public ICommand ForgotPasswordCommand { get; }
 
         private INavigation _navigation;
 
@@ -57,6 +60,7 @@ namespace DineTab_v1.ViewModels.Auth
             _navigation = navigation;
 
             LoginCommand = new Command(OnLogin);
+            ForgotPasswordCommand = new Command(OnForgotPassword);
             OrderCommand = new Command(OnOrder);
         }
 
@@ -67,7 +71,7 @@ namespace DineTab_v1.ViewModels.Auth
 
             if (SelectedRole == "Que")
             {
-                //_navigation.PushAsync(new QuePage());
+                _navigation.PushAsync(new QueuePage());
             }
         }
 
@@ -128,6 +132,11 @@ namespace DineTab_v1.ViewModels.Auth
         private async void OnOrder()
         {
             await _navigation.PushAsync(new CustomerPage());
+        }
+
+        private async void OnForgotPassword()
+        {
+            await _navigation.PushAsync(new ForgotPasswordPage());
         }
     }
 }

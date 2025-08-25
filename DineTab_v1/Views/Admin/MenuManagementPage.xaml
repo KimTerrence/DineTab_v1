@@ -20,15 +20,15 @@
             </Grid>
 
             <Label Text="Categories" Padding="0, 20, 0, 0"/>
-
-            <CollectionView ItemsSource="{Binding Categories}" SelectionMode="None">
-                <CollectionView.ItemsLayout>
-                    <LinearItemsLayout Orientation="Horizontal" ItemSpacing="5"/>
-                </CollectionView.ItemsLayout>
-
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Button Text="{Binding Name}"
+            <HorizontalStackLayout Spacing="5">
+                <Button Text="All Items" BackgroundColor="#FA7E0E" TextColor="Black" CornerRadius="0"/>
+                <CollectionView ItemsSource="{Binding Categories}" SelectionMode="None">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Horizontal" ItemSpacing="5"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Button Text="{Binding Name}"
                     BackgroundColor="#BCBCBC"
                     HeightRequest="25"
                     FontSize="12"
@@ -36,10 +36,12 @@
                     CornerRadius="0"
                     Margin="2,0"
                     IsEnabled="False"/>
-                        <!-- Disable if just for display -->
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+                            <!-- Disable if just for display -->
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </HorizontalStackLayout>
+
 
 
             <!-- Menu Items -->

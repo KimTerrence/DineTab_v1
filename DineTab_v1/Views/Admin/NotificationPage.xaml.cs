@@ -1,3 +1,5 @@
+using DineTab_v1.ViewModels.Admin;
+
 namespace DineTab_v1.Views.Admin;
 using DineTab_v1.Services;
 public partial class NotificationPage : ContentView
@@ -6,5 +8,6 @@ public partial class NotificationPage : ContentView
     public NotificationPage()
 	{
 		InitializeComponent();
+		BindingContext = new NotificationViewModel();
 	}
 }

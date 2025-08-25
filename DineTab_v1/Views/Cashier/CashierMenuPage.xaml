@@ -16,7 +16,7 @@
             <VerticalStackLayout Grid.Column="0">
                 <HorizontalStackLayout Spacing="20" >
                     <Label Text="Dine Tab" FontSize="32" FontAttributes="Bold" TextColor="#9A9A9A"/>
-                    <Label Text="Orders " FontSize="32" FontAttributes="Bold"/>
+                    <Button Text="Sign Out" Command="{Binding SignOutCommand}" BackgroundColor="White" TextColor="Black" BorderColor="Black" BorderWidth="1" />
                 </HorizontalStackLayout>
             <Picker Title="Order Type" WidthRequest="100" HorizontalOptions="Start">
                 <Picker.Items>
@@ -190,7 +190,8 @@
                             BorderWidth="1"
                             CornerRadius="0"
                             TextColor="Black"
-                            Command="{Binding CancelOrderCommand}"/>
+                            Command="{Binding CancelOrderCommand}"
+                            CommandParameter="{Binding .}" />
                     <Button Text="Confirm Payment" BackgroundColor="White"
                             BorderColor="Black"
                             BorderWidth="1"

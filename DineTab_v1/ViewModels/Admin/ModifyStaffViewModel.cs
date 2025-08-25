@@ -174,6 +174,15 @@ namespace DineTab_v1.ViewModels.Admin
                         return;
                     }
 
+                    // Check password length and special character
+                    if (NewPassword.Length < 8 ||
+                        !System.Text.RegularExpressions.Regex.IsMatch(NewPassword, @"[!@#$%^&*(),.?""':{}|<>]"))
+                    {
+                        await Application.Current.MainPage.DisplayAlert("Error",
+                            "Password must be at least 8 characters and contain at least one special character.", "OK");
+                        return;
+                    }
+
                     if (NewPassword != ConfirmPassword)
                     {
                         await Application.Current.MainPage.DisplayAlert("Error", "Passwords do not match.", "OK");

@@ -8,5 +8,7 @@ public partial class KitchenStaffPage : ContentPage
 	{
 		InitializeComponent();
 		BindingContext = new KitchenStaffViewModel();
-	}
+        NavigationPage.SetHasNavigationBar(this, false);
+
+    }
 }

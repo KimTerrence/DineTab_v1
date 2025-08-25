@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DineTab_v1.Views.Admin.SuccessPopUp"
+              BackgroundColor="#80000000">
+    <!-- semi-transparent overlay -->
+
+    <Grid VerticalOptions="Center" HorizontalOptions="Center">
+        <Border Padding="30"          
+               BackgroundColor="White">
+            <VerticalStackLayout Spacing="15" HorizontalOptions="Center" VerticalOptions="Center">
+
+                <!-- Checkmark circle -->
+                <Border WidthRequest="60" HeightRequest="60" BackgroundColor="#39FF14" StrokeShape="100" HorizontalOptions="Center">
+                    <Label Text="✔" FontSize="16" HorizontalOptions="Center" VerticalOptions="Center" TextColor="Black"/>
+                </Border>
+
+                <!-- Message -->
+                <Label Text="A new user has been successfully added."
+                       FontAttributes="Bold"
+                       FontSize="16"
+                       HorizontalTextAlignment="Center"/>
+
+            </VerticalStackLayout>
+        </Border>
+    </Grid>
+</ContentPage>

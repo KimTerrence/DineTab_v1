@@ -16,12 +16,23 @@ namespace DineTab_v1.ViewModels.KitchenStaff
         public ObservableCollection<Order> YesterdayOrders { get; set; } = new();
 
         public ICommand RecallCommand { get; }
+        public ICommand GobackCommand { get; }
 
         public HistoryViewModel()
         {
             _databaseService = new DatabaseService();
 
             RecallCommand = new Command<Order>(RecallOrder);
+
+            GobackCommand = new Command( async () =>
+            {
+                try
+                {
+                    await Application.Current.MainPage.Navigation.PopAsync();
+                }
+                catch (Exception ex) { }
+              
+            });
 
             LoadCompletedOrders();
         }
@@ -35,18 +46,23 @@ namespace DineTab_v1.ViewModels.KitchenStaff
             var completedOrders = await _databaseService.GetAllCompletedOrdersAsync();
 
             var today = DateTime.Today;
+            var yesterday = DateTime.Today.AddDays(-1);
 
             foreach (var order in completedOrders.OrderByDescending(o => o.CreatedAt))
             {
-                if (order.CreatedAt.Date == today)
+                var orderDate = order.CreatedAt.Date;
+                System.Diagnostics.Debug.WriteLine($"Order {order.OrderNumber} CreatedAt: {order.CreatedAt}, Date: {orderDate}");
+
+                if (orderDate == today)
                 {
                     TodayOrders.Add(order);
                 }
-                else
+                else if (orderDate == yesterday)
                 {
                     YesterdayOrders.Add(order);
                 }
             }
+
         }
 
         private void RecallOrder(Order order)
@@ -57,6 +73,9 @@ namespace DineTab_v1.ViewModels.KitchenStaff
             Application.Current.MainPage.DisplayAlert("Recall", $"Order {order.OrderNumber} recalled!", "OK");
 
             // You can also implement logic to move the order back to Paid/Preparing
+
+
+
         }
     }
 }

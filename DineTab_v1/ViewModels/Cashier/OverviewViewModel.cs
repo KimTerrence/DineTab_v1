@@ -37,7 +37,11 @@ namespace DineTab_v1.ViewModels.Cashier
         private async void OnCancel()
         {
             await Application.Current.MainPage.DisplayAlert("Cancelled", "Order was cancelled.", "OK");
-            await Application.Current.MainPage.Navigation.PopAsync();
+                try
+            {
+                await Application.Current.MainPage.Navigation.PopAsync();
+            } catch (Exception ex) { }
+            
         }
 
 

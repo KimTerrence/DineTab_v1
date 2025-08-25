@@ -23,6 +23,7 @@ namespace DineTab_v1.ViewModels.KitchenStaff
         public ICommand MarkReadyCommand { get; }
         public ICommand MarkCompleteCommand { get; }
         public ICommand ShowHistoryCommand { get; }
+        public ICommand SignOutCommand { get; }
 
         public KitchenStaffViewModel()
         {
@@ -33,7 +34,14 @@ namespace DineTab_v1.ViewModels.KitchenStaff
             MarkReadyCommand = new Command<Order>(order => MarkReady(order));
             MarkCompleteCommand = new Command<Order>(order => MarkComplete(order));
             ShowHistoryCommand = new Command(LoadCompletedOrders);
+            SignOutCommand = new Command(async () =>
+            {
+                bool confirmed = await Application.Current.MainPage.DisplayAlert(
+                    "Sign Out", "Are you sure you want to sign out?", "Yes", "No");
 
+                if (confirmed)
+                    Application.Current.MainPage = new NavigationPage(new Views.Auth.LoginPage());
+            });
             LoadData();
             StartGlobalTimer();
         }

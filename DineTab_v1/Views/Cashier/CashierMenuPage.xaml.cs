@@ -9,5 +9,7 @@ public partial class CashierMenuPage : ContentPage
     {
         InitializeComponent();
         BindingContext = new CashierMenuViewModel();
+        NavigationPage.SetHasNavigationBar(this, false);
+
     }
 }

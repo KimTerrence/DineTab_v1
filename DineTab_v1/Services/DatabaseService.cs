@@ -40,7 +40,8 @@ namespace DineTab_v1.Services
                         "SELECT COUNT(*) FROM Orders WHERE OrderType = 'Dine In' ", conn);
                     return Convert.ToInt32(cmd.ExecuteScalar());
                 }
-            });        }
+            });
+        }
 
 
         public async Task<int> GetTakeOut()
@@ -384,7 +385,7 @@ namespace DineTab_v1.Services
             var result = await cmd.ExecuteNonQueryAsync();
             return result > 0;
         }
-  
+
         // Get all categories
         public async Task<List<Category>> GetCategoriesAsync()
         {
@@ -589,8 +590,8 @@ namespace DineTab_v1.Services
             {
                 list.Add(new Order
                 {
-                    OrderId = reader.IsDBNull(0) ? 0 : reader.GetInt32(0),                 
-                    OrderNumber = reader.IsDBNull(1) ? string.Empty : reader.GetString(1),  
+                    OrderId = reader.IsDBNull(0) ? 0 : reader.GetInt32(0),
+                    OrderNumber = reader.IsDBNull(1) ? string.Empty : reader.GetString(1),
                     OrderType = reader.IsDBNull(2) ? string.Empty : reader.GetString(2),
                     Total = reader.IsDBNull(3) ? 0m : reader.GetDecimal(3),
                     CreatedAt = reader.IsDBNull(4) ? DateTime.MinValue : reader.GetDateTime(4)
@@ -668,6 +669,21 @@ namespace DineTab_v1.Services
             int count = (int)await cmd.ExecuteScalarAsync();
             return count > 0;
         }
+
+        public async Task<bool> UpdateOrderStatusAsync(int orderId, string status)
+        {
+            using var conn = new SqlConnection(_connectionString);
+            await conn.OpenAsync();
+
+            var query = "UPDATE Orders SET Status = @Status WHERE Id = @OrderId";
+            using var cmd = new SqlCommand(query, conn);
+            cmd.Parameters.AddWithValue("@Status", status);
+            cmd.Parameters.AddWithValue("@OrderId", orderId);
+
+            int rows = await cmd.ExecuteNonQueryAsync();
+            return rows > 0;
+        }
+
 
         public async Task UpdateOrderPaymentStatusAsync(string orderNumber, string paymentStatus)
         {
@@ -781,7 +797,108 @@ namespace DineTab_v1.Services
             return orders;
         }
 
+        //Get ORder Niotifcation
+        public async Task<List<NotificationItem>> GetOrderNotificationsAsync()
+        {
+            var notifications = new List<NotificationItem>();
 
-        // Other database methods like GetMenuItemsAsync(), GetCategoriesAsync(), etc.
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(_connectionString))
+                {
+                    await conn.OpenAsync();
+
+                    string query = @"
+                    SELECT OrderNumber, Status
+                    FROM Orders
+                    ORDER BY CreatedAt DESC"; // adjust column names as per your table
+
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    using (SqlDataReader reader = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            notifications.Add(new NotificationItem
+                            {
+                                OrderNumber = reader["OrderNumber"].ToString(),
+                                Status = reader["Status"].ToString()
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error fetching notifications: {ex.Message}");
+            }
+
+            return notifications;
+        }
+
+        //Queue
+
+        public async Task<ObservableCollection<Order>> GetPreparingOrdersAsync()
+        {
+            var list = new ObservableCollection<Order>();
+            using var conn = new SqlConnection(_connectionString);
+            await conn.OpenAsync();
+
+            var query = @"
+                SELECT Id, OrderNumber, OrderType, CreatedAt, Total, Status, TargetTime
+                FROM Orders
+                WHERE Status='Preparing'";
+
+            using var cmd = new SqlCommand(query, conn);
+            using var reader = await cmd.ExecuteReaderAsync();
+
+            while (await reader.ReadAsync())
+            {
+                list.Add(new Order
+                {
+                    OrderId = reader.GetInt32(reader.GetOrdinal("Id")),
+                    OrderNumber = reader.GetString(reader.GetOrdinal("OrderNumber")),
+                    OrderType = reader.GetString(reader.GetOrdinal("OrderType")),
+                    CreatedAt = reader.GetDateTime(reader.GetOrdinal("CreatedAt")),
+                    Total = reader.GetDecimal(reader.GetOrdinal("Total")),
+                    Status = reader.GetString(reader.GetOrdinal("Status")),
+                    TargetTime = reader.IsDBNull(reader.GetOrdinal("TargetTime"))
+                        ? null
+                        : reader.GetDateTime(reader.GetOrdinal("TargetTime"))
+                });
+            }
+
+            return list;
+        }
+
+        public async Task<ObservableCollection<Order>> GetReadyOrdersAsync()
+        {
+            var list = new ObservableCollection<Order>();
+            using var conn = new SqlConnection(_connectionString);
+            await conn.OpenAsync();
+
+            var query = @"
+                SELECT Id, OrderNumber, OrderType, CreatedAt, Total, Status
+                FROM Orders
+                WHERE Status='Ready'";
+
+            using var cmd = new SqlCommand(query, conn);
+            using var reader = await cmd.ExecuteReaderAsync();
+
+            while (await reader.ReadAsync())
+            {
+                list.Add(new Order
+                {
+                    OrderId = reader.GetInt32(reader.GetOrdinal("Id")),
+                    OrderNumber = reader.GetString(reader.GetOrdinal("OrderNumber")),
+                    OrderType = reader.GetString(reader.GetOrdinal("OrderType")),
+                    CreatedAt = reader.GetDateTime(reader.GetOrdinal("CreatedAt")),
+                    Total = reader.GetDecimal(reader.GetOrdinal("Total")),
+                    Status = reader.GetString(reader.GetOrdinal("Status"))
+                });
+            }
+
+            return list;
+        }
     }
+    // Other database methods like GetMenuItemsAsync(), GetCategoriesAsync(), etc.
 }

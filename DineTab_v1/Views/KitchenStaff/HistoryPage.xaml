@@ -10,11 +10,10 @@
 
             <!-- Go Back Button -->
             <Button Text="Go Back"
-                    Command="{Binding GoBackCommand}"
-                    HorizontalOptions="Start"/>
+                    Command="{Binding GobackCommand}"
+                    HorizontalOptions="Start" Background="White" TextColor="Black" BorderColor="Black" BorderWidth="1"/>
 
             <!-- Today's Orders -->
-            <Label Text="Date: 08/21/2025" FontSize="14" FontAttributes="Bold"/>
             <Label Text="From Recent to Old" FontSize="12" />
 
             <CollectionView ItemsSource="{Binding TodayOrders}" 
@@ -29,11 +28,14 @@
                                 <CollectionView ItemsSource="{Binding Items}">
                                     <CollectionView.ItemTemplate>
                                         <DataTemplate>
-                                            <Label Text="{Binding Name}"/>
+                                            <Grid ColumnDefinitions="2*,1*" Padding="0,2">
+                                                <Label Text="{Binding Name}" FontSize="Small"/>
+                                                <Label Text="{Binding Quantity}" Grid.Column="1" FontSize="Small" HorizontalOptions="End"/>
+                                            </Grid>
                                         </DataTemplate>
                                     </CollectionView.ItemTemplate>
                                 </CollectionView>
-                                <Button Text="Recall" Command="{Binding RecallCommand}"/>
+                                <Button Text="Recall" Command="{Binding RecallCommand}" BackgroundColor="White" TextColor="Black" BorderColor="Black" BorderWidth="1"/>
                             </VerticalStackLayout>
                         </Frame>
                     </DataTemplate>
@@ -61,7 +63,6 @@
                                         </DataTemplate>
                                     </CollectionView.ItemTemplate>
                                 </CollectionView>
-                                <Button Text="Recall" IsEnabled="False"/>
                             </VerticalStackLayout>
                         </Frame>
                     </DataTemplate>

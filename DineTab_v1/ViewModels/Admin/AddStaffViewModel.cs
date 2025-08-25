@@ -1,4 +1,5 @@
 ﻿using DineTab_v1.Models;
+using DineTab_v1.Views.Admin;
 using DineTab_v1.Services;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Storage;
@@ -103,9 +104,17 @@ namespace DineTab_v1.ViewModels.Admin
         {
             try
             {
+                // Check if passwords match
                 if (Password != ConfirmPassword)
                 {
                     await Application.Current.MainPage.DisplayAlert("Error", "Passwords do not match", "OK");
+                    return;
+                }
+
+                // Check password length and special character
+                if (Password.Length < 8 || !System.Text.RegularExpressions.Regex.IsMatch(Password, @"[!@#$%^&*(),.?""':{}|<>]"))
+                {
+                    await Application.Current.MainPage.DisplayAlert("Error", "Password must be at least 8 characters and contain at least one special character.", "OK");
                     return;
                 }
 
@@ -116,17 +125,17 @@ namespace DineTab_v1.ViewModels.Admin
                     Email = Email,
                     Password = Password,
                     Role = Role,
-                    ProfileImageFile = ImageFileName // store only filename in DB
+                    ProfileImageFile = ImageFileName
                 };
 
                 bool success = await _dbService.AddStaffAsync(newUser);
 
                 if (success)
                 {
-                    await Application.Current.MainPage.DisplayAlert("Success", "Staff added successfully", "OK");
                     try
                     {
-                        await Application.Current.MainPage.Navigation.PopModalAsync(); //close modal
+                        await Application.Current.MainPage.Navigation.PopModalAsync();
+                        await Application.Current.MainPage.Navigation.PushModalAsync(new SuccessPopUp());
                     }
                     catch (Exception ex) { }
                     MessagingCenter.Send(this, "StaffUpdated");

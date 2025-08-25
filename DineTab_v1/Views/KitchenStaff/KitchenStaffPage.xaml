@@ -9,10 +9,10 @@
 
         <!-- Header -->
         <HorizontalStackLayout Spacing="20" VerticalOptions="Center">
-            <Label Text="DineTab" FontAttributes="Bold" FontSize="Large"/>
-            <Label Text="Orders" FontAttributes="Bold" FontSize="Large"/>
+            <Label Text="DineTab" FontAttributes="Bold" FontSize="Large" />
+            <Button Text="Sign Out" Command="{Binding SignOutCommand}"  Background="White" TextColor="Black" BorderColor="Black" BorderWidth="1"/>
             <Button Text="Show History"
-                    Command="{Binding ShowHistoryCommand}"/>
+                    Command="{Binding ShowHistoryCommand}" Background="White" TextColor="Black" BorderColor="Black" BorderWidth="1"/>
         </HorizontalStackLayout>
 
         <!-- Orders Grid (horizontal scroll for categories) -->
@@ -99,15 +99,15 @@
                                                         TextColor="Black"
                                                         CornerRadius="0"
                                                         Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.CookCommand}"
-            CommandParameter="{Binding}" />
+                                                        CommandParameter="{Binding}" />
                                                 <Button Grid.Column="1" Text="Prep"
                                                         Background="White"
                                                         BorderColor="Black"
                                                         BorderWidth="1"
                                                         TextColor="Black"
                                                         CornerRadius="0"
-                                                           Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.PrepCommand}"
-            CommandParameter="{Binding}" />
+                                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.PrepCommand}"
+                                                        CommandParameter="{Binding}" />
                                             </Grid>
                                         </VerticalStackLayout>
                                     </Border>
@@ -137,10 +137,10 @@
                                         <HorizontalStackLayout Spacing="10" Margin="0,5,0,0">
                                             <Button Text="Add 5 min"
                                                     Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.AddFiveMinutesCommand}"
-                                                    CommandParameter="{Binding}" />
+                                                    CommandParameter="{Binding}" Background="White" TextColor="Black" BorderColor="Black" BorderWidth="1"/>
                                             <Button Text="Done"
                                                     Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.MarkReadyCommand}"
-                                                    CommandParameter="{Binding}" />
+                                                    CommandParameter="{Binding}" Background="White" TextColor="Black" BorderColor="Black" BorderWidth="1"/>
                                         </HorizontalStackLayout>
                                     </StackLayout>
                                 </DataTemplate>
@@ -168,7 +168,7 @@
                                         </VerticalStackLayout>
                                         <Button Text="Received"
                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.MarkCompleteCommand}"
-                                                CommandParameter="{Binding}" />
+                                                CommandParameter="{Binding}" Background="White" TextColor="Black" BorderColor="Black" BorderWidth="1"/>
                                     </StackLayout>
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>

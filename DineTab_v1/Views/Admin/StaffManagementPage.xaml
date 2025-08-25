@@ -45,7 +45,7 @@
             <!-- Filter Buttons -->
             <HorizontalStackLayout Spacing="10">
                 <Button Text="All Account" 
-                         BackgroundColor="White"
+                         BackgroundColor="#FA7E0E"
                          CornerRadius="0"
                          TextColor="Black"
                          BorderColor="Black"

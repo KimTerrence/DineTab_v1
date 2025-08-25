@@ -21,6 +21,9 @@ namespace DineTab_v1.ViewModels.Cashier
         public ICommand DecreaseOrderItemCommand { get; }
         public ICommand ConfirmPaymentCommand { get; }
         public ICommand CreateOrderCommand {  get; }
+        public ICommand CancelOrderCommand { get; }
+        public ICommand SignOutCommand { get; }
+
         public CashierMenuViewModel()
         {
             LoadOrders();
@@ -29,6 +32,15 @@ namespace DineTab_v1.ViewModels.Cashier
             ConfirmPaymentCommand = new Command(OnConfirmPayment);
             DecreaseOrderItemCommand = new Command<OrderItem>(DecreaseQuantity);
             CreateOrderCommand = new Command(CreateOrder);
+            CancelOrderCommand = new Command(CancelOrder);
+            SignOutCommand = new Command(async () =>
+            {
+                bool confirmed = await Application.Current.MainPage.DisplayAlert(
+                    "Sign Out", "Are you sure you want to sign out?", "Yes", "No");
+
+                if (confirmed)
+                    Application.Current.MainPage = new NavigationPage(new Views.Auth.LoginPage());
+            });
         }
 
         private async void LoadOrders()
@@ -120,5 +132,42 @@ namespace DineTab_v1.ViewModels.Cashier
         {
             await Shell.Current.Navigation.PushModalAsync(new CreateOrderPage());
         }
+        private async void CancelOrder()
+        {
+            if (SelectedOrderId == 0) return; // No order selected
+
+            bool confirm = await Application.Current.MainPage.DisplayAlert(
+                "Cancel Order",
+                "Are you sure you want to cancel this order?",
+                "Yes", "No");
+
+            if (!confirm) return;
+
+            // Update status in database
+            bool success = await _dbService.UpdateOrderStatusAsync(SelectedOrderId, "Canceled");
+
+            if (success)
+            {
+                // Clear current order in UI
+                OrderItems.Clear();
+                SelectedOrderId = 0;
+                SelectedOrderNumber = string.Empty;
+                SelectedOrderType = string.Empty;
+                OnPropertyChanged(nameof(Total));
+
+                // Optionally remove from Orders collection
+                var orderToRemove = Orders.FirstOrDefault(o => o.OrderId == SelectedOrderId);
+                if (orderToRemove != null)
+                    Orders.Remove(orderToRemove);
+
+                LoadOrders();
+            }
+            else
+            {
+                await Application.Current.MainPage.DisplayAlert("Error", "Failed to cancel order.", "OK");
+            }
+        }
+
+
     }
 }

@@ -66,7 +66,7 @@
                                    Text="{Binding Password}"
                                    BackgroundColor="White"/>
                         </Border>
-                        <Label Text="Forgot Password" HorizontalOptions="End"/>
+                        <Button Text="Forgot Password" HorizontalOptions="End" Command="{Binding ForgotPasswordCommand}" BackgroundColor="Transparent" TextColor="DarkBlue"/>
                     </VerticalStackLayout>
 
                     <!-- Login Button -->

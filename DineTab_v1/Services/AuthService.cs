@@ -1,5 +1,9 @@
 ﻿using DineTab_v1.Models;
 using Microsoft.Data.SqlClient;
+using System.Net;
+using System.Net.Mail;
+using System.Net;
+
 
 namespace DineTab_v1.Services
 {
@@ -73,6 +77,91 @@ namespace DineTab_v1.Services
             catch (Exception ex)
             {
                 Console.WriteLine($"❌ Failed to update LastLogin: {ex.Message}");
+            }
+        }
+        public async Task<bool> SendPinToEmailAsync(string email)
+        {
+            try
+            {
+                // 1. Generate a random 6-digit PIN
+                Random rnd = new Random();
+                string pin = rnd.Next(100000, 999999).ToString();
+
+                // 2. Save PIN in memory (or DB for real)
+                _currentPin = pin;
+
+                // 3. Configure SMTP with your Gmail and App Password
+                var smtpClient = new SmtpClient("smtp.gmail.com")
+                {
+                    Port = 587,
+                    Credentials = new NetworkCredential("quineskimterrence@gmail.com", "vqam oypx gknh pjld "),
+                    EnableSsl = true,
+                };
+
+                // 4. Create the email message
+                var mailMessage = new MailMessage
+                {
+                    From = new MailAddress("quineskimterrence@gmail.com", "DineTab Support"),
+                    Subject = "Your PIN for Password Reset",
+                    Body = $"Your PIN is: {pin}",
+                    IsBodyHtml = false
+                };
+
+                mailMessage.To.Add(email);
+
+                // 5. Send email
+                await smtpClient.SendMailAsync(mailMessage);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ Failed to send PIN email: {ex.Message}");
+                return false;
+            }
+        }
+
+        private string _currentPin; // store the latest PIN (for demo)
+
+        public async Task<bool> VerifyPinAsync(string email, string pin)
+        {
+            await Task.Delay(200); // simulate async
+            return pin == _currentPin;
+        }
+
+
+        public async Task<bool> ResetPasswordAsync(string email, string newPassword)
+        {
+            try
+            {
+                // Validate password (8+ chars and at least 1 special character)
+                if (string.IsNullOrWhiteSpace(newPassword) ||
+                    newPassword.Length < 8 ||
+                    !newPassword.Any(ch => !char.IsLetterOrDigit(ch))) // check for special char
+                {
+                    Console.WriteLine("❌ Password must be at least 8 characters long and contain a special character.");
+                    return false;
+                }
+
+                using (var conn = new SqlConnection(_connectionString))
+                {
+                    await conn.OpenAsync();
+
+                    var cmd = new SqlCommand(
+                        "UPDATE Users SET Password = @Password WHERE Email = @Email", conn);
+
+                    cmd.Parameters.AddWithValue("@Password", newPassword);
+                    cmd.Parameters.AddWithValue("@Email", email);
+
+                    int rowsAffected = await cmd.ExecuteNonQueryAsync();
+
+                    return rowsAffected > 0; // success if at least 1 row updated
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ Failed to reset password: {ex.Message}");
+                return false;
             }
         }
     }
