@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="DineTab_v1.Views.Admin.StaffManagementPage"
-             >
+             xmlns:vm="clr-namespace:DineTab_v1.ViewModels.Admin"
+             x:Class="DineTab_v1.Views.Admin.StaffManagementPage">
+    
+        <ContentView.Resources>
+        <ResourceDictionary>
+            <vm:RoleToColorConverter x:Key="RoleToColorConverter"/>
+        </ResourceDictionary>
+    </ContentView.Resources>
+    
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="15">
 
@@ -24,7 +31,8 @@
                     <Entry x:Name="SearchBar"
                            Placeholder="Search Account..."
                            WidthRequest="200"
-                           Grid.Column="0"/>
+                           Grid.Column="0"
+                            Text="{Binding SearchText}"/>
                 </Border>
                 <!-- Spacer -->
                 <BoxView Grid.Column="1" BackgroundColor="Transparent"/>
@@ -44,31 +52,44 @@
 
             <!-- Filter Buttons -->
             <HorizontalStackLayout Spacing="10">
-                <Button Text="All Account" 
-                         BackgroundColor="#FA7E0E"
-                         CornerRadius="0"
-                         TextColor="Black"
-                         BorderColor="Black"
-                         BorderWidth="1"/>
-                <Button Text="Admin" 
-                         BackgroundColor="White"
-                         CornerRadius="0"
-                         TextColor="Black"
-                         BorderColor="Black"
-                         BorderWidth="1"/>
-                <Button Text="Cashier" 
-                         BackgroundColor="White"
-                         CornerRadius="0"
-                         TextColor="Black"
-                         BorderColor="Black"
-                         BorderWidth="1" />
-                <Button Text="Kitchen Staff" 
-                         BackgroundColor="White"
-                         CornerRadius="0"
-                         TextColor="Black"
-                         BorderColor="Black"
-                         BorderWidth="1"/>
+
+                <Button Text="All Account"
+                        Command="{Binding SelectRoleCommand}"
+                        CommandParameter="All Account"
+                        BackgroundColor="{Binding SelectedRole, Converter={StaticResource RoleToColorConverter}, ConverterParameter=All Account}"
+                        CornerRadius="0"
+                        TextColor="Black"
+                        BorderColor="Black"
+                        BorderWidth="1"/>
+
+                <Button Text="Admin"
+                        Command="{Binding SelectRoleCommand}"
+                        CommandParameter="Admin"
+                        BackgroundColor="{Binding SelectedRole, Converter={StaticResource RoleToColorConverter}, ConverterParameter=Admin}"
+                        CornerRadius="0"
+                        TextColor="Black"
+                        BorderColor="Black"
+                        BorderWidth="1"/>
+
+                <Button Text="Cashier"
+                        Command="{Binding SelectRoleCommand}"
+                        CommandParameter="Cashier"
+                        BackgroundColor="{Binding SelectedRole, Converter={StaticResource RoleToColorConverter}, ConverterParameter=Cashier}"
+                        CornerRadius="0"
+                        TextColor="Black"
+                        BorderColor="Black"
+                        BorderWidth="1"/>
+
+                <Button Text="Kitchen Staff"
+                        Command="{Binding SelectRoleCommand}"
+                        CommandParameter="Kitchen Staff"
+                        BackgroundColor="{Binding SelectedRole, Converter={StaticResource RoleToColorConverter}, ConverterParameter=Kitchen Staff}"
+                        CornerRadius="0"
+                        TextColor="Black"
+                        BorderColor="Black"
+                        BorderWidth="1"/>
             </HorizontalStackLayout>
+
 
             <!-- Accounts Display Section -->
             <CollectionView x:Name="StaffCollection"
