@@ -53,7 +53,7 @@
                             <VerticalStackLayout Padding="5">
                                 <!-- Image Placeholder -->
                                 <Grid HeightRequest="150" BackgroundColor="LightGray">
-                                    <Image Source="icon.png" Aspect="AspectFill" />
+                                    <Image Source="{Binding ItemImageSource}" Aspect="AspectFill" />
                                     <Label Text="★" HorizontalOptions="End" VerticalOptions="Start" Margin="5" />
                                 </Grid>
                                 <!-- Item Info -->

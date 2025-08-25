@@ -347,7 +347,11 @@ namespace DineTab_v1.Services
                 cmd.Parameters.AddWithValue("@CategoryId", item.CategoryId);
                 cmd.Parameters.AddWithValue("@Availability", item.Availability);
                 cmd.Parameters.AddWithValue("@Spicy", item.Spicy);
-                cmd.Parameters.AddWithValue("@Image", item.Image ?? new byte[0]);
+
+                if (item.Image != null)
+                    cmd.Parameters.Add("@Image", SqlDbType.VarBinary).Value = item.Image;
+                else
+                    cmd.Parameters.Add("@Image", SqlDbType.VarBinary).Value = DBNull.Value;
 
                 int rows = await cmd.ExecuteNonQueryAsync();
                 return rows > 0;
@@ -383,7 +387,10 @@ namespace DineTab_v1.Services
             cmd.Parameters.AddWithValue("@categoryId", item.CategoryId);
             cmd.Parameters.AddWithValue("@availability", item.Availability);
             cmd.Parameters.AddWithValue("@spicy", item.Spicy);
-            cmd.Parameters.AddWithValue("@image", item.Image ?? new byte[0]);
+            if (item.Image != null)
+                cmd.Parameters.Add("@Image", SqlDbType.VarBinary).Value = item.Image;
+            else
+                cmd.Parameters.Add("@Image", SqlDbType.VarBinary).Value = DBNull.Value;
             cmd.Parameters.AddWithValue("@id", item.Id);
 
             var result = await cmd.ExecuteNonQueryAsync();
@@ -511,6 +518,7 @@ namespace DineTab_v1.Services
                         CategoryName = reader.IsDBNull(reader.GetOrdinal("CategoryName"))
                                        ? "Unknown"
                                        : reader.GetString(reader.GetOrdinal("CategoryName")),
+
                         Image = reader.IsDBNull(reader.GetOrdinal("Image"))
                                 ? null
                                 : (byte[])reader["Image"]

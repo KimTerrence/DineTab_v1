@@ -10,6 +10,23 @@
         public string Availability { get; set; } = "Available";
         public string Spicy { get; set; } = "No";
         public byte[]? Image { get; set; }
+        public ImageSource ItemImageSource
+        {
+            get
+            {
+                if (Image == null || Image.Length == 0)
+                    return "icon.png"; // fallback image from Resources
+
+                try
+                {
+                    return ImageSource.FromStream(() => new MemoryStream(Image));
+                }
+                catch
+                {
+                    return "icon.png"; // fallback if decode fails
+                }
+            }
+        }
         public string CategoryName { get; set; } = string.Empty;
     }
 }
