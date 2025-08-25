@@ -138,6 +138,9 @@
 	  <MauiXaml Update="Views\Customer\ThankYouPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\KitchenStaff\HistoryPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Views\KitchenStaff\KitchenStaffPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

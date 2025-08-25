@@ -4,7 +4,8 @@
              x:Class="DineTab_v1.Views.Cashier.CashierMenuPage"
              x:Name="RootPage"
              NavigationPage.HasBackButton="False"
-             Shell.NavBarIsVisible="False">
+             Shell.NavBarIsVisible="False"
+             Padding="0">
     
     <Grid ColumnDefinitions="*, 300" 
           RowDefinitions="Auto, *" 

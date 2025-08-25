@@ -10,7 +10,7 @@ public class PaymentViewModel : INotifyPropertyChanged
     private string _moneyReceived = "";
     private string _change = "";
     private string _amountToBePaid;
-    private string _orderNumber;   // 👉 Use string for order number
+    private string _orderNumber;
 
     public string OrderNumber
     {

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:DineTab_v1.ViewModels.KitchenStaff"
+             x:Class="DineTab_v1.Views.KitchenStaff.HistoryPage"
+             Title="Completed Orders"
+             BackgroundColor="White">
+    <ScrollView>
+        <VerticalStackLayout Padding="10" Spacing="20">
+
+            <!-- Go Back Button -->
+            <Button Text="Go Back"
+                    Command="{Binding GoBackCommand}"
+                    HorizontalOptions="Start"/>
+
+            <!-- Today's Orders -->
+            <Label Text="Date: 08/21/2025" FontSize="14" FontAttributes="Bold"/>
+            <Label Text="From Recent to Old" FontSize="12" />
+
+            <CollectionView ItemsSource="{Binding TodayOrders}" 
+                            ItemsLayout="VerticalGrid, 3"
+                            Margin="0,10,0,0">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame BorderColor="Black" Padding="5" Margin="5">
+                            <VerticalStackLayout Spacing="5">
+                                <Label Text="{Binding OrderNumber}" FontAttributes="Bold"/>
+                                <Label Text="{Binding Time}" FontSize="12"/>
+                                <CollectionView ItemsSource="{Binding Items}">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Label Text="{Binding Name}"/>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                                <Button Text="Recall" Command="{Binding RecallCommand}"/>
+                            </VerticalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- Yesterday's Orders -->
+            <Label Text="Date: 08/20/2025 (Yesterday's Orders Can't Recall)" FontSize="14" FontAttributes="Bold"/>
+            <CollectionView ItemsSource="{Binding YesterdayOrders}" 
+                            ItemsLayout="VerticalGrid, 5"
+                            Margin="0,10,0,0">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame BorderColor="Black" Padding="5" Margin="5">
+                            <VerticalStackLayout Spacing="5">
+                                <Label Text="{Binding OrderNumber}" FontAttributes="Bold"/>
+                                <Label Text="{Binding Time}" FontSize="12"/>
+                                <CollectionView ItemsSource="{Binding Items}">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid ColumnDefinitions="2*,1*" Padding="0,2">
+                                                <Label Text="{Binding Name}" FontSize="Small"/>
+                                                <Label Text="{Binding Quantity}" Grid.Column="1" FontSize="Small" HorizontalOptions="End"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                                <Button Text="Recall" IsEnabled="False"/>
+                            </VerticalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

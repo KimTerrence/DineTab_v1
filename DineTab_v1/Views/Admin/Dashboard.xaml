@@ -73,9 +73,8 @@
                         <VerticalStackLayout>
                             <HorizontalStackLayout>
                                 <Image Source="icon.png" HeightRequest="30"/>
-                                <Label Text="0.00" FontSize="20" FontAttributes="Bold"/>
+                                <Label Text="{Binding DailyRevenue}" FontSize="20" FontAttributes="Bold"/>
                             </HorizontalStackLayout>
-                            <Label Text="From 0 orders today" FontSize="10" TextColor="#000000"/>
                         </VerticalStackLayout>
                     </VerticalStackLayout>
                 </Border>
@@ -93,7 +92,7 @@
                             </Grid.ColumnDefinitions>
 
                             <!-- Label on the left -->
-                            <Label Text="Daily Revenue" 
+                            <Label Text="Active Orders" 
                                     FontSize="14" 
                                     TextColor="#000000" 
                                     Grid.Column="0" 
@@ -106,8 +105,7 @@
                                     VerticalOptions="Center" />
                         </Grid>
                         <VerticalStackLayout>
-                            <Label Text="0" FontSize="20" FontAttributes="Bold"/>
-                            <Label Text="0 pending  0 cooking  0 ready" FontSize="10" TextColor="#000000"/>
+                            <Label Text="{Binding ActiveOrders}" FontSize="20" FontAttributes="Bold"/>
                         </VerticalStackLayout>
                     </VerticalStackLayout>
                 </Border>
@@ -125,7 +123,7 @@
                             </Grid.ColumnDefinitions>
 
                             <!-- Label on the left -->
-                            <Label Text="Daily Revenue" 
+                            <Label Text="Staff Status" 
                                     FontSize="14" 
                                     TextColor="#000000" 
                                     Grid.Column="0" 
@@ -138,8 +136,7 @@
                                     VerticalOptions="Center" />
                         </Grid>
                         <VerticalStackLayout>
-                            <Label Text="0" FontSize="20" FontAttributes="Bold"/>
-                            <Label Text="0 active of 0 total staff" FontSize="10" TextColor="#000000"/>
+                            <Label  Text="{Binding StaffStatus}" FontSize="20" FontAttributes="Bold"/>
                         </VerticalStackLayout>
                     </VerticalStackLayout>
                 </Border>
@@ -157,7 +154,7 @@
                             </Grid.ColumnDefinitions>
 
                             <!-- Label on the left -->
-                            <Label Text="Daily Revenue" 
+                            <Label Text="Order Completed" 
                                     FontSize="14" 
                                     TextColor="#000000" 
                                     Grid.Column="0" 
@@ -170,8 +167,7 @@
                                     VerticalOptions="Center" />
                         </Grid>
                         <VerticalStackLayout>
-                            <Label Text="0" FontSize="20" FontAttributes="Bold"/>
-                            <Label Text="Orders served today" FontSize="10" TextColor="#000000"/>
+                            <Label Text="{Binding CompletedOrders}" FontSize="20" FontAttributes="Bold"/>
                         </VerticalStackLayout>
                     </VerticalStackLayout>
                 </Border>
@@ -186,7 +182,7 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <Label Text="Dine In"/>
-                            <Label Text="0" Grid.Column="1"/>
+                            <Label Text="{Binding DineIn}" Grid.Column="1"/>
                         </Grid>
                         <Grid ColumnSpacing="10" BackgroundColor="#D9D9D9" Padding="10">
                             <Grid.ColumnDefinitions>
@@ -194,7 +190,7 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <Label Text="Take Out"/>
-                            <Label Text="0" Grid.Column="1"/>
+                            <Label Text="{Binding TakeOut}" Grid.Column="1"/>
                         </Grid>
                     </VerticalStackLayout>
                 </Border>
@@ -212,7 +208,7 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <Label Text="Pending"/>
-                            <Label Text="0" Grid.Column="1"/>
+                            <Label Text="{Binding Pending}" Grid.Column="1"/>
                         </Grid>
                         <Grid ColumnSpacing="10" BackgroundColor="#D9D9D9" Padding="5">
                             <Grid.ColumnDefinitions>
@@ -220,7 +216,7 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <Label Text="Preparing"/>
-                            <Label Text="0" Grid.Column="1"/>
+                            <Label Text="{Binding Preparing}" Grid.Column="1"/>
                         </Grid>
                         <Grid ColumnSpacing="10" BackgroundColor="#D9D9D9" Padding="5">
                             <Grid.ColumnDefinitions>
@@ -228,7 +224,7 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <Label Text="Ready"/>
-                            <Label Text="0" Grid.Column="1"/>
+                            <Label Text="{Binding Ready}" Grid.Column="1"/>
                         </Grid>
                     </VerticalStackLayout>
                 </Border>

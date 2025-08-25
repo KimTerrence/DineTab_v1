@@ -1,13 +1,182 @@
-<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:DineTab_v1.Models"
              x:Class="DineTab_v1.Views.KitchenStaff.KitchenStaffPage"
-             Title="KitchenStaffPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Kitchen Staff!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" 
-            FontSize="100"/>
+             Title="Kitchen Staff"
+             BackgroundColor="White">
+
+    <VerticalStackLayout Padding="10" Spacing="10"> 
+
+        <!-- Header -->
+        <HorizontalStackLayout Spacing="20" VerticalOptions="Center">
+            <Label Text="DineTab" FontAttributes="Bold" FontSize="Large"/>
+            <Label Text="Orders" FontAttributes="Bold" FontSize="Large"/>
+            <Button Text="Show History"
+                    Command="{Binding ShowHistoryCommand}"/>
+        </HorizontalStackLayout>
+
+        <!-- Orders Grid (horizontal scroll for categories) -->
+        <ScrollView Orientation="Horizontal">
+            <Grid ColumnSpacing="20">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="300"/>
+                    <ColumnDefinition Width="300"/>
+                    <ColumnDefinition Width="300"/>
+                    <ColumnDefinition Width="300"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Pending Orders -->
+                <Border Grid.Column="0" Padding="10" HeightRequest="670" Stroke="Transparent">
+                    <Grid RowDefinitions="Auto,*">
+                        <Label Grid.Row="0" Text="Pending for Payment" FontAttributes="Bold" FontSize="Medium"/>
+
+                        <CollectionView Grid.Row="1" ItemsSource="{Binding PendingOrders}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Stroke="Black" StrokeThickness="1" Padding="5" Margin="0,5">
+                                        <VerticalStackLayout>
+                                            <Grid ColumnDefinitions="2*,1*" Padding="0,5">
+                                                <Label Text="{Binding OrderNumber}" FontAttributes="Bold"/>
+                                                <Label Text="{Binding CreatedAt, StringFormat='{0:hh:mm tt}'}"
+                                                       FontSize="Small" Grid.Column="1" HorizontalOptions="End"/>
+                                            </Grid>
+                                            <BoxView HeightRequest="1" BackgroundColor="Gray" />
+
+                                            <!-- Items -->
+                                            <VerticalStackLayout BindableLayout.ItemsSource="{Binding Items}">
+                                                <BindableLayout.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Grid ColumnDefinitions="2*,1*" Padding="0,2">
+                                                            <Label Text="{Binding Name}" FontSize="Small"/>
+                                                            <Label Text="{Binding Quantity}" FontSize="Small" Grid.Column="1" HorizontalOptions="End"/>
+                                                        </Grid>
+                                                    </DataTemplate>
+                                                </BindableLayout.ItemTemplate>
+                                            </VerticalStackLayout>
+                                        </VerticalStackLayout>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </Grid>
+                </Border>
+
+                <!-- Paid Orders -->
+                <Border Grid.Column="1" Padding="10" HeightRequest="670" Stroke="Transparent">
+                    <Grid RowDefinitions="Auto,*">
+                        <Label Grid.Row="0" Text="Paid Orders" FontAttributes="Bold" FontSize="Medium"/>
+                        <CollectionView Grid.Row="1" ItemsSource="{Binding PaidOrders}" >
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Stroke="Black" Margin="0,0,0,10" Padding="10">
+                                        <VerticalStackLayout>
+                                            <Grid ColumnDefinitions="2*,1*" Padding="0,5">
+                                                <Label Text="{Binding OrderNumber}" FontAttributes="Bold"/>
+                                                <Label Text="{Binding CreatedAt, StringFormat='{0:hh:mm tt}'}"
+                                                       FontSize="Small" Grid.Column="1" HorizontalOptions="End"/>
+                                            </Grid>
+                                            <BoxView HeightRequest="1" BackgroundColor="Gray" />
+
+                                            <!-- Items -->
+                                            <VerticalStackLayout BindableLayout.ItemsSource="{Binding Items}">
+                                                <BindableLayout.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Grid ColumnDefinitions="*,*" Padding="0,2">
+                                                            <Label Text="{Binding Name}" FontSize="Small"/>
+                                                            <Label Grid.Column="1" Text="{Binding Quantity}" FontSize="Small" HorizontalOptions="End"/>
+                                                        </Grid>
+                                                    </DataTemplate>
+                                                </BindableLayout.ItemTemplate>
+                                            </VerticalStackLayout>
+
+                                            <!-- Buttons -->
+                                            <Grid ColumnDefinitions="*,*" ColumnSpacing="10" Margin="0,5,0,0">
+                                                <Button Text="Cook"
+                                                        Background="White"
+                                                        BorderColor="Black"
+                                                        BorderWidth="1"
+                                                        TextColor="Black"
+                                                        CornerRadius="0"
+                                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.CookCommand}"
+            CommandParameter="{Binding}" />
+                                                <Button Grid.Column="1" Text="Prep"
+                                                        Background="White"
+                                                        BorderColor="Black"
+                                                        BorderWidth="1"
+                                                        TextColor="Black"
+                                                        CornerRadius="0"
+                                                           Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.PrepCommand}"
+            CommandParameter="{Binding}" />
+                                            </Grid>
+                                        </VerticalStackLayout>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </Grid>
+                </Border>
+
+                <!-- Preparing Orders -->
+                <Border Grid.Column="2" Padding="10"  HeightRequest="670" Stroke="Transparent">
+                    <Grid RowDefinitions="Auto,*">
+                        <Label Grid.Row="0" Text="Preparing" FontAttributes="Bold" FontSize="Medium"/>
+                        <CollectionView Grid.Row="1" ItemsSource="{Binding PreparingOrders}" >
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackLayout Margin="0,5">
+                                        <Label Text="{Binding OrderNumber}" FontAttributes="Bold"/>
+                                        <Label Text="{Binding RemainingTimeString}" FontSize="Small"/>
+                                        <VerticalStackLayout BindableLayout.ItemsSource="{Binding Items}">
+                                            <BindableLayout.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Label Text="{Binding Name}" FontSize="Small"/>
+                                                </DataTemplate>
+                                            </BindableLayout.ItemTemplate>
+                                        </VerticalStackLayout>
+                                        <HorizontalStackLayout Spacing="10" Margin="0,5,0,0">
+                                            <Button Text="Add 5 min"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.AddFiveMinutesCommand}"
+                                                    CommandParameter="{Binding}" />
+                                            <Button Text="Done"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.MarkReadyCommand}"
+                                                    CommandParameter="{Binding}" />
+                                        </HorizontalStackLayout>
+                                    </StackLayout>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </Grid>
+                </Border>
+
+                <!-- Ready Orders -->
+                <Border Grid.Column="3" Padding="10" HeightRequest="670" Stroke="Transparent">
+                    <Grid RowDefinitions="Auto,*">
+                        <Label Grid.Row="0" Text="Ready to Serve" FontAttributes="Bold" FontSize="Medium"/>
+                        <CollectionView Grid.Row="1" ItemsSource="{Binding ReadyOrders}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackLayout Margin="0,5">
+                                        <Label Text="{Binding OrderNumber}" FontAttributes="Bold"/>
+                                        <Label Text="{Binding Time, StringFormat='{0:hh:mm tt}'}" FontSize="Small"/>
+                                        <VerticalStackLayout BindableLayout.ItemsSource="{Binding Items}">
+                                            <BindableLayout.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Label Text="{Binding Name}" FontSize="Small"/>
+                                                </DataTemplate>
+                                            </BindableLayout.ItemTemplate>
+                                        </VerticalStackLayout>
+                                        <Button Text="Received"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.MarkCompleteCommand}"
+                                                CommandParameter="{Binding}" />
+                                    </StackLayout>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </Grid>
+                </Border>
+
+            </Grid>
+        </ScrollView>
     </VerticalStackLayout>
 </ContentPage>
