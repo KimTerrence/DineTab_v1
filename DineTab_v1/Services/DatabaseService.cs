@@ -138,7 +138,58 @@ namespace DineTab_v1.Services
                 }
             });
         }
-    
+
+
+        //Generate Report
+        public async Task<List<SoldItemReport>> GetSoldItemsAsync()
+        {
+            var soldItems = new List<SoldItemReport>();
+
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(_connectionString))
+                {
+                    await conn.OpenAsync();
+
+                    string query = @"
+                    SELECT 
+                    o.OrderNumber,
+                    o.CreatedAt,
+                    o.OrderType,
+                    SUM(oi.Quantity) AS TotalItem,
+                    o.Total
+                FROM Orders o
+                LEFT JOIN OrderItems oi ON oi.Id = o.Id
+                GROUP BY o.OrderNumber, o.CreatedAt, o.OrderType, o.Total
+                ORDER BY o.CreatedAt DESC
+            ";
+
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    using (SqlDataReader reader = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            soldItems.Add(new SoldItemReport
+                            {
+                                OrderNo = Convert.ToString(reader["OrderNumber"]),
+                                OrderDate = Convert.ToDateTime(reader["CreatedAt"]),
+                                Type = reader["OrderType"].ToString(),
+                                TotalItem = Convert.ToInt32(reader["TotalItem"]),
+                                TotalPrice = Convert.ToDecimal(reader["Total"])
+                            });
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+
+            return soldItems;
+        }
+
+
         public async Task<bool> AddStaffAsync(User user)
         {
 

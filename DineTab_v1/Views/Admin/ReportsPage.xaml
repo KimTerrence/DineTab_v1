@@ -70,7 +70,7 @@
                         </Grid>
                         <VerticalStackLayout>
                             <HorizontalStackLayout>
-                                <Label Text="0" FontSize="20" FontAttributes="Bold"/>
+                                <Label Text="{Binding TotalSoldItems}" FontSize="20" FontAttributes="Bold"/>
                             </HorizontalStackLayout>
                           
                         </VerticalStackLayout>
@@ -103,7 +103,7 @@
                                  VerticalOptions="Center" />
                         </Grid>
                         <VerticalStackLayout>
-                            <Label Text="0" FontSize="20" FontAttributes="Bold"/>
+                            <Label Text="{Binding TotalRevenue, StringFormat='₱{0:F2}'}" FontSize="20" FontAttributes="Bold"/>
                         </VerticalStackLayout>
                     </VerticalStackLayout>
                 </Border>
@@ -134,7 +134,7 @@
                                  VerticalOptions="Center" />
                         </Grid>
                         <VerticalStackLayout>
-                            <Label Text="0" FontSize="20" FontAttributes="Bold"/>
+                            <Label Text="{Binding TotalOrders}" FontSize="20" FontAttributes="Bold"/>
                         </VerticalStackLayout>
                     </VerticalStackLayout>
                 </Border>
@@ -165,7 +165,7 @@
                                  VerticalOptions="Center" />
                         </Grid>
                         <VerticalStackLayout>
-                            <Label Text="0" FontSize="20" FontAttributes="Bold"/>
+                            <Label Text="{Binding TotalOrders}" FontSize="20" FontAttributes="Bold"/>
                         </VerticalStackLayout>
                     </VerticalStackLayout>
                 </Border>
@@ -207,7 +207,6 @@
               RowSpacing="0">
 
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="2*"/>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
@@ -215,33 +214,36 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <Label Text="Item Name" Grid.Column="0" FontAttributes="Bold"/>
-                        <Label Text="Category"  Grid.Column="1" FontAttributes="Bold"/>
-                        <Label Text="Date"      Grid.Column="2" FontAttributes="Bold"/>
-                        <Label Text="Unit Price" Grid.Column="3" FontAttributes="Bold"/>
-                        <Label Text="Quantity Sold" Grid.Column="4" FontAttributes="Bold"/>
-                        <Label Text="Revenue"   Grid.Column="5" FontAttributes="Bold"/>
+                        <Label Text="Order No" Grid.Column="0" FontAttributes="Bold"/>
+                        <Label Text="Date"      Grid.Column="1" FontAttributes="Bold"/>
+                        <Label Text="Type"      Grid.Column="2" FontAttributes="Bold"/>
+                        <Label Text="Total Item" Grid.Column="3" FontAttributes="Bold"/>
+                        <Label Text="Total Price" Grid.Column="4" FontAttributes="Bold"/>
                     </Grid>
 
                     <!-- Example Row (bind your data here via CollectionView) -->
-                    <Grid Padding="5" ColumnSpacing="10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
+                    <!-- CollectionView for dynamic data -->
+                    <CollectionView ItemsSource="{Binding SoldItems}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Padding="5" ColumnSpacing="10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
 
-                        <Label Text="Coke" Grid.Column="0"/>
-                        <Label Text="Drinks" Grid.Column="1"/>
-                        <Label Text="2025-08-18" Grid.Column="2"/>
-                        <Label Text="₱20" Grid.Column="3"/>
-                        <Label Text="5" Grid.Column="4"/>
-                        <Label Text="₱100" Grid.Column="5"/>
-                    </Grid>
-
+                                    <Label Text="{Binding OrderNo}" Grid.Column="0"/>
+                                    <Label Text="{Binding OrderDate, StringFormat='{0:yyyy-MM-dd}'}" Grid.Column="1"/>
+                                    <Label Text="{Binding Type}" Grid.Column="2"/>
+                                    <Label Text="{Binding TotalItem}" Grid.Column="3"/>
+                                    <Label Text="{Binding TotalPrice, StringFormat='₱{0:F2}'}" Grid.Column="4"/>
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
                 </VerticalStackLayout>
             </Border>
         </VerticalStackLayout>
