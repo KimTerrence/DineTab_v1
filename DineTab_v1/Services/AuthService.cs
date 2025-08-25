@@ -2,7 +2,6 @@
 using Microsoft.Data.SqlClient;
 using System.Net;
 using System.Net.Mail;
-using System.Net;
 
 
 namespace DineTab_v1.Services

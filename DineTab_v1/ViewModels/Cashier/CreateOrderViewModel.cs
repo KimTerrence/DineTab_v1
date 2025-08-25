@@ -154,7 +154,12 @@ namespace DineTab_v1.ViewModels.Cashier
         {
             
                 OrderItems.Clear();
+            try
+            {
                 Application.Current.MainPage = new NavigationPage(new CashierMenuPage());
+            }
+            catch (Exception ex) { }
+               
         }
 
         private void RefreshTotals()

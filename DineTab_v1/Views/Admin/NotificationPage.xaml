@@ -11,8 +11,6 @@
                            FontAttributes="Bold"
                            TextColor="White"
                            FontSize="24"/>
-                    <Label Text="Tuesday, June 24, 2025" 
-                           TextColor="White"/>
                 </VerticalStackLayout>
             </Border>
 

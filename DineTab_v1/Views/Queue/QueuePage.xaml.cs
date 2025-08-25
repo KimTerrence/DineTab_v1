@@ -11,6 +11,7 @@ public partial class QueuePage : ContentPage
         InitializeComponent();
         _viewModel = new QueueViewModel();
         BindingContext = _viewModel;
+        NavigationPage.SetHasNavigationBar(this, false);
     }
 
     protected override void OnAppearing()

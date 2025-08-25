@@ -21,4 +21,15 @@ public partial class ReceiptPage : ContentPage
 
         BindingContext = this;
     }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+
+        // Wait for 3 seconds
+        await Task.Delay(3000);
+
+        // Navigate to Home page (replace with your actual HomePage class)
+        Application.Current.MainPage = new NavigationPage(new CashierMenuPage());
+    }
 }

@@ -17,7 +17,6 @@
                 <!-- Left side content -->
                 <VerticalStackLayout Grid.Column="0" Spacing="2">
                     <Label Text="Sales Report" FontSize="24" FontAttributes="Bold" TextColor="White"/>
-                    <Label Text="Tuesday, June 10, 2025" FontSize="12" TextColor="White"/>
                 </VerticalStackLayout>
 
                 <!-- Right side content -->

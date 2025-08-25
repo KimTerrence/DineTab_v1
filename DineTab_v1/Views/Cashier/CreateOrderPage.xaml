@@ -36,7 +36,7 @@
                 <DataTemplate>
                     <Border Padding="5" Margin="5">
                         <VerticalStackLayout Spacing="20">
-                            <BoxView HeightRequest="150" Color="LightGray" />
+                            <Image  HeightRequest="200" Aspect="AspectFill" Source="{Binding ItemImageSource} " />
                             <Label Text="{Binding ItemName}" FontAttributes="Bold" HorizontalOptions="Center"/>
                             <Grid ColumnDefinitions="*,Auto"
                               Padding="10"
