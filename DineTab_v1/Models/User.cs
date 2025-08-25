@@ -16,37 +16,20 @@ namespace DineTab_v1.Models
         public string Password { get; set; }
         public string Role { get; set; }
         public string Status { get; set; }
+        public byte[] ProfileImage { get; set; }
 
-        private string profileImageFile;
-        public string ProfileImageFile
-        {
-            get => profileImageFile;
-            set
-            {
-                if (profileImageFile != value)
-                {
-                    profileImageFile = value;
-                    OnPropertyChanged(nameof(ProfileImageFile));
-                    OnPropertyChanged(nameof(ProfileImageSource));
-                }
-            }
-        }
-
-        // This forces a unique path every time so MAUI reloads it
         public ImageSource ProfileImageSource
         {
             get
             {
-                if (!string.IsNullOrWhiteSpace(ProfileImageFile))
+                if (ProfileImage != null && ProfileImage.Length > 0)
                 {
-                    var imagesFolder = AppPaths.GetImagesFolder();
-                    var fullPath = Path.Combine(imagesFolder, ProfileImageFile);
-                    if (File.Exists(fullPath))
-                        return ImageSource.FromFile(fullPath + $"?{DateTime.Now.Ticks}");
+                    return ImageSource.FromStream(() => new MemoryStream(ProfileImage));
                 }
-                return "icon.png";
+                return "icon.png"; // fallback avatar
             }
         }
+
 
         public string FullName => $"{FirstName} {LastName}";
         public string MaskedPassword =>

@@ -115,51 +115,15 @@ namespace DineTab_v1.ViewModels.Admin
             Role = user.Role;
             IsActive = user.Status == "Active";
 
-            ProfileImage = !string.IsNullOrEmpty(user.ProfileImageFile)
-       ? ImageSource.FromFile(Path.Combine(FileSystem.AppDataDirectory, user.ProfileImageFile))
-       : "icon.png";
+        
 
-            ImageFileName = user.ProfileImageFile;
+ 
 
             // Commands
             SaveCommand = new Command(OnSave);
             CancelCommand = new Command(OnCancel);
             ToggleResetPasswordCommand = new Command(() => IsResetPasswordVisible = !IsResetPasswordVisible);
-            UploadPhotoCommand = new Command(async () => await PickAndSaveImageAsync());
         }
-
-
-        // Pick and save new profile image
-        private async Task PickAndSaveImageAsync()
-        {
-            try
-            {
-                var result = await MediaPicker.PickPhotoAsync(new MediaPickerOptions
-                {
-                    Title = "Select a profile photo"
-                });
-
-                if (result != null)
-                {
-                    var stream = await result.OpenReadAsync();
-
-                    // Save to AppDataDirectory
-                    ImageFileName = result.FileName;
-                    var savePath = Path.Combine(FileSystem.AppDataDirectory, ImageFileName);
-                    using var fileStream = File.OpenWrite(savePath);
-                    await stream.CopyToAsync(fileStream);
-
-                    // Update ImageSource
-                    ProfileImage = ImageSource.FromFile(savePath);
-                }
-            }
-            catch (Exception ex)
-            {
-                await Application.Current.MainPage.DisplayAlert("Error", $"Unable to select image: {ex.Message}", "OK");
-            }
-        }
-
-
         private async void OnSave()
         {
             // Save user info
@@ -200,7 +164,6 @@ namespace DineTab_v1.ViewModels.Admin
                     Role = this.Role,
                     Status = this.IsActive ? "Active" : "Inactive", // convert bool to string
                     Password = IsResetPasswordVisible ? NewPassword : null, // only update if reset
-                    ProfileImageFile = this.ImageFileName // store only filename in DB
                 };
                 
                 // Call your service to update user in database

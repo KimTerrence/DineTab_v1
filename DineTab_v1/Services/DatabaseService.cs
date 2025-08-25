@@ -3,6 +3,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.Maui.ApplicationModel.DataTransfer;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.Threading.Tasks;
 
 namespace DineTab_v1.Services
@@ -224,7 +225,7 @@ namespace DineTab_v1.Services
                     cmd.Parameters.AddWithValue("@Email", user.Email);
                     cmd.Parameters.AddWithValue("@Password", user.Password);
                     cmd.Parameters.AddWithValue("@Role", user.Role);
-                    cmd.Parameters.AddWithValue("@ProfileImageFile", user.ProfileImageFile ?? "");
+                        //cmd.Parameters.AddWithValue("@ProfileImageFile", user.ProfileImageFile ?? "");
 
                     int rows = await cmd.ExecuteNonQueryAsync();
                     return rows > 0;
@@ -241,7 +242,7 @@ namespace DineTab_v1.Services
             {
                 await conn.OpenAsync();
 
-                string query = "SELECT Id, FirstName, LastName, Email, Role, Password, filename FROM Users";
+                string query = "SELECT Id, FirstName, LastName, Email, Role, Password, ProfileImage FROM Users";
 
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 using (SqlDataReader reader = await cmd.ExecuteReaderAsync())
@@ -256,7 +257,10 @@ namespace DineTab_v1.Services
                             Email = reader.GetString(3),
                             Role = reader.GetString(4),
                             Password = reader.GetString(5),
-                            ProfileImageFile = reader["filename"] as string //  filename
+                            ProfileImage = reader.IsDBNull(reader.GetOrdinal("ProfileImage"))
+                    ? null
+                    : (byte[])reader["ProfileImage"]
+
                         });
                     }
                 }
@@ -898,6 +902,49 @@ namespace DineTab_v1.Services
             }
 
             return list;
+        }
+
+        //Add staf
+        public async Task<bool> AddStaffAsync(string firstName, string lastName, string email, string password, string role, byte[] profileImage)
+        {
+            try
+            {
+                using (var conn = new SqlConnection(_connectionString))
+                {
+                    await conn.OpenAsync();
+
+                    var cmd = new SqlCommand(
+                        @"INSERT INTO Users (FirstName, LastName, Email, Password, Role, ProfileImage)
+                          VALUES (@FirstName, @LastName, @Email, @Password, @Role, @ProfileImage)",
+                        conn);
+
+                    cmd.Parameters.AddWithValue("@FirstName", firstName ?? "");
+                    cmd.Parameters.AddWithValue("@LastName", lastName ?? "");
+                    cmd.Parameters.AddWithValue("@Email", email ?? "");
+                    cmd.Parameters.AddWithValue("@Password", password ?? "");
+                    cmd.Parameters.AddWithValue("@Role", role ?? "Staff");
+
+                    if (profileImage != null)
+                        cmd.Parameters.Add("@ProfileImage", SqlDbType.VarBinary).Value = profileImage;
+                    else
+                        cmd.Parameters.Add("@ProfileImage", SqlDbType.VarBinary).Value = DBNull.Value;
+
+                    await cmd.ExecuteNonQueryAsync();
+                    return true;
+                }
+            }
+            catch (SqlException ex)
+            {
+                // Example: unique constraint violation
+                if (ex.Number == 2627 || ex.Number == 2601)
+                    throw new Exception("Email already exists!");
+
+                throw;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
     // Other database methods like GetMenuItemsAsync(), GetCategoriesAsync(), etc.

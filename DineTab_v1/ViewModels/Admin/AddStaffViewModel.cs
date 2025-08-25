@@ -1,5 +1,6 @@
 ﻿using DineTab_v1.Models;
 using DineTab_v1.Views.Admin;
+using Microsoft.Data.SqlClient;
 using DineTab_v1.Services;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Storage;
@@ -7,12 +8,13 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Text.RegularExpressions;
 
 namespace DineTab_v1.ViewModels.Admin
 {
     public class AddStaffViewModel : BaseViewModel
     {
-        private readonly DatabaseService _dbService = new DatabaseService();
+        private readonly DatabaseService _databaseService = new DatabaseService();
 
         // Bindable properties for profile image
         private ImageSource profileImage = "icon.png";
@@ -39,8 +41,9 @@ namespace DineTab_v1.ViewModels.Admin
         public ICommand CancelCommand { get; }
 
         public INavigation Navigation { get; set; }
+        private byte[] ImageBytes { get; set; }
 
-        //To Add Staff
+        // Constructor
         public AddStaffViewModel()
         {
             UploadPhotoCommand = new Command(async () => await PickAndSaveImageAsync());
@@ -59,33 +62,21 @@ namespace DineTab_v1.ViewModels.Admin
 
                 if (result == null) return;
 
-                // Ensure folder exists
-                var imagesFolder = AppPaths.GetImagesFolder();
-                Directory.CreateDirectory(imagesFolder);
-
-                // Unique filename
-                ImageFileName = $"{Guid.NewGuid()}{Path.GetExtension(result.FileName)}";
-                var savePath = Path.Combine(imagesFolder, ImageFileName);
-
                 using (var input = await result.OpenReadAsync())
-                using (var output = File.Create(savePath))
+                using (var ms = new MemoryStream())
                 {
-                    await input.CopyToAsync(output);
-                    await output.FlushAsync();
+                    await input.CopyToAsync(ms);
+                    ImageBytes = ms.ToArray(); // store image in memory
                 }
 
-                // Show in UI immediately
-                ProfileImage = ImageSource.FromFile(savePath);
-
-                await Application.Current.MainPage.DisplayAlert("Saved", savePath, "OK");
+                // Show in UI immediately (preview)
+                ProfileImage = ImageSource.FromStream(() => new MemoryStream(ImageBytes));
             }
             catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert("Error", $"Unable to save image: {ex.Message}", "OK");
+                await Application.Current.MainPage.DisplayAlert("Error", $"Unable to load image: {ex.Message}", "OK");
             }
         }
-
-
 
         // Cancel command to close the modal
         private async void OnCancel()
@@ -94,61 +85,40 @@ namespace DineTab_v1.ViewModels.Admin
             {
                 await Application.Current.MainPage.Navigation.PopModalAsync(); //close modal
             }
-            catch (Exception ex) { }
-
+            catch { }
         }
-
 
         // Add command to save new staff member
         private async void OnAdd()
         {
             try
             {
-                // Check if passwords match
                 if (Password != ConfirmPassword)
                 {
                     await Application.Current.MainPage.DisplayAlert("Error", "Passwords do not match", "OK");
                     return;
                 }
 
-                // Check password length and special character
-                if (Password.Length < 8 || !System.Text.RegularExpressions.Regex.IsMatch(Password, @"[!@#$%^&*(),.?""':{}|<>]"))
+                if (Password.Length < 8 || !Regex.IsMatch(Password, @"[!@#$%^&*(),.?""':{}|<>]"))
                 {
                     await Application.Current.MainPage.DisplayAlert("Error", "Password must be at least 8 characters and contain at least one special character.", "OK");
                     return;
                 }
 
-                User newUser = new User
-                {
-                    FirstName = FirstName,
-                    LastName = LastName,
-                    Email = Email,
-                    Password = Password,
-                    Role = Role,
-                    ProfileImageFile = ImageFileName
-                };
-
-                bool success = await _dbService.AddStaffAsync(newUser);
+                bool success = await _databaseService.AddStaffAsync(
+                    FirstName, LastName, Email, Password, Role, ImageBytes);
 
                 if (success)
                 {
-                    try
-                    {
-                        await Application.Current.MainPage.Navigation.PopModalAsync();
-                        await Application.Current.MainPage.Navigation.PushModalAsync(new SuccessPopUp());
-                    }
-                    catch (Exception ex) { }
+                    await Application.Current.MainPage.Navigation.PopModalAsync();
+                    await Application.Current.MainPage.Navigation.PushModalAsync(new SuccessPopUp());
                     MessagingCenter.Send(this, "StaffUpdated");
                 }
-                else
-                {
-                    await Application.Current.MainPage.DisplayAlert("Error", "Failed to add staff", "OK");
-                }
             }
-            catch
+            catch (Exception ex)
             {
-                await Application.Current.MainPage.DisplayAlert("Error", "Please fill all fields", "OK");
+               // await Application.Current.MainPage.DisplayAlert("Error", ex.Message, "OK");
             }
-        }
+        }       
     }
 }
