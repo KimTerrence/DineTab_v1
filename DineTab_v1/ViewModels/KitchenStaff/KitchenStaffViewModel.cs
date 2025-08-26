@@ -42,6 +42,7 @@ namespace DineTab_v1.ViewModels.KitchenStaff
                 if (confirmed)
                     Application.Current.MainPage = new NavigationPage(new Views.Auth.LoginPage());
             });
+
             LoadData();
             StartGlobalTimer();
         }
@@ -52,10 +53,18 @@ namespace DineTab_v1.ViewModels.KitchenStaff
 
             foreach (var order in orders)
             {
-                if (order.Status == "Preparing" && order.TargetTime.HasValue)
+                // Ensure we calculate RemainingTime for Preparing orders
+                if (order.Status == "Preparing")
                 {
+                    // If TargetTime is null (DB didn't save), use default based on mode
+                    if (!order.TargetTime.HasValue)
+                    {
+                        // fallback default
+                        order.TargetTime = DateTime.Now.AddMinutes(20);
+                        await _databaseService.UpdateOrderPreparingAsync(order.OrderId, "Preparing", order.TargetTime.Value);
+                    }
+
                     order.RemainingTime = order.TargetTime.Value - DateTime.Now;
-              
                 }
 
                 switch (order.Status)
@@ -77,19 +86,13 @@ namespace DineTab_v1.ViewModels.KitchenStaff
 
                 foreach (var order in PreparingOrders)
                 {
-                    if (!order.PreparingUntil.HasValue) continue;
+                    if (!order.TargetTime.HasValue) continue;
 
-                    order.RemainingTime = order.PreparingUntil.Value - now;
-
-                    // ✅ Do NOT auto change to Ready when 00:00
-                    if (order.RemainingTime <= TimeSpan.Zero)
-                    {
-                        order.RemainingTime = TimeSpan.Zero;
-                        // Status stays "Preparing" so user can still add +5 min
-                    }
+                    var remaining = order.TargetTime.Value - now;
+                    order.RemainingTime = remaining > TimeSpan.Zero ? remaining : TimeSpan.Zero;
                 }
 
-                return true;
+                return true; // repeat every second
             });
         }
 
@@ -98,14 +101,23 @@ namespace DineTab_v1.ViewModels.KitchenStaff
             if (order == null) return;
 
             order.Status = "Preparing";
-            order.TargetTime = DateTime.Now.AddMinutes(20); // save to DB
-            order.PreparingUntil = order.TargetTime;
+
+            // Set TargetTime based on mode
+            if (mode == "Cook")
+                order.TargetTime = DateTime.Now.AddMinutes(20);
+            else if (mode == "Prep")
+                order.TargetTime = DateTime.Now.AddMinutes(15);
+            else
+                order.TargetTime = DateTime.Now.AddMinutes(20); // default fallback
+
+            order.RemainingTime = order.TargetTime.Value - DateTime.Now;
 
             await _databaseService.UpdateOrderPreparingAsync(order.OrderId, "Preparing", order.TargetTime);
 
             if (PaidOrders.Contains(order)) PaidOrders.Remove(order);
             if (!PreparingOrders.Contains(order)) PreparingOrders.Add(order);
         }
+
 
 
         private async void AddFiveMinutes(Order order)
@@ -121,8 +133,7 @@ namespace DineTab_v1.ViewModels.KitchenStaff
             await _databaseService.UpdateOrderPreparingAsync(order.OrderId, "Preparing", order.TargetTime.Value);
         }
 
-
-        private async void MarkReady(Order order) // ✅ explicit ready action
+        private async void MarkReady(Order order)
         {
             if (order == null) return;
 
@@ -134,23 +145,21 @@ namespace DineTab_v1.ViewModels.KitchenStaff
             if (PreparingOrders.Contains(order)) PreparingOrders.Remove(order);
             if (!ReadyOrders.Contains(order)) ReadyOrders.Add(order);
         }
+
         private async void MarkComplete(Order order)
         {
             if (order == null) return;
 
             order.Status = "Complete";
 
-            // Update MS SQL
             await _databaseService.UpdateOrderPreparingAsync(order.OrderId, "Complete", DateTime.Now);
 
-            // Remove from ReadyOrders
             if (ReadyOrders.Contains(order)) ReadyOrders.Remove(order);
         }
+
         public async void LoadCompletedOrders()
         {
             await Application.Current.MainPage.Navigation.PushAsync(new HistoryPage());
-
         }
-
     }
 }
