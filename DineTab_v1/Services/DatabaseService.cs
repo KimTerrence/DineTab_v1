@@ -632,7 +632,8 @@ namespace DineTab_v1.Services
                     Total = reader.IsDBNull(3) ? 0m : reader.GetDecimal(3),
                     CreatedAt = reader.IsDBNull(4) ? DateTime.MinValue : reader.GetDateTime(4),
                     Status = reader.IsDBNull(5) ? string.Empty : reader.GetString(5),
-                    Items = new ObservableCollection<OrderItem>() // prevent null
+                    Items = new ObservableCollection<OrderItem>(), // prevent null
+                    TargetTime = reader.IsDBNull(6) ? (DateTime?)null : reader.GetDateTime(6) 
                 };
 
                 list.Add(order);

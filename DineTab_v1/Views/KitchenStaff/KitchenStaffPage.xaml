@@ -10,9 +10,9 @@
         <!-- Header -->
         <HorizontalStackLayout Spacing="20" VerticalOptions="Center">
             <Label Text="DineTab" FontAttributes="Bold" FontSize="Large" />
-            <Button Text="Sign Out" Command="{Binding SignOutCommand}"  Background="White" TextColor="Black" BorderColor="Black" BorderWidth="1"/>
+            <Button Text="Sign Out" Command="{Binding SignOutCommand}"  Background="White" TextColor="Black" BorderColor="Black" BorderWidth="1" CornerRadius="0"/>
             <Button Text="Show History"
-                    Command="{Binding ShowHistoryCommand}" Background="White" TextColor="Black" BorderColor="Black" BorderWidth="1"/>
+                    Command="{Binding ShowHistoryCommand}" Background="White" TextColor="Black" BorderColor="Black" BorderWidth="1" CornerRadius="0"/>
         </HorizontalStackLayout>
 
         <!-- Orders Grid (horizontal scroll for categories) -->
@@ -124,25 +124,27 @@
                         <CollectionView Grid.Row="1" ItemsSource="{Binding PreparingOrders}" >
                             <CollectionView.ItemTemplate>
                                 <DataTemplate>
-                                    <StackLayout Margin="0,5">
-                                        <Label Text="{Binding OrderNumber}" FontAttributes="Bold"/>
-                                        <Label Text="{Binding RemainingTimeString}" FontSize="Small"/>
-                                        <VerticalStackLayout BindableLayout.ItemsSource="{Binding Items}">
-                                            <BindableLayout.ItemTemplate>
-                                                <DataTemplate>
-                                                    <Label Text="{Binding Name}" FontSize="Small"/>
-                                                </DataTemplate>
-                                            </BindableLayout.ItemTemplate>
-                                        </VerticalStackLayout>
-                                        <HorizontalStackLayout Spacing="10" Margin="0,5,0,0">
-                                            <Button Text="Add 5 min"
+                                    <Border Stroke="Black" Margin="0, 5">
+                                        <StackLayout Margin="0,5" Padding="10">
+                                            <Label Text="{Binding OrderNumber}" FontAttributes="Bold"/>
+                                            <Label Text="{Binding RemainingTimeString}" FontSize="Small"/>
+                                            <VerticalStackLayout BindableLayout.ItemsSource="{Binding Items}">
+                                                <BindableLayout.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Label Text="{Binding Name}" FontSize="Small"/>
+                                                    </DataTemplate>
+                                                </BindableLayout.ItemTemplate>
+                                            </VerticalStackLayout>
+                                            <HorizontalStackLayout Spacing="10" Margin="0,5,0,0">
+                                                <Button Text="Add 5 min"
                                                     Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.AddFiveMinutesCommand}"
-                                                    CommandParameter="{Binding}" Background="White" TextColor="Black" BorderColor="Black" BorderWidth="1"/>
-                                            <Button Text="Done"
+                                                    CommandParameter="{Binding}" Background="White" TextColor="Black" BorderColor="Black" BorderWidth="1" CornerRadius="0"/>
+                                                <Button Text="Done"
                                                     Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.MarkReadyCommand}"
-                                                    CommandParameter="{Binding}" Background="White" TextColor="Black" BorderColor="Black" BorderWidth="1"/>
-                                        </HorizontalStackLayout>
-                                    </StackLayout>
+                                                    CommandParameter="{Binding}" Background="White" TextColor="Black" BorderColor="Black" BorderWidth="1" CornerRadius="0"/>
+                                            </HorizontalStackLayout>
+                                        </StackLayout>
+                                    </Border>
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>
                         </CollectionView>
@@ -156,7 +158,8 @@
                         <CollectionView Grid.Row="1" ItemsSource="{Binding ReadyOrders}">
                             <CollectionView.ItemTemplate>
                                 <DataTemplate>
-                                    <StackLayout Margin="0,5">
+                                    <Border Stroke="Black" Margin="0, 5" >
+                                    <StackLayout Padding="10">
                                         <Label Text="{Binding OrderNumber}" FontAttributes="Bold"/>
                                         <Label Text="{Binding Time, StringFormat='{0:hh:mm tt}'}" FontSize="Small"/>
                                         <VerticalStackLayout BindableLayout.ItemsSource="{Binding Items}">
@@ -168,8 +171,9 @@
                                         </VerticalStackLayout>
                                         <Button Text="Received"
                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.MarkCompleteCommand}"
-                                                CommandParameter="{Binding}" Background="White" TextColor="Black" BorderColor="Black" BorderWidth="1"/>
+                                                CommandParameter="{Binding}" Background="White" TextColor="Black" BorderColor="Black" BorderWidth="1" CornerRadius="0"/>
                                     </StackLayout>
+                                    </Border>
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>
                         </CollectionView>

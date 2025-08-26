@@ -51,31 +51,34 @@ namespace DineTab_v1.ViewModels.KitchenStaff
         {
             var orders = await _databaseService.GetAllOrdersAsync();
 
+            PreparingOrders.Clear();
+            PendingOrders.Clear();
+            PaidOrders.Clear();
+            ReadyOrders.Clear();
+
             foreach (var order in orders)
             {
-                // Ensure we calculate RemainingTime for Preparing orders
-                if (order.Status == "Preparing")
-                {
-                    // If TargetTime is null (DB didn't save), use default based on mode
-                    if (!order.TargetTime.HasValue)
-                    {
-                        // fallback default
-                        order.TargetTime = DateTime.Now.AddMinutes(20);
-                        await _databaseService.UpdateOrderPreparingAsync(order.OrderId, "Preparing", order.TargetTime.Value);
-                    }
-
-                    order.RemainingTime = order.TargetTime.Value - DateTime.Now;
-                }
-
                 switch (order.Status)
                 {
                     case "Pending": PendingOrders.Add(order); break;
                     case "Paid": PaidOrders.Add(order); break;
-                    case "Preparing": PreparingOrders.Add(order); break;
+                    case "Preparing":
+                        // Only set default if null
+                        if (!order.TargetTime.HasValue)
+                        {
+                            order.TargetTime = DateTime.Now.AddMinutes(20);
+                           // await _databaseService.UpdateOrderPreparingAsync(order.OrderId, "Preparing", order.TargetTime.Value);
+                        }
+
+                        // Calculate RemainingTime based on TargetTime
+                        order.RemainingTime = order.TargetTime.Value - DateTime.Now;
+                        PreparingOrders.Add(order);
+                        break;
                     case "Ready": ReadyOrders.Add(order); break;
                 }
             }
         }
+
 
 
         private void StartGlobalTimer()
