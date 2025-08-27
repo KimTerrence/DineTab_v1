@@ -50,7 +50,7 @@ public class PaymentViewModel : INotifyPropertyChanged
     public ObservableCollection<OrderItem> OrderItems { get; set; }
 
 
-    // 👉 Constructor now accepts OrderNumber
+    //  Constructor now accepts OrderNumber
     public PaymentViewModel(string orderNumber, decimal amount, ObservableCollection<OrderItem> items)
     {
         OrderNumber = orderNumber;

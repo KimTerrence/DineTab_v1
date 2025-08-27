@@ -2,6 +2,7 @@
 
 namespace DineTab_v1.Models
 {
+    //model for order item with property change notification for quantity updates
     public class OrderItem : INotifyPropertyChanged
     {
         public int ItemId { get; set; }

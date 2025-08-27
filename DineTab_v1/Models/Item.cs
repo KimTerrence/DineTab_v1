@@ -1,5 +1,6 @@
 ﻿namespace DineTab_v1.Models
 {
+    //model for  order item
     public class Item
     {
         public int Id { get; set; }

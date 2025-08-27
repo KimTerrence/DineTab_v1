@@ -134,6 +134,7 @@ namespace DineTab_v1.ViewModels.Admin
             
         }
 
+        // Image upload using FilePicker
         private async Task UploadImage()
         {
             try

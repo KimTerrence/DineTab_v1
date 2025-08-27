@@ -4,6 +4,9 @@ using Microsoft.Maui.Controls;
 
 namespace DineTab_v1.Converters
 {
+
+
+    //display active or inactive based on boolean value to the switch in ui
     public class BoolToStatusConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

@@ -101,9 +101,7 @@ namespace DineTab_v1.ViewModels.Admin
             }
         }
 
-        /// <summary>
-        /// Applies both role filter and search filter
-        /// </summary>
+        // Applies both role filter and search filter
         private void ApplyFilters()
         {
             IEnumerable<User> filtered = _allStaff;
@@ -134,7 +132,7 @@ namespace DineTab_v1.ViewModels.Admin
         }
     }
 
-    // ✅ Converter to highlight only the selected role
+    // Converter to highlight only the selected role
     public class RoleToColorConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

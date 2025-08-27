@@ -6,6 +6,7 @@ using System.IO;
 
 namespace DineTab_v1.Models
 {
+    //model for user with property change notification for profile image updates
     public class User : INotifyPropertyChanged
     {
 
@@ -18,6 +19,7 @@ namespace DineTab_v1.Models
         public string Status { get; set; }
         public byte[] ProfileImage { get; set; }
 
+        // Property to get ImageSource from byte array
         public ImageSource ProfileImageSource
         {
             get

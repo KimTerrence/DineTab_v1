@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace DineTab_v1.Models
 {
+    //model for category
     public class Category
     {
         public int Id { get; set; }

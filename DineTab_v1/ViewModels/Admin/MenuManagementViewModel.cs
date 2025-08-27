@@ -190,7 +190,7 @@ namespace DineTab_v1.ViewModels.Admin
         }
     }
 
-    // ✅ Converter to highlight only selected category
+    // Converter to highlight only selected category
     public class CategoryToColorConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -212,7 +212,7 @@ namespace DineTab_v1.ViewModels.Admin
 
 
     }
-    // ✅ Converter inside the same namespace
+    // Converter inside the same namespace
     public class CategorySelectionToColorConverter : IMultiValueConverter
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)

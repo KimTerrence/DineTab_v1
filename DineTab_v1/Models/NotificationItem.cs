@@ -2,6 +2,8 @@
 
 namespace DineTab_v1.Models
 {
+
+    // Model to handle notification items with dynamic messages and colors based on status
     public class NotificationItem
     {
         public string OrderNumber { get; set; }

@@ -4,6 +4,7 @@ using System.ComponentModel;
 
 namespace DineTab_v1.Models
 {
+    //Order Model 
     public class Order : INotifyPropertyChanged
     {
         public int OrderId { get; set; }
@@ -14,13 +15,13 @@ namespace DineTab_v1.Models
         public ObservableCollection<OrderItem> Items { get; set; } = new();
         public string Status { get; set; }
 
-        // ✅ NEW: Target time for countdown persistence
+        //   Target time for countdown persistence
         public DateTime? TargetTime { get; set; }
 
-        // ✅ NEW: PreparingUntil for live countdown
+        //  PreparingUntil for live countdown
         public DateTime? PreparingUntil { get; set; }
 
-        // ✅ Writable RemainingTime
+        //  Writable RemainingTime
         private TimeSpan remainingTime;
         public TimeSpan RemainingTime
         {

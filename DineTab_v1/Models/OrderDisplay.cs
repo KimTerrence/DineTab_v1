@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace DineTab_v1.Models
 {
+    //Model for displaying order with total calculation
     public class OrderDisplay
     {
         public int OrderId { get; set; }

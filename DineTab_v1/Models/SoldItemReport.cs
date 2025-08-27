@@ -1,5 +1,6 @@
 ﻿namespace DineTab_v1.Models
 {
+    //model for sold item report
     public class SoldItemReport
     {
         public string OrderNo { get; set; }
