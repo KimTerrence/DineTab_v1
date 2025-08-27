@@ -30,6 +30,8 @@ public class ReportsViewModel : INotifyPropertyChanged
 
     // Total number of items sold
     public int TotalSoldItems => SoldItems.Sum(s => s.TotalItem);
+    // Orders placed today
+    public int OrdersToday => SoldItems.Count(s => s.OrderDate.Date == DateTime.Today);
 
     // Total revenue
     public decimal TotalRevenue => SoldItems.Sum(s => s.TotalPrice);

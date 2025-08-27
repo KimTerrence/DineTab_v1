@@ -132,11 +132,12 @@ namespace DineTab_v1.ViewModels.Cashier
         {
             try
             {
-                await Shell.Current.Navigation.PushModalAsync(new CreateOrderPage());
+                await Application.Current.MainPage.Navigation.PushModalAsync(new CreateOrderPage());
+
             }
             catch (Exception ex)
             {
-
+                Console.WriteLine(ex);
             }
           
         }

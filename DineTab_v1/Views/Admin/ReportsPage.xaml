@@ -133,7 +133,7 @@
                                  VerticalOptions="Center" />
                         </Grid>
                         <VerticalStackLayout>
-                            <Label Text="{Binding TotalOrders}" FontSize="20" FontAttributes="Bold"/>
+                            <Label Text="{Binding OrdersToday}" FontSize="20" FontAttributes="Bold"/>
                         </VerticalStackLayout>
                     </VerticalStackLayout>
                 </Border>

@@ -1,10 +1,11 @@
-﻿using System.Collections.ObjectModel;
-using System.Linq;
-using System.Windows.Input;
-using DineTab_v1.Models;
+﻿using DineTab_v1.Models;
 using DineTab_v1.Services;
 using DineTab_v1.Views.Auth;
 using Microsoft.Maui.Controls;
+using System.Collections.ObjectModel;
+using System.Globalization;
+using System.Linq;
+using System.Windows.Input;
 
 namespace DineTab_v1.ViewModels.Customer
 {
@@ -29,8 +30,10 @@ namespace DineTab_v1.ViewModels.Customer
         public ICommand DecreaseOrderItemCommand { get; }
         public ICommand CancelOrderCommand { get; }
         public ICommand PlaceOrderCommand { get; }
+        public ICommand SelectCategoryCommand { get; }
+        private ObservableCollection<Item> _allMenuItems = new(); // keep all items unfiltered
 
-            private string _orderNumber;
+        private string _orderNumber;
         public string OrderNumber
         {
             get => _orderNumber;
@@ -41,6 +44,19 @@ namespace DineTab_v1.ViewModels.Customer
                     _orderNumber = value;
                     OnPropertyChanged(nameof(OrderNumber));
                 }
+            }
+        }
+
+        private string _selectedCategory = "All Items"; // default
+        public string SelectedCategory
+        {
+            get => _selectedCategory;
+            set
+            {
+                if (_selectedCategory == value) return;
+                _selectedCategory = value;
+                OnPropertyChanged();
+                ApplySearchAndCategoryFilter();   // filter when category changes
             }
         }
 
@@ -96,6 +112,11 @@ namespace DineTab_v1.ViewModels.Customer
                 }
             });
 
+            SelectCategoryCommand = new Command<string>(cat =>
+            {
+                SelectedCategory = cat;
+            });
+
 
 
             LoadMenuItems();
@@ -113,6 +134,7 @@ namespace DineTab_v1.ViewModels.Customer
             {
                 if (item.Availability?.ToLower() == "available")
                     MenuItems.Add(item);
+                _allMenuItems.Add(item);
             }
         }
 
@@ -201,6 +223,45 @@ namespace DineTab_v1.ViewModels.Customer
                 new DineTab_v1.Views.Customer.OrderOverviewPage(vm)
             );
         }
+        private void ApplySearchAndCategoryFilter()
+        {
+            IEnumerable<Item> filtered = _allMenuItems;
 
+            // Apply category filter (skip if "All Items")
+            if (!string.IsNullOrEmpty(SelectedCategory) && SelectedCategory != "All Items")
+            {
+                filtered = filtered.Where(i => i.CategoryName.Equals(SelectedCategory, StringComparison.OrdinalIgnoreCase));
+            }
+
+
+            // Update UI collection
+            MenuItems.Clear();
+            foreach (var item in filtered)
+                MenuItems.Add(item);
+        }
     }
+
+    // Converter to highlight only selected category
+    public class CategoryToColorConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            // value = SelectedCategory from ViewModel
+            // parameter = this button's category
+            string selectedCategory = value as string;
+            string thisCategory = parameter as string;
+
+            if (selectedCategory == thisCategory)
+                return Colors.Orange; // highlight selected
+
+            return Colors.Transparent; // default
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+
 }

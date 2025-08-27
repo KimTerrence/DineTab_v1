@@ -1,31 +1,57 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:DineTab_v1.ViewModels.Customer"
              x:Class="DineTab_v1.Views.Customer.CustomerMenuPage"
              x:Name="RootPage">
 
-    <Grid ColumnDefinitions="*, 300" 
-          RowDefinitions="Auto, *" 
-          RowSpacing="10">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:CategoryToColorConverter x:Key="CategoryToColorConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid ColumnDefinitions="*,300" RowDefinitions="Auto,*" RowSpacing="10">
 
         <!-- Top Category Icons -->
         <ScrollView Grid.Column="0" Grid.Row="0" Orientation="Horizontal" Padding="10">
-            <HorizontalStackLayout Spacing="10"
-                                   BindableLayout.ItemsSource="{Binding Categories}">
+            <HorizontalStackLayout Spacing="5">
 
-                <BindableLayout.ItemTemplate>
-                    <DataTemplate>
-                        <Button Text="{Binding Name}"
-                                Command="{Binding BindingContext.CategorySelectedCommand, Source={x:Reference RootPage}}"
-                                CommandParameter="{Binding .}" 
-                                CornerRadius="0"
-                                BackgroundColor="#D3D3D3"
-                                TextColor="Black"/>
-                    </DataTemplate>
-                </BindableLayout.ItemTemplate>
+                <!-- All Items Button -->
+                <Button Text="All Items"
+                        Command="{Binding SelectCategoryCommand}"
+                        CommandParameter="All Items"
+                        TextColor="Black"
+                        BorderColor="Black"
+                        BorderWidth="1"
+                        CornerRadius="0"
+                        BackgroundColor="{Binding SelectedCategory, 
+                                                  Converter={StaticResource CategoryToColorConverter}, 
+                                                  ConverterParameter=All Items}"/>
+
+                <!-- Category Buttons -->
+                <CollectionView ItemsSource="{Binding Categories}" SelectionMode="None">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Horizontal" ItemSpacing="5"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Button Text="{Binding Name}"
+                                    Command="{Binding Source={x:Reference RootPage}, Path=BindingContext.SelectCategoryCommand}"
+                                    CommandParameter="{Binding Name}"
+                                    TextColor="Black"
+                                    BorderColor="Black"
+                                    BorderWidth="1"
+                                    CornerRadius="0"
+                                    BackgroundColor="{Binding Source={x:Reference RootPage}, Path=BindingContext.SelectedCategory,
+                                                              Converter={StaticResource CategoryToColorConverter},
+                                                              ConverterParameter={Binding Name}}"/>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
             </HorizontalStackLayout>
         </ScrollView>
-
 
         <!-- Menu Items Grid -->
         <CollectionView Grid.Column="0" Grid.Row="1" ItemsSource="{Binding MenuItems}">
@@ -36,14 +62,13 @@
                 <DataTemplate>
                     <Border Padding="5" Margin="5">
                         <VerticalStackLayout Spacing="20">
-                            <BoxView HeightRequest="150" Color="LightGray" />
+                            <Image Source="{Binding ItemImageSource}" HeightRequest="150" Aspect="AspectFill" />
                             <Label Text="{Binding ItemName}" FontAttributes="Bold" HorizontalOptions="Center"/>
                             <Grid ColumnDefinitions="*,Auto"
                                   Padding="10"
                                   Margin="5"
                                   BackgroundColor="White">
 
-                                <!-- Price -->
                                 <Label Text="{Binding Price, StringFormat='₱{0:F2}'}"
                                        Grid.Column="0"
                                        VerticalOptions="Center"
@@ -51,7 +76,6 @@
                                        FontAttributes="Bold"
                                        TextColor="Black" />
 
-                                <!-- Add Button -->
                                 <Button Text="Add"
                                         Grid.Column="1"
                                         BackgroundColor="White"
@@ -60,10 +84,9 @@
                                         BorderColor="Black"
                                         BorderWidth="1"
                                         WidthRequest="100"
-                                        Command="{Binding BindingContext.AddToOrderCommand, Source={x:Reference Name=RootPage}}"
-                                        CommandParameter="{Binding .}" />   
+                                        Command="{Binding BindingContext.AddToOrderCommand, Source={x:Reference RootPage}}"
+                                        CommandParameter="{Binding .}" />
                             </Grid>
-
                         </VerticalStackLayout>
                     </Border>
                 </DataTemplate>
@@ -71,7 +94,7 @@
         </CollectionView>
 
         <!-- Order Summary Panel -->
-        <Border Stroke="Black" Grid.Column="1" Grid.Row="0"  Grid.RowSpan="2" >
+        <Border Stroke="Black" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2">
             <VerticalStackLayout Spacing="10" BackgroundColor="#f5f5f5">
                 <Border Stroke="Black">
                     <VerticalStackLayout Spacing="10" Padding="10">
@@ -79,12 +102,7 @@
                             <Label Text="Order " FontAttributes="Bold" FontSize="16"/>
                             <Label Text="{Binding OrderNumber}" FontAttributes="Bold" FontSize="16"/>
                         </HorizontalStackLayout>
-                        <VerticalStackLayout Spacing="5" HorizontalOptions="Start">
-
-                            <Label Text="{Binding OrderTypeText}" 
-                                       FontSize="16" 
-                                       HorizontalOptions="Center"/>
-                        </VerticalStackLayout>
+                        <Label Text="{Binding OrderTypeText}" FontSize="16" HorizontalOptions="Center"/>
                     </VerticalStackLayout>
                 </Border>
 
@@ -95,67 +113,33 @@
                                 <Border Stroke="Transparent" Padding="10">
                                     <VerticalStackLayout Padding="5" BackgroundColor="White">
                                         <Grid ColumnDefinitions="*,Auto">
-                                            <!-- Item Name -->
-                                            <Label Text="{Binding Name}" 
-                                                    Grid.Column="0" 
-                                                    VerticalOptions="Center" 
-                                                    HorizontalOptions="Start"
-                                                    FontSize="18"/>
-
-                                            <!-- Remove Button -->
-                                            <Button Text="x" 
-                                                     Grid.Column="1" 
-                                                     HorizontalOptions="End"
-                                                     VerticalOptions="Center"
-                                                     BackgroundColor="Transparent"
-                                                     TextColor="Black"
-                                                     Command="{Binding BindingContext.RemoveItemCommand, Source={x:Reference RootPage}}"
-                                                      CommandParameter="{Binding}" /> 
+                                            <Label Text="{Binding Name}" Grid.Column="0" VerticalOptions="Center" FontSize="18"/>
+                                            <Button Text="x" Grid.Column="1" HorizontalOptions="End" VerticalOptions="Center"
+                                                    BackgroundColor="Transparent" TextColor="Black"
+                                                    Command="{Binding BindingContext.RemoveItemCommand, Source={x:Reference RootPage}}"
+                                                    CommandParameter="{Binding}" />
                                         </Grid>
 
                                         <Grid>
-                                            <!-- Item Price -->
                                             <Label Text="{Binding Price, StringFormat='₱{0:F2}'}"
-                                                    VerticalOptions="Center"
-                                                    HorizontalOptions="Start"
-                                                    TextColor="#787878"
-                                                     FontSize="12"/>
-
-                                            <!-- Quantity Controls -->
+                                                   VerticalOptions="Center"
+                                                   HorizontalOptions="Start"
+                                                   TextColor="#787878"
+                                                   FontSize="12"/>
                                             <HorizontalStackLayout VerticalOptions="Center" HorizontalOptions="Center">
-                                                <!-- Decrease Quantity -->
-                                                <Button Text="-" 
-                                                         WidthRequest="0"
-                                                         Command="{Binding BindingContext.DecreaseOrderItemCommand, Source={x:Reference RootPage}}"
-                                                         CommandParameter="{Binding}" 
-                                                         CornerRadius="30"
-                                                         Background="#D9D9D9"
-                                                         TextColor="Black"
-                                                         FontSize="12"/>
-                                                <!-- Quantity Display -->
-                                                <Label Text="{Binding Quantity}" 
-                                                        FontSize="12" 
-                                                        WidthRequest="40"
-                                                        HorizontalOptions="Center"
-                                                        VerticalOptions="Center"
-                                                        HorizontalTextAlignment="Center"/>
-
-                                                <!-- Increase Quantity -->
-                                                <Button Text="+" 
-                                                         WidthRequest="30"
-                                                         Command="{Binding BindingContext.IncreaseOrderItemCommand, Source={x:Reference RootPage}}"
-                                                         CommandParameter="{Binding}" 
-                                                         CornerRadius="30"
-                                                         Background="#D9D9D9"
-                                                         TextColor="Black"
-                                                         FontSize="12"/>
+                                                <Button Text="-" WidthRequest="0"
+                                                        Command="{Binding BindingContext.DecreaseOrderItemCommand, Source={x:Reference RootPage}}"
+                                                        CommandParameter="{Binding}" 
+                                                        CornerRadius="30" Background="#D9D9D9" TextColor="Black" FontSize="12"/>
+                                                <Label Text="{Binding Quantity}" FontSize="12" WidthRequest="40"
+                                                       HorizontalOptions="Center" VerticalOptions="Center" HorizontalTextAlignment="Center"/>
+                                                <Button Text="+" WidthRequest="30"
+                                                        Command="{Binding BindingContext.IncreaseOrderItemCommand, Source={x:Reference RootPage}}"
+                                                        CommandParameter="{Binding}" 
+                                                        CornerRadius="30" Background="#D9D9D9" TextColor="Black" FontSize="12"/>
                                             </HorizontalStackLayout>
-
-                                            <!-- Total Price -->
                                             <Label Text="{Binding TotalPrice, StringFormat='₱{0:F2}'}"
-                                                    VerticalOptions="Center"
-                                                    HorizontalOptions="End"
-                                                    FontSize="12"/>
+                                                   VerticalOptions="Center" HorizontalOptions="End" FontSize="12"/>
                                         </Grid>
                                     </VerticalStackLayout>
                                 </Border>
@@ -168,18 +152,10 @@
                     <Label Text="{Binding Total, StringFormat='Total: ₱{0:F2}'}" FontAttributes="Bold" VerticalOptions="Center"/>
                 </Border>
                 <VerticalStackLayout Spacing="10" Padding="10">
-                    <Button Text="Cancel" BackgroundColor="White"
-                            BorderColor="Black"
-                            BorderWidth="1"
-                            CornerRadius="0"
-                            TextColor="Black"
+                    <Button Text="Cancel" BackgroundColor="White" BorderColor="Black" BorderWidth="1" CornerRadius="0" TextColor="Black"
                             Command="{Binding CancelOrderCommand}"/>
-                    <Button Text="Place Order" BackgroundColor="White"
-                            BorderColor="Black"
-                            BorderWidth="1"
-                            CornerRadius="0"
-                            Command="{Binding PlaceOrderCommand}"
-                            TextColor="Black"/>
+                    <Button Text="Place Order" BackgroundColor="White" BorderColor="Black" BorderWidth="1" CornerRadius="0" TextColor="Black"
+                            Command="{Binding PlaceOrderCommand}"/>
                 </VerticalStackLayout>
             </VerticalStackLayout>
         </Border>
