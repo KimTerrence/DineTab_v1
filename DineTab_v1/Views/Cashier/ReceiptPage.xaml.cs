@@ -11,9 +11,22 @@ public partial class ReceiptPage : ContentPage
     public ObservableCollection<OrderItem> OrderItems { get; set; }
     public decimal TotalAmount { get; set; }
 
-    public ReceiptPage(string orderNumber, ObservableCollection<OrderItem> items, decimal totalAmount)
+    public decimal CashReceived { get; set; }
+    public decimal Change { get; set; }
+    public string PaymentMethod { get; set; }
+
+    public ReceiptPage(string orderNumber, ObservableCollection<OrderItem> items, decimal totalAmount, decimal cashReceived, string paymentMethod)
     {
         InitializeComponent();
+
+        OrderNumber = orderNumber;
+        OrderDate = DateTime.Now;
+        OrderItems = items;
+        TotalAmount = totalAmount;
+        CashReceived = cashReceived;
+        PaymentMethod = paymentMethod;
+        Change = cashReceived - totalAmount;
+
         OrderNumber = orderNumber;
         OrderDate = DateTime.Now;
         OrderItems = items;

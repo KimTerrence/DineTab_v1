@@ -161,7 +161,7 @@ namespace DineTab_v1.Services
                     SUM(oi.Quantity) AS TotalItem,
                     o.Total
                 FROM Orders o
-                LEFT JOIN OrderItems oi ON oi.Id = o.Id
+                LEFT JOIN OrderMenu oi ON oi.Id = o.Id
                 GROUP BY o.OrderNumber, o.CreatedAt, o.OrderType, o.Total
                 ORDER BY o.CreatedAt DESC
             ";
@@ -578,7 +578,7 @@ namespace DineTab_v1.Services
             await connection.OpenAsync();
             foreach (var item in items)
             {
-                var query = "INSERT INTO OrderItems (Id, ItemId, Quantity, Price, Name) VALUES (@OrderId, @ItemId, @Quantity, @Price, @Name)";
+                var query = "INSERT INTO OrderMenu (Id, ItemId, Quantity, Price, Name) VALUES (@OrderId, @ItemId, @Quantity, @Price, @Name)";
                 using var cmd = new SqlCommand(query, connection);
                 cmd.Parameters.AddWithValue("@OrderId", orderId);
                 cmd.Parameters.AddWithValue("@ItemId", item.ItemId);
@@ -654,7 +654,7 @@ namespace DineTab_v1.Services
             var items = new ObservableCollection<OrderItem>();
             using var connection = new SqlConnection(_connectionString);
             await connection.OpenAsync();
-            var query = "SELECT ItemId, Name, Quantity, Price FROM OrderItems WHERE Id=@OrderId";
+            var query = "SELECT ItemId, Name, Quantity, Price FROM OrderMenu WHERE Id=@OrderId";
             using var cmd = new SqlCommand(query, connection);
             cmd.Parameters.AddWithValue("@OrderId", orderId);
             using var reader = await cmd.ExecuteReaderAsync();
@@ -955,6 +955,63 @@ namespace DineTab_v1.Services
                 return false;
             }
         }
+
+        public async Task<int> InsertPaymentAsync(
+    int orderId,
+    decimal amountPaid,
+    decimal amountToBePaid,
+    decimal changeAmount,
+    string paymentStatus,
+    string paymentMethod = "Cash")
+        {
+            using (var conn = new SqlConnection(_connectionString))
+            {
+                await conn.OpenAsync();
+
+                string query = @"
+            INSERT INTO Payments (OrderId, AmountPaid, AmountToBePaid, ChangeAmount, PaymentStatus, PaymentMethod)
+            OUTPUT INSERTED.PaymentId
+            VALUES (@OrderId, @AmountPaid, @AmountToBePaid, @ChangeAmount, @PaymentStatus, @PaymentMethod)";
+
+                using (var cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@OrderId", orderId);
+                    cmd.Parameters.AddWithValue("@AmountPaid", amountPaid);
+                    cmd.Parameters.AddWithValue("@AmountToBePaid", amountToBePaid);
+                    cmd.Parameters.AddWithValue("@ChangeAmount", changeAmount);
+                    cmd.Parameters.AddWithValue("@PaymentStatus", paymentStatus);
+                    cmd.Parameters.AddWithValue("@PaymentMethod", paymentMethod);
+
+                    var paymentId = (int)await cmd.ExecuteScalarAsync();
+                    return paymentId;
+                }
+            }
+        }
+        public async Task<int> GetOrderIdByOrderNumberAsync(string orderNumber)
+        {
+            using (var conn = new SqlConnection(_connectionString))
+            {
+                await conn.OpenAsync();
+
+                string query = "SELECT OrderId FROM Orders WHERE OrderNumber = @OrderNumber";
+
+                using (var cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@OrderNumber", orderNumber);
+
+                    object result = await cmd.ExecuteScalarAsync();
+                    if (result != null && int.TryParse(result.ToString(), out int orderId))
+                    {
+                        return orderId;
+                    }
+                    else
+                    {
+                        throw new Exception($"Order not found for OrderNumber: {orderNumber}");
+                    }
+                }
+            }
+        }
+
     }
     // Other database methods like GetMenuItemsAsync(), GetCategoriesAsync(), etc.
 }

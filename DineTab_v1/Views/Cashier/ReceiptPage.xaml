@@ -80,6 +80,29 @@
 
             <BoxView HeightRequest="1" Color="Gray" Margin="0,10" />
 
+            <!-- Payment Info -->
+            <Grid ColumnDefinitions="*,Auto" Padding="0,5">
+                <Label Text="Payment Method" FontSize="14"/>
+                <Label Text="{Binding PaymentMethod}" Grid.Column="1" FontSize="14"/>
+            </Grid>
+
+            <Grid ColumnDefinitions="*,Auto" Padding="0,5">
+                <Label Text="Cash Received" FontSize="14"/>
+                <Label Text="{Binding CashReceived, StringFormat='₱{0:N2}'}" Grid.Column="1" FontSize="14"/>
+            </Grid>
+
+            <Grid ColumnDefinitions="*,Auto" Padding="0,5">
+                <Label Text="Change" FontAttributes="Bold" FontSize="16"/>
+                <Label Text="{Binding Change, StringFormat='₱{0:N2}'}"
+           Grid.Column="1"
+           FontAttributes="Bold"
+           FontSize="16"/>
+            </Grid>
+
+            <BoxView HeightRequest="1" Color="Gray" Margin="0,10" />
+
+            <BoxView HeightRequest="1" Color="Gray" Margin="0,10" />
+
             <!-- Footer -->
             <Label Text="Thank you for your order!"
                    FontAttributes="Bold"
