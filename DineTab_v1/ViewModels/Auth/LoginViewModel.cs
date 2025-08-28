@@ -19,6 +19,30 @@ namespace DineTab_v1.ViewModels.Auth
             "Admin", "Cashier", "Kitchen Staff", "Customer", "Que"
         };
 
+        private bool _isPasswordHidden = true;
+        private string _passwordToggleIcon = "eye.png"; 
+
+        public bool IsPasswordHidden
+        {
+            get => _isPasswordHidden;
+            set
+            {
+                _isPasswordHidden = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string PasswordToggleIcon
+        {
+            get => _passwordToggleIcon;
+            set
+            {
+                _passwordToggleIcon = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public ICommand TogglePasswordCommand { get; }
         private string selectedRole;
         public string SelectedRole
         {
@@ -62,6 +86,12 @@ namespace DineTab_v1.ViewModels.Auth
             LoginCommand = new Command(OnLogin);
             ForgotPasswordCommand = new Command(OnForgotPassword);
             OrderCommand = new Command(OnOrder);
+
+            TogglePasswordCommand = new Command(() =>
+            {
+                IsPasswordHidden = !IsPasswordHidden;
+                PasswordToggleIcon = IsPasswordHidden ? "eye.png" : "eyeclosed.png";
+            });
         }
 
         private void UpdateUIForRole()

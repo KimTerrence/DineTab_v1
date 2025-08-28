@@ -100,10 +100,13 @@ public class PaymentViewModel : INotifyPropertyChanged
     private async Task OnConfirmAsync()
     {
         string total = AmountToBePaid;
+        try
+        {
+            await Application.Current.MainPage.Navigation.PushModalAsync(
+                        new OverviewPage(OrderNumber, OrderItems, total));
+        } catch(Exception ex) { }
+        
 
-        await Application.Current.MainPage.Navigation.PushModalAsync(
-            new OverviewPage(OrderNumber, OrderItems, total)
-        );
     }
 
     public event PropertyChangedEventHandler PropertyChanged;

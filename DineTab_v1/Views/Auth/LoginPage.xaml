@@ -58,16 +58,36 @@
                     </VerticalStackLayout>
 
                     <!-- Password -->
+                    <!-- Password -->
                     <VerticalStackLayout Spacing="5">
                         <Label Text="Password"/>
                         <Border Stroke="Black">
-                            <Entry Placeholder="Password"
-                                   IsPassword="True"
-                                   Text="{Binding Password}"
-                                   BackgroundColor="White"/>
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Entry Placeholder="Password"
+                                       Text="{Binding Password}"
+                                       IsPassword="{Binding IsPasswordHidden}"
+                                       BackgroundColor="White"
+                                       Grid.Column="0"/>
+                                <ImageButton Source="{Binding PasswordToggleIcon}"
+                                             Command="{Binding TogglePasswordCommand}"
+                                             BackgroundColor="White"
+                                             WidthRequest="10"
+                                             HeightRequest="10"
+                                             Padding="10"
+                                             Margin="0"
+                                             Grid.Column="1"
+                                             HorizontalOptions="End"
+                                             VerticalOptions="Center"/>
+
+                            </Grid>
                         </Border>
-                        <Button Text="Forgot Password" HorizontalOptions="End" Command="{Binding ForgotPasswordCommand}" BackgroundColor="Transparent" TextColor="DarkBlue"/>
+                        <Button Text="Forgot Password" 
+                                HorizontalOptions="End" 
+                                Command="{Binding ForgotPasswordCommand}" 
+                                BackgroundColor="Transparent" 
+                                TextColor="DarkBlue"/>  
                     </VerticalStackLayout>
+
 
                     <!-- Login Button -->
                     <Button Text="Login"
