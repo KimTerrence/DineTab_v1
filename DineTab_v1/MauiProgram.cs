@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using System.Text;
 
 namespace DineTab_v1
 {
@@ -6,6 +7,9 @@ namespace DineTab_v1
     {
         public static MauiApp CreateMauiApp()
         {
+
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()

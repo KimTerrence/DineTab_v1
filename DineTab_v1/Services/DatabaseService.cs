@@ -338,7 +338,7 @@ namespace DineTab_v1.Services
                 using SqlConnection conn = new SqlConnection(_connectionString);
                 await conn.OpenAsync();
 
-                string query = @"INSERT INTO Items (Name, Price, CategoryId, Availability, Spicy, Image)
+                string query = @"INSERT INTO Menu (Name, Price, CategoryId, Availability, Spicy, Image)
                          VALUES (@ItemName, @Price, @CategoryId, @Availability, @Spicy, @Image)";
 
                 using SqlCommand cmd = new SqlCommand(query, conn);
@@ -372,7 +372,7 @@ namespace DineTab_v1.Services
 
             var cmd = conn.CreateCommand();
             cmd.CommandText = @"
-                UPDATE Items
+                UPDATE Menu
                 SET Name = @name,
                     Price = @price,
                     CategoryId = @categoryId,
@@ -499,7 +499,7 @@ namespace DineTab_v1.Services
 
                 string query = @"
                 SELECT i.Id, i.Name, i.Price, i.CategoryId, i.Availability, i.Spicy, i.Image, c.Name AS CategoryName
-                FROM Items i
+                FROM Menu i
                 LEFT JOIN Categories c ON i.CategoryId = c.Id";
 
                 using SqlCommand cmd = new SqlCommand(query, conn);
@@ -571,7 +571,7 @@ namespace DineTab_v1.Services
             return (int)await cmd.ExecuteScalarAsync();
         }
 
-        // Insert OrderItems linked to orderId
+        // Insert OrderMenu linked to orderId
         public async Task InsertOrderItemsAsync(int orderId, ObservableCollection<OrderItem> items)
         {
             using var connection = new SqlConnection(_connectionString);
@@ -993,7 +993,7 @@ namespace DineTab_v1.Services
             {
                 await conn.OpenAsync();
 
-                string query = "SELECT OrderId FROM Orders WHERE OrderNumber = @OrderNumber";
+                string query = "SELECT Id FROM Orders WHERE OrderNumber = @OrderNumber";
 
                 using (var cmd = new SqlCommand(query, conn))
                 {

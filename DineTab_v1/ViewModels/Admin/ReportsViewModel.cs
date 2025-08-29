@@ -1,18 +1,77 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows.Input;
 using DineTab_v1.Models;
 using DineTab_v1.Services;
 
+
 public class ReportsViewModel : INotifyPropertyChanged
 {
+    private readonly PdfService _pdfService = new();
+
     private readonly DatabaseService _dbService = new();
 
     public ObservableCollection<SoldItemReport> SoldItems { get; set; } = new();
+    public ObservableCollection<SoldItemReport> FilteredSoldItems { get; set; } = new();
+
+    public ObservableCollection<string> Categories { get; set; } = new();
+    public ICommand ClearDateCommand { get; }
+
+    public ICommand ExportPdfCommand => new Command(async () =>
+    {
+        var items = FilteredSoldItems.Select(x =>
+            (x.OrderNo, x.TotalItem, x.TotalPrice)).ToList();
+
+        var filePath = await _pdfService.CreateSalesReportAsync(
+            items, TotalSoldItems, TotalOrders, TotalRevenue);
+
+        await Launcher.OpenAsync(new OpenFileRequest
+        {
+            File = new ReadOnlyFile(filePath)
+        });
+    });
+
+    private string _selectedCategory = "All";
+    public string SelectedCategory
+    {
+        get => _selectedCategory;
+        set
+        {
+            if (_selectedCategory != value)
+            {
+                _selectedCategory = value;
+                OnPropertyChanged(nameof(SelectedCategory));
+                ApplyFilters();
+            }
+        }
+    }
+
+
+    private DateTime? _selectedDate = null;
+    public DateTime? SelectedDate
+    {
+        get => _selectedDate;
+        set
+        {
+            if (_selectedDate != value)
+            {
+                _selectedDate = value;
+                OnPropertyChanged(nameof(SelectedDate));
+                ApplyFilters();
+            }
+        }
+    }
 
     public ReportsViewModel()
     {
         LoadSoldItems();
+
+        ClearDateCommand = new Command(() =>
+        {
+            SelectedDate = null;
+            ApplyFilters();
+        });
     }
 
     private async void LoadSoldItems()
@@ -22,22 +81,44 @@ public class ReportsViewModel : INotifyPropertyChanged
         foreach (var item in items)
             SoldItems.Add(item);
 
-        // Raise property changed for totals
+        // Load categories (distinct from items)
+        Categories.Clear();
+        Categories.Add("All");
+        foreach (var cat in SoldItems.Select(s => s.Type).Distinct())
+            Categories.Add(cat);
+
+        ApplyFilters();
+    }
+
+    private void ApplyFilters()
+    {
+        var query = SoldItems.AsEnumerable();
+
+        // Only filter by category if not "All"
+        if (!string.IsNullOrEmpty(SelectedCategory) && SelectedCategory != "All")
+            query = query.Where(s => s.Type == SelectedCategory);
+
+        // Only filter by date if user selected one
+        if (SelectedDate.HasValue)
+            query = query.Where(s => s.OrderDate.Date == SelectedDate.Value.Date);
+
+        FilteredSoldItems.Clear();
+        foreach (var item in query)
+            FilteredSoldItems.Add(item);
+
+        // Update totals
         OnPropertyChanged(nameof(TotalSoldItems));
         OnPropertyChanged(nameof(TotalRevenue));
         OnPropertyChanged(nameof(TotalOrders));
+        OnPropertyChanged(nameof(OrdersToday));
     }
 
-    // Total number of items sold
-    public int TotalSoldItems => SoldItems.Sum(s => s.TotalItem);
-    // Orders placed today
-    public int OrdersToday => SoldItems.Count(s => s.OrderDate.Date == DateTime.Today);
 
-    // Total revenue
-    public decimal TotalRevenue => SoldItems.Sum(s => s.TotalPrice);
-
-    // Total orders (today or overall)
-    public int TotalOrders => SoldItems.Count;
+    // Totals based on FilteredSoldItems
+    public int TotalSoldItems => FilteredSoldItems.Sum(s => s.TotalItem);
+    public int OrdersToday => FilteredSoldItems.Count(s => s.OrderDate.Date == DateTime.Today);
+    public decimal TotalRevenue => FilteredSoldItems.Sum(s => s.TotalPrice);
+    public int TotalOrders => FilteredSoldItems.Count;
 
     public event PropertyChangedEventHandler PropertyChanged;
     private void OnPropertyChanged(string propertyName) =>

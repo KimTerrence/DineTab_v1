@@ -119,13 +119,22 @@ namespace DineTab_v1.ViewModels.Cashier
         }
         private async void OnConfirmPayment()
         {
-            var orderNumber = SelectedOrderNumber;
+            try
+            {
+                var orderNumber = SelectedOrderNumber;
             var totalAmount = Total;
             var items = new ObservableCollection<OrderItem>(OrderItems);
+           
+               await Shell.Current.Navigation.PushModalAsync(
+               new PaymentPage(orderNumber, totalAmount, items)
+           );
 
-            await Shell.Current.Navigation.PushModalAsync(
-                new PaymentPage(orderNumber, totalAmount, items)
-            );
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }   
         }
 
         public async void CreateOrder()
@@ -176,7 +185,5 @@ namespace DineTab_v1.ViewModels.Cashier
                 await Application.Current.MainPage.DisplayAlert("Error", "Failed to cancel order.", "OK");
             }
         }
-
-
     }
 }
