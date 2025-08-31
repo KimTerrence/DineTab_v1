@@ -21,7 +21,7 @@ public class ReportsViewModel : INotifyPropertyChanged
     public ICommand ExportPdfCommand => new Command(async () =>
     {
         var items = FilteredSoldItems.Select(x =>
-            (x.OrderNo, x.TotalItem, x.TotalPrice)).ToList();
+            (x.OrderNo, x.TotalItem, x.TotalPrice, x.OrderDate)).ToList();
 
         var filePath = await _pdfService.CreateSalesReportAsync(
             items, TotalSoldItems, TotalOrders, TotalRevenue);
@@ -31,6 +31,7 @@ public class ReportsViewModel : INotifyPropertyChanged
             File = new ReadOnlyFile(filePath)
         });
     });
+
 
     private string _selectedCategory = "All";
     public string SelectedCategory

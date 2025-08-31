@@ -3,10 +3,10 @@
 public class PdfService
 {
     public async Task<string> CreateSalesReportAsync(
-        IEnumerable<(string ItemName, int Qty, decimal Price)> items,
-        int totalSold,
-        int totalOrders,
-        decimal totalRevenue)
+       IEnumerable<(string ItemName, int Qty, decimal Price, DateTime Date)> items,
+       int totalSold,
+       int totalOrders,
+       decimal totalRevenue)
     {
         var filePath = Path.Combine(FileSystem.AppDataDirectory, "SalesReport.pdf");
 
@@ -48,32 +48,34 @@ public class PdfService
 
         float margin = 40;
         float y = 60;
-        float tableWidth = 500;
+        float tableWidth = 540;
         float rowHeight = 22;
 
-        // Center Title
+        // Title
         var title = "Sales Report";
         float titleWidth = titlePaint.MeasureText(title);
         canvas.DrawText(title, (595 - titleWidth) / 2, y, titlePaint);
         y += 50;
 
-        // Table column positions
+        // Column positions (Item first, then Date, Quantity, Price)
         float colItem = margin;
-        float colQty = 350;
-        float colPrice = 450;
+        float colDate = colItem + 180;
+        float colQty = colDate + 100;
+        float colPrice = colQty + 80;
 
-        // Draw header background
+        // Header background
         var headerBg = new SKPaint { Color = SKColors.LightGray };
         canvas.DrawRect(margin - 5, y - 15, tableWidth, rowHeight, headerBg);
 
         // Headers
         canvas.DrawText("Item", colItem, y, headerPaint);
+        canvas.DrawText("Date", colDate, y, headerPaint);
         canvas.DrawText("Quantity", colQty, y, headerPaint);
         canvas.DrawText("Price", colPrice, y, headerPaint);
 
         y += rowHeight;
 
-        // Table rows with alternating background
+        // Rows
         bool shade = false;
         foreach (var item in items)
         {
@@ -83,13 +85,18 @@ public class PdfService
                     new SKPaint { Color = new SKColor(240, 240, 240) });
             }
 
+            // Item
             canvas.DrawText(item.ItemName, colItem, y, bodyPaint);
 
-            // Right align Qty
-            var qtyText = item.Qty.ToString();
-            canvas.DrawText(qtyText, colQty + 60 - bodyPaint.MeasureText(qtyText), y, bodyPaint);
+            // Date
+            var dateText = item.Date.ToString("MM/dd/yyyy");
+            canvas.DrawText(dateText, colDate, y, bodyPaint);
 
-            // Right align Price
+            // Qty (Right align)
+            var qtyText = item.Qty.ToString();
+            canvas.DrawText(qtyText, colQty + 50 - bodyPaint.MeasureText(qtyText), y, bodyPaint);
+
+            // Price (Right align)
             var priceText = $"₱{item.Price:N2}";
             canvas.DrawText(priceText, colPrice + 80 - bodyPaint.MeasureText(priceText), y, bodyPaint);
 
@@ -99,7 +106,7 @@ public class PdfService
 
         y += 30;
 
-        // Totals Section (Bold)
+        // Totals
         canvas.DrawText($"Total Items: {totalSold}", margin, y, boldBodyPaint); y += 20;
         canvas.DrawText($"Total Orders: {totalOrders}", margin, y, boldBodyPaint); y += 20;
         canvas.DrawText($"Total Revenue: ₱{totalRevenue:N2}", margin, y, boldBodyPaint);
