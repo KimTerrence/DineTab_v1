@@ -61,18 +61,19 @@
                     <!-- Password -->
                     <VerticalStackLayout Spacing="5">
                         <Label Text="Password"/>
-                        <Border Stroke="Black">
+                        <Border Stroke="Black" HeightRequest="48" BackgroundColor="White">
                             <Grid ColumnDefinitions="*,Auto">
                                 <Entry Placeholder="Password"
                                        Text="{Binding Password}"
                                        IsPassword="{Binding IsPasswordHidden}"
                                        BackgroundColor="White"
-                                       Grid.Column="0"/>
+                                       Grid.Column="0"
+                                 />
                                 <ImageButton Source="{Binding PasswordToggleIcon}"
                                              Command="{Binding TogglePasswordCommand}"
                                              BackgroundColor="White"
-                                             WidthRequest="10"
-                                             HeightRequest="10"
+                                             WidthRequest="60"
+                                             HeightRequest="80"
                                              Padding="10"
                                              Margin="0"
                                              Grid.Column="1"

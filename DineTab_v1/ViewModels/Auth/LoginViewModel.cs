@@ -56,14 +56,14 @@ namespace DineTab_v1.ViewModels.Auth
             }
         }
 
-        private bool isLoginFormVisible = true;
+        private bool isLoginFormVisible = false;
         public bool IsLoginFormVisible
         {
             get => isLoginFormVisible;
             set => SetProperty(ref isLoginFormVisible, value);
         }
 
-        private bool isCustomerSelected;
+        private bool isCustomerSelected = true;
         public bool IsCustomerSelected
         {
             get => isCustomerSelected;
