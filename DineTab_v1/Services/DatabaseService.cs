@@ -500,7 +500,8 @@ namespace DineTab_v1.Services
                 string query = @"
                 SELECT i.Id, i.Name, i.Price, i.CategoryId, i.Availability, i.Spicy, i.Image, c.Name AS CategoryName
                 FROM Menu i
-                LEFT JOIN Categories c ON i.CategoryId = c.Id";
+                LEFT JOIN Categories c ON i.CategoryId = c.Id
+                WHERE i.Availability = 'Available'; ";
 
                 using SqlCommand cmd = new SqlCommand(query, conn);
                 using SqlDataReader reader = await cmd.ExecuteReaderAsync();
