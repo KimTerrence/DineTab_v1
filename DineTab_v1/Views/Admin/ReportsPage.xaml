@@ -192,19 +192,47 @@
 
                         <!-- Filters (aligned to end) -->
                         <HorizontalStackLayout Spacing="10" Grid.Column="1" VerticalOptions="Center">
-                            <!-- Category Filter -->
-                            <Border Stroke="Black" StrokeThickness="1" Padding="5">
-                                <Picker Title="Show all category"
-                                               ItemsSource="{Binding Categories}"
-                                               SelectedItem="{Binding SelectedCategory}" />        
-                            </Border>
 
-                            <!-- Date Filter -->
-                            <Border Stroke="Black" StrokeThickness="1" Padding="5">
-                                <DatePicker Date="{Binding SelectedDate}" />
-                            </Border>
-                            <Button Text="Clear Date" Command="{Binding ClearDateCommand}"  BackgroundColor="White" TextColor="Black" BorderColor="Black" BorderWidth="1" CornerRadius="0"/>
+                            <!-- Category Filter -->
+                            <VerticalStackLayout>
+                                <Label Text="Category" FontSize="12" TextColor="Black"/>
+                                <Border Stroke="Black" StrokeThickness="1" Padding="5">
+                                    <Picker Title="Show all category"
+                    ItemsSource="{Binding Categories}"
+                    SelectedItem="{Binding SelectedCategory}" />
+                                </Border>
+                            </VerticalStackLayout>
+
+                            <!-- From Date -->
+                            <VerticalStackLayout>
+                                <Label Text="From" FontSize="12" TextColor="Black"/>
+                                <Border Stroke="Black" StrokeThickness="1" Padding="5">
+                                    <DatePicker Date="{Binding FromDate}" />
+                                </Border>
+                            </VerticalStackLayout>
+
+                            <!-- To Date -->
+                            <VerticalStackLayout>
+                                <Label Text="To" FontSize="12" TextColor="Black"/>
+                                <Border Stroke="Black" StrokeThickness="1" Padding="5">
+                                    <DatePicker Date="{Binding ToDate}" />
+                                </Border>
+                            </VerticalStackLayout>
+
+                            <!-- Clear Button -->
+                            <VerticalStackLayout VerticalOptions="End">
+                                <Button Text="Clear Dates" 
+                                        Command="{Binding ClearDateCommand}"  
+                                        BackgroundColor="White" 
+                                        TextColor="Black" 
+                                        BorderColor="Black" 
+                                        BorderWidth="1" 
+                                        CornerRadius="0"
+                                        HeightRequest="55"/>
+                            </VerticalStackLayout>
+
                         </HorizontalStackLayout>
+
                     </Grid>
                     <!-- Table Header -->
                     <Grid BackgroundColor="#D9D9D9"
@@ -226,7 +254,6 @@
                         <Label Text="Total Item" Grid.Column="3" FontAttributes="Bold"/>
                         <Label Text="Total Price" Grid.Column="4" FontAttributes="Bold"/>
                     </Grid>
-
 
                     <!-- CollectionView for dynamic data -->
                     <CollectionView ItemsSource="{Binding FilteredSoldItems}">

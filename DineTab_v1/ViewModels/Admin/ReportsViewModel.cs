@@ -24,13 +24,14 @@ public class ReportsViewModel : INotifyPropertyChanged
             (x.OrderNo, x.TotalItem, x.TotalPrice, x.OrderDate)).ToList();
 
         var filePath = await _pdfService.CreateSalesReportAsync(
-            items, TotalSoldItems, TotalOrders, TotalRevenue);
+            items, TotalSoldItems, TotalOrders, TotalRevenue, FromDate, ToDate);
 
         await Launcher.OpenAsync(new OpenFileRequest
         {
             File = new ReadOnlyFile(filePath)
         });
     });
+
 
 
     private string _selectedCategory = "All";
@@ -43,6 +44,36 @@ public class ReportsViewModel : INotifyPropertyChanged
             {
                 _selectedCategory = value;
                 OnPropertyChanged(nameof(SelectedCategory));
+                ApplyFilters();
+            }
+        }
+    }
+
+    private DateTime? _fromDate = null;
+    public DateTime? FromDate
+    {
+        get => _fromDate;
+        set
+        {
+            if (_fromDate != value)
+            {
+                _fromDate = value;
+                OnPropertyChanged(nameof(FromDate));
+                ApplyFilters();
+            }
+        }
+    }
+
+    private DateTime? _toDate = null;
+    public DateTime? ToDate
+    {
+        get => _toDate;
+        set
+        {
+            if (_toDate != value)
+            {
+                _toDate = value;
+                OnPropertyChanged(nameof(ToDate));
                 ApplyFilters();
             }
         }
@@ -70,9 +101,11 @@ public class ReportsViewModel : INotifyPropertyChanged
 
         ClearDateCommand = new Command(() =>
         {
-            SelectedDate = null;
+            FromDate = null;
+            ToDate = null;
             ApplyFilters();
         });
+
     }
 
     private async void LoadSoldItems()
@@ -95,14 +128,20 @@ public class ReportsViewModel : INotifyPropertyChanged
     {
         var query = SoldItems.AsEnumerable();
 
-        // Only filter by category if not "All"
+        // Filter by category
         if (!string.IsNullOrEmpty(SelectedCategory) && SelectedCategory != "All")
             query = query.Where(s => s.Type == SelectedCategory);
 
-        // Only filter by date if user selected one
-        if (SelectedDate.HasValue)
-            query = query.Where(s => s.OrderDate.Date == SelectedDate.Value.Date);
+        // Filter by date range
+        if (FromDate.HasValue && ToDate.HasValue)
+            query = query.Where(s => s.OrderDate.Date >= FromDate.Value.Date &&
+                                     s.OrderDate.Date <= ToDate.Value.Date);
+        else if (FromDate.HasValue) // Only from date selected
+            query = query.Where(s => s.OrderDate.Date >= FromDate.Value.Date);
+        else if (ToDate.HasValue) // Only to date selected
+            query = query.Where(s => s.OrderDate.Date <= ToDate.Value.Date);
 
+        // Apply results
         FilteredSoldItems.Clear();
         foreach (var item in query)
             FilteredSoldItems.Add(item);

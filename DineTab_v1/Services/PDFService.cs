@@ -6,7 +6,9 @@ public class PdfService
        IEnumerable<(string ItemName, int Qty, decimal Price, DateTime Date)> items,
        int totalSold,
        int totalOrders,
-       decimal totalRevenue)
+       decimal totalRevenue,
+       DateTime? fromDate = null,
+       DateTime? toDate = null)
     {
         var filePath = Path.Combine(FileSystem.AppDataDirectory, "SalesReport.pdf");
 
@@ -55,7 +57,29 @@ public class PdfService
         var title = "Sales Report";
         float titleWidth = titlePaint.MeasureText(title);
         canvas.DrawText(title, (595 - titleWidth) / 2, y, titlePaint);
-        y += 50;
+        y += 30;
+
+        // Date Range (if provided)
+        if (fromDate.HasValue || toDate.HasValue)
+        {
+            string rangeText;
+            if (fromDate.HasValue && toDate.HasValue)
+                rangeText = $"Date Range: {fromDate:MM/dd/yyyy} - {toDate:MM/dd/yyyy}";
+            else if (fromDate.HasValue)
+                rangeText = $"From: {fromDate:MM/dd/yyyy}";
+            else
+                rangeText = $"To: {toDate:MM/dd/yyyy}";
+
+            canvas.DrawText(rangeText, margin, y, bodyPaint);
+            y += 30;
+        }
+        else
+        {
+            // If no range, show today's date
+            string todayText = $"Date: {DateTime.Today:MM/dd/yyyy}";
+            canvas.DrawText(todayText, margin, y, bodyPaint);
+            y += 30;
+        }
 
         // Column positions (Item first, then Date, Quantity, Price)
         float colItem = margin;

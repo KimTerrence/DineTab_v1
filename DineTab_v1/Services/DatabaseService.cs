@@ -163,7 +163,7 @@ namespace DineTab_v1.Services
                 FROM Orders o
                 LEFT JOIN OrderMenu oi ON oi.Id = o.Id
                 GROUP BY o.OrderNumber, o.CreatedAt, o.OrderType, o.Total
-                ORDER BY o.CreatedAt DESC
+                ORDER BY o.CreatedAt ASC
             ";
 
                     using (SqlCommand cmd = new SqlCommand(query, conn))
@@ -543,7 +543,7 @@ namespace DineTab_v1.Services
                 await conn.OpenAsync();
 
                 using var cmd = conn.CreateCommand();
-                cmd.CommandText = "DELETE FROM Items WHERE Id = @Id";
+                cmd.CommandText = "DELETE FROM Menu WHERE Id = @Id";
                 cmd.Parameters.AddWithValue("@Id", itemId);
 
                 int rows = await cmd.ExecuteNonQueryAsync();
