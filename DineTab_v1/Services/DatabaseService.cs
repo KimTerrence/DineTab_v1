@@ -500,8 +500,52 @@ namespace DineTab_v1.Services
                 string query = @"
                 SELECT i.Id, i.Name, i.Price, i.CategoryId, i.Availability, i.Spicy, i.Image, c.Name AS CategoryName
                 FROM Menu i
-                LEFT JOIN Categories c ON i.CategoryId = c.Id
-                WHERE i.Availability = 'Available'; ";
+                LEFT JOIN Categories c ON i.CategoryId = c.Id; ";
+
+                using SqlCommand cmd = new SqlCommand(query, conn);
+                using SqlDataReader reader = await cmd.ExecuteReaderAsync();
+
+                while (await reader.ReadAsync())
+                {
+                    items.Add(new Item
+                    {
+                        Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                        ItemName = reader.GetString(reader.GetOrdinal("Name")),
+                        Price = reader.GetDecimal(reader.GetOrdinal("Price")),
+                        CategoryId = reader.GetInt32(reader.GetOrdinal("CategoryId")),
+                        Availability = reader.GetString(reader.GetOrdinal("Availability")),
+                        Spicy = reader.GetString(reader.GetOrdinal("Spicy")),
+                        CategoryName = reader.IsDBNull(reader.GetOrdinal("CategoryName"))
+                                       ? "Unknown"
+                                       : reader.GetString(reader.GetOrdinal("CategoryName")),
+
+                        Image = reader.IsDBNull(reader.GetOrdinal("Image"))
+                                ? null
+                                : (byte[])reader["Image"]
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"GetMenuItemsAsync error: {ex.Message}");
+            }
+
+            return items;
+        }
+
+        public async Task<List<Item>> GetAvailableItemsAsync()
+        {
+            var items = new List<Item>();
+
+            try
+            {
+                using SqlConnection conn = new SqlConnection(_connectionString);
+                await conn.OpenAsync();
+
+                string query = @"
+                SELECT i.Id, i.Name, i.Price, i.CategoryId, i.Availability, i.Spicy, i.Image, c.Name AS CategoryName
+                FROM Menu i
+                LEFT JOIN Categories c ON i.CategoryId = c.Id where i.Availability = 'Available' ; ";
 
                 using SqlCommand cmd = new SqlCommand(query, conn);
                 using SqlDataReader reader = await cmd.ExecuteReaderAsync();

@@ -1,28 +1,58 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                xmlns:local="clr-namespace:DineTab_v1.ViewModels.Cashier"
              x:Class="DineTab_v1.Views.Cashier.CreateOrderPage"
              Title="CreateOrderPage"            
              x:Name="RootPage">
+    
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <local:CategoryToColorConverter x:Key="CategoryToColorConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
     <Grid ColumnDefinitions="*, 300" 
       RowDefinitions="Auto, *" 
       RowSpacing="10">
-
+        
         <!-- Top Category Icons -->
         <ScrollView Grid.Column="0" Grid.Row="0" Orientation="Horizontal" Padding="10">
-            <HorizontalStackLayout Spacing="10"
-                               BindableLayout.ItemsSource="{Binding Categories}">
+            <HorizontalStackLayout Spacing="5">
 
-                <BindableLayout.ItemTemplate>
-                    <DataTemplate>
-                        <Button Text="{Binding Name}"
-                            Command="{Binding BindingContext.CategorySelectedCommand, Source={x:Reference RootPage}}"
-                            CommandParameter="{Binding .}" 
+                <!-- All Items Button -->
+                <Button Text="All Items"
+                Command="{Binding SelectCategoryCommand}"
+                CommandParameter="All Items"
+                TextColor="Black"
+                BorderColor="Black"
+                BorderWidth="1"
+                CornerRadius="0"
+                BackgroundColor="{Binding SelectedCategory, 
+                                          Converter={StaticResource CategoryToColorConverter}, 
+                                          ConverterParameter=All Items}"/>
+
+                <!-- Category Buttons -->
+                <CollectionView ItemsSource="{Binding Categories}" SelectionMode="None">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Horizontal" ItemSpacing="5"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Button Text="{Binding Name}"
+                            Command="{Binding Source={x:Reference RootPage}, Path=BindingContext.SelectCategoryCommand}"
+                            CommandParameter="{Binding Name}"
+                            TextColor="Black"
+                            BorderColor="Black"
+                            BorderWidth="1"
                             CornerRadius="0"
-                            BackgroundColor="#D3D3D3"
-                            TextColor="Black"/>
-                    </DataTemplate>
-                </BindableLayout.ItemTemplate>
+                            BackgroundColor="{Binding Source={x:Reference RootPage}, Path=BindingContext.SelectedCategory,
+                                                      Converter={StaticResource CategoryToColorConverter},
+                                                      ConverterParameter={Binding Name}}"/>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
             </HorizontalStackLayout>
         </ScrollView>
 
@@ -38,6 +68,7 @@
                         <VerticalStackLayout Spacing="20">
                             <Image  HeightRequest="200" Aspect="AspectFill" Source="{Binding ItemImageSource} " />
                             <Label Text="{Binding ItemName}" FontAttributes="Bold" HorizontalOptions="Center"/>
+                            <Label Text="{Binding CategoryName}" HorizontalOptions="Center"/>
                             <Grid ColumnDefinitions="*,Auto"
                               Padding="10"
                               Margin="5"

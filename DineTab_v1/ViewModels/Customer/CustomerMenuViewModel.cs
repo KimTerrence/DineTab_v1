@@ -127,12 +127,11 @@ namespace DineTab_v1.ViewModels.Customer
 
         private async void LoadMenuItems()
         {
-            var itemsFromDb = await _databaseService.GetMenuItemsAsync();
+            var itemsFromDb = await _databaseService.GetAvailableItemsAsync();
             MenuItems.Clear();
 
             foreach (var item in itemsFromDb)
             {
-                if (item.Availability?.ToLower() == "available")
                     MenuItems.Add(item);
                 _allMenuItems.Add(item);
             }
