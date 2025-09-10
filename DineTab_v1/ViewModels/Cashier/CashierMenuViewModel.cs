@@ -122,20 +122,19 @@ namespace DineTab_v1.ViewModels.Cashier
             try
             {
                 var orderNumber = SelectedOrderNumber;
-            var totalAmount = Total;
-            var items = new ObservableCollection<OrderItem>(OrderItems);
-           
-               await Shell.Current.Navigation.PushModalAsync(
-               new PaymentPage(orderNumber, totalAmount, items)
-           );
+                var totalAmount = Total;
+                var items = new ObservableCollection<OrderItem>(OrderItems);
 
-
+                await Application.Current.MainPage.Navigation.PushModalAsync(
+                    new PaymentPage(orderNumber, totalAmount, items)
+                );
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
-            }   
+            }
         }
+
 
         public async void CreateOrder()
         {
